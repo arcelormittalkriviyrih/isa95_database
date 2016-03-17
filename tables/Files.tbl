@@ -1,0 +1,17 @@
+﻿USE [B2MML-BatchML]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE dbo.Files (
+	[ID] [int] PRIMARY KEY CLUSTERED,
+	[FileName] [nvarchar](255) NOT NULL,
+	[Encoding] [nvarchar](255) NULL,
+	[FileType] [nvarchar](50) NOT NULL,
+	[Data] [varbinary](MAX)
+)
+GO
