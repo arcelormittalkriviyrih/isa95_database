@@ -1,0 +1,17 @@
+﻿CREATE VIEW [dbo].v_ProductionResponse
+AS
+SELECT ProductionResponse.ID,
+       ProductionResponse.ResponseState,
+       ProductionResponse.ProductionRequestID,
+       EquipmentRequirement.EquipmentID,
+       Equipment.EquipmentClassID
+  FROM dbo.Equipment Equipment,
+       dbo.EquipmentRequirement EquipmentRequirement,
+       dbo.SegmentRequirement SegmentRequirement,
+       dbo.ProductionRequest ProductionRequest,
+       dbo.ProductionResponse ProductionResponse
+ WHERE (ProductionResponse.ProductionRequestID = ProductionRequest.ID)
+   AND (SegmentRequirement.ProductionRequest = ProductionRequest.ID)
+   AND (EquipmentRequirement.SegmentRequirementID = SegmentRequirement.ID)
+   AND (EquipmentRequirement.EquipmentID = Equipment.ID)
+GO

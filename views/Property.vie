@@ -1,0 +1,17 @@
+﻿USE [B2MML-BatchML]
+GO
+
+IF OBJECT_ID ('dbo.v_Property', N'V') IS NOT NULL
+   DROP VIEW dbo.v_Property;
+GO
+
+CREATE VIEW dbo.v_Property
+AS
+SELECT prop.ID, 
+       prop.Description
+FROM dbo.EquipmentClassProperty prop
+UNION ALL
+SELECT prop.ID, 
+       prop.Description
+FROM dbo.MaterialDefinitionProperty prop
+GO
