@@ -101,10 +101,6 @@ BEGIN
 END;
 GO
 
-IF OBJECT_ID ('dbo.gen_ClassDefinitionProperty',N'SO') IS NULL
-   CREATE SEQUENCE dbo.gen_ClassDefinitionProperty AS INT START WITH 1 INCREMENT BY 1 NO CACHE;
-GO
-
 --------------------------------------------------------------
 -- Процедура вставки в таблицу EquipmentClassProperty
 IF OBJECT_ID ('dbo.ins_EquipmentClassProperty',N'P') IS NOT NULL
@@ -213,11 +209,6 @@ BEGIN
   RETURN;
 
 END;
-GO
-
---------------------------------------------------------------
-IF OBJECT_ID ('dbo.gen_Property',N'SO') IS NULL
-   CREATE SEQUENCE dbo.gen_Property AS INT START WITH 1 INCREMENT BY 1 NO CACHE;
 GO
 
 --------------------------------------------------------------

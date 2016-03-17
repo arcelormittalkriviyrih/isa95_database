@@ -284,6 +284,7 @@ CREATE PROCEDURE dbo.ins_ProductionParameter
     @ProductSegmentID      INT,
     @ProcessSegmentID      INT,
     @Parameter             NVARCHAR(50),
+    @PropertyType          INT,
     @ProductionParameterID INT OUTPUT
 AS
 BEGIN
@@ -294,11 +295,13 @@ BEGIN
   INSERT INTO dbo.ProductionParameter(ID,
                                       ProductSegmentID,
                                       ProcessSegmentID,
-                                      Parameter)
+                                      Parameter,
+                                      PropertyType)
                               VALUES (@ProductionParameterID,
                                       @ProductSegmentID,
                                       @ProcessSegmentID,
-                                      @Parameter);
+                                      @Parameter,
+                                      @PropertyType);
 
 END;
 GO
@@ -313,14 +316,16 @@ CREATE PROCEDURE dbo.upd_ProductionParameter
     @ID               INT,
     @ProductSegmentID INT,
     @ProcessSegmentID INT,
-    @Parameter        NVARCHAR(50)
+    @Parameter        NVARCHAR(50),
+    @PropertyType     INT
 AS
 BEGIN
 
   UPDATE dbo.ProductionParameter
   SET ProductSegmentID=@ProductSegmentID,
       ProcessSegmentID=@ProcessSegmentID,
-      Parameter=@Parameter
+      Parameter=@Parameter,
+      PropertyType=@PropertyType
   WHERE ID=@ID;
 
 END;
@@ -353,7 +358,8 @@ CREATE FUNCTION dbo.get_ProductionParameter(@ID INT)
 RETURNS @retProductionParameter TABLE (ID               INT PRIMARY KEY NOT NULL,
                                        ProductSegmentID INT,
                                        ProcessSegmentID INT,
-                                       Parameter        NVARCHAR(50))
+                                       Parameter        NVARCHAR(50),
+                                       PropertyType     INT)
 AS
 BEGIN
 
@@ -361,7 +367,8 @@ BEGIN
   SELECT ID,
          ProductSegmentID,
          ProcessSegmentID,
-         Parameter
+         Parameter,
+         PropertyType
   FROM dbo.ProductionParameter
   WHERE ID=@ID;
 

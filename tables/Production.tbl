@@ -1,0 +1,11 @@
+﻿
+-----------------------------------------------------------------
+-- alter ProductionParameter table structure
+ALTER TABLE dbo.ProductionParameter ADD [PropertyType] [int] NULL
+GO
+
+ALTER TABLE dbo.ProductionParameter WITH CHECK ADD CONSTRAINT [FK_ProductionParameter_PropertyTypes] FOREIGN KEY(PropertyType) REFERENCES dbo.PropertyTypes (ID)
+GO
+
+ALTER TABLE dbo.ProductionParameter CHECK CONSTRAINT [FK_ProductionParameter_PropertyTypes]
+GO
