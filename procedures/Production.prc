@@ -1,6 +1,4 @@
-﻿USE [B2MML-BatchML]
-GO
-
+﻿
 IF OBJECT_ID ('dbo.gen_ProductionResponse',N'SO') IS NULL
    CREATE SEQUENCE dbo.gen_ProductionResponse AS INT START WITH 1 INCREMENT BY 1 NO CACHE;
 GO

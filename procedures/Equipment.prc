@@ -1,6 +1,4 @@
-﻿USE [B2MML-BatchML]
-GO
-
+﻿
 --------------------------------------------------------------
 -- Процедура вставки в таблицу EquipmentClass
 IF OBJECT_ID ('dbo.ins_EquipmentClass',N'P') IS NOT NULL
