@@ -4,7 +4,9 @@ SELECT ProductionResponse.ID,
        ProductionResponse.ResponseState,
        ProductionResponse.ProductionRequestID,
        EquipmentRequirement.EquipmentID,
-       Equipment.EquipmentClassID
+       Equipment.EquipmentClassID,
+       SegmentRequirement.ProductSegmentID,
+       SegmentRequirement.ProcessSegmentID
   FROM dbo.Equipment Equipment,
        dbo.EquipmentRequirement EquipmentRequirement,
        dbo.SegmentRequirement SegmentRequirement,

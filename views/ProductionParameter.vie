@@ -1,0 +1,12 @@
+CREATE VIEW dbo.v_ProductionParameter_Files
+AS
+SELECT ProductionParameter.ProductSegmentID,
+       ProductionParameter.ProcessSegmentID,
+       ProductionParameter.Parameter,
+       ProductionParameter.PropertyType,
+       Files.FileType,
+       Files.Data
+FROM Files Files, 
+     ProductionParameter ProductionParameter
+WHERE Files.ID = ProductionParameter.Parameter
+GO

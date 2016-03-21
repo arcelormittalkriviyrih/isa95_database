@@ -1,0 +1,12 @@
+CREATE VIEW dbo.v_EquipmentProperty
+AS
+SELECT ep.ID,
+       ep.Description,
+       ep.Value,
+       ep.EquipmentProperty,
+       ep.EquipmentCapabilityTestSpecification,
+       ep.TestResult,
+       ep.EquipmentID,
+       ep.ClassPropertyID
+FROM dbo.EquipmentProperty ep
+GO
