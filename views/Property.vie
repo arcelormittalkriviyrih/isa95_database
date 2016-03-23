@@ -12,4 +12,56 @@ UNION ALL
 SELECT prop.ID, 
        prop.Description
 FROM dbo.MaterialDefinitionProperty prop
+UNION ALL
+SELECT prop.ID,
+       prop.Description
+FROM dbo.PropertyTypes prop
+GO
+
+
+IF OBJECT_ID ('dbo.v_PrintProperties', N'V') IS NOT NULL
+   DROP VIEW dbo.v_PrintProperties;
+GO
+
+CREATE VIEW dbo.v_PrintProperties
+AS
+SELECT srp.ProductionResponse,
+       epc.ID ClassPropertyID,
+       N'EquipmentProperty' TypeProperty,
+       epc.Description NameProperty,
+       convert(nvarchar, ep.value) ValueProperty
+FROM dbo.SegmentRequirement sr 
+     INNER JOIN dbo.EquipmentRequirement er ON (er.SegmentRequirementID=sr.ID)
+     INNER JOIN dbo.EquipmentProperty ep ON (ep.EquipmentID=er.EquipmentID)
+     INNER JOIN dbo.EquipmentClassProperty epc ON (epc.ID=ep.ClassPropertyID)
+	 INNER JOIN dbo.SegmentResponse srp ON (srp.ProductionRequest=sr.ProductionRequest)
+UNION ALL
+SELECT sr.ProductionResponse,
+       mdp.ID ClassPropertyID,
+       N'MaterialLotProperty' TypeProperty,
+       mdp.Description NameProperty,
+       convert(nvarchar, mlp.value) ValueProperty
+FROM dbo.SegmentResponse sr
+     INNER JOIN dbo.MaterialActual ma ON (ma.SegmentResponseID=sr.ID)
+     INNER JOIN dbo.MaterialLotProperty mlp ON (mlp.MaterialLotID=ma.MaterialLotID)
+     INNER JOIN dbo.MaterialDefinitionProperty mdp ON (mdp.ID=mlp.DefinitionPropertyID)
+UNION ALL
+SELECT srp.ProductionResponse,
+       pt.ID ClassPropertyID,
+       N'ProductionParameter' TypeProperty,
+       pt.Description NameProperty,
+       convert(nvarchar, pp.Parameter) ValueProperty
+FROM dbo.SegmentRequirement sr 
+     INNER JOIN dbo.ProductionParameter pp ON (pp.ID=sr.ProductionParameter)
+     INNER JOIN dbo.PropertyTypes pt ON (pt.ID=pp.PropertyType)
+	 INNER JOIN dbo.SegmentResponse srp ON (srp.ProductionRequest=sr.ProductionRequest)
+UNION ALL
+SELECT sr.ProductionResponse,
+       0 ClassPropertyID,
+       N'Weight' TypeProperty,
+       N'Weight' NameProperty,
+       convert(nvarchar, ml.Quantity) ValueProperty
+FROM dbo.MaterialLot ml
+     INNER JOIN dbo.MaterialActual ma ON (ma.MaterialLotID=ml.ID)
+     INNER JOIN dbo.SegmentResponse sr ON (sr.ID=ma.SegmentResponseID)       
 GO

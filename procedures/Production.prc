@@ -268,10 +268,6 @@ BEGIN
 END;
 GO
 
-IF OBJECT_ID ('dbo.gen_ProductionParameter',N'SO') IS NULL
-   CREATE SEQUENCE dbo.gen_ProductionParameter AS INT START WITH 1 INCREMENT BY 1 NO CACHE;
-GO
-
 --------------------------------------------------------------
 -- Процедура вставки в таблицу ProductionParameter
 IF OBJECT_ID ('dbo.ins_ProductionParameter',N'P') IS NOT NULL
@@ -288,7 +284,7 @@ AS
 BEGIN
 
   IF @ProductionParameterID IS NULL
-    SET @ProductionParameterID=NEXT VALUE FOR dbo.gen_ProductionParameter;
+    SET @ProductionParameterID=NEXT VALUE FOR dbo.gen_Property;
 
   INSERT INTO dbo.ProductionParameter(ID,
                                       ProductSegmentID,
