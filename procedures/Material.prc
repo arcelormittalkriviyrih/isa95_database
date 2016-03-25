@@ -606,17 +606,17 @@ BEGIN
     @ProductionResponseID INT,
     @MaterialLotID        INT,
     @MaterialActualID     INT,
+    @Quantity             INT,
     @now                  DATETIME = CURRENT_TIMESTAMP,
     @err_message          NVARCHAR(255);
 
-  SELECT @ProductionRequestID=preq.ID
-  FROM dbo.ProductionRequest preq
-      INNER JOIN dbo.SegmentRequirement sreq ON (sreq.ProductionRequest = preq.ID)
-      INNER JOIN dbo.EquipmentRequirement ereq ON (ereq.SegmentRequirementID = sreq.ID)
-      INNER JOIN dbo.Equipment eq ON (eq.ID = ereq.EquipmentID)
-      INNER JOIN dbo.EquipmentProperty eqp ON (eqp.EquipmentID=eq.ID AND eqp.ClassPropertyID=1)
-  WHERE ISNUMERIC(eqp.value)=1
-   AND CAST(eqp.value AS INT)=@ControllerID;
+  SELECT @ProductionRequestID=sreq.ProductionRequest,
+         @Quantity=kl.Weight_VALUE
+  FROM dbo.v_kep_logger kl
+       INNER JOIN dbo.EquipmentRequirement ereq ON (ereq.EquipmentID=kl.EquipmentID)
+       INNER JOIN dbo.SegmentRequirement sreq ON (sreq.ID=ereq.SegmentRequirementID)
+       INNER JOIN dbo.ProductionRequest preq ON (preq.ID=sreq.ProductionRequest AND preq.RequestState=N'InProgress')
+  WHERE kl.Controller_ID=@ControllerID;
 
   IF @ProductionRequestID IS NULL
     BEGIN
@@ -628,7 +628,7 @@ BEGIN
   EXEC dbo.ins_ProductionResponse @ProductionRequestID  = @ProductionRequestID,
                                   @StartTime            = @now,
                                   @EndTime              = @now,
-                                  @ResponseState        = N'InProgress',
+                                  @ResponseState        = N'ToPrint',
                                   @ProductionResponseID = @ProductionResponseID OUTPUT;
 
   EXEC dbo.ins_SegmentResponse @Description        = NULL,
@@ -641,12 +641,12 @@ BEGIN
 
   EXEC dbo.ins_MaterialLot @Description          = NULL,
                            @Status               = NULL,
-                           @Quantity             = 1,
+                           @Quantity             = @Quantity,
                            @MaterialLotID        = @MaterialLotID OUTPUT;
 
   EXEC dbo.ins_MaterialActual @MaterialLotID     = @MaterialLotID,
                               @Description       = NULL,
-                              @Quantity          = 1,
+                              @Quantity          = NULL,
                               @SegmentResponseID = @SegmentResponseID,
                               @MaterialActualID  = @MaterialActualID OUTPUT
 END;
