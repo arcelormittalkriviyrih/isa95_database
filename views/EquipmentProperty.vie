@@ -1,3 +1,7 @@
+IF OBJECT_ID ('dbo.v_EquipmentProperty', 'V') IS NOT NULL
+	DROP VIEW dbo.v_EquipmentProperty;
+GO
+
 CREATE VIEW dbo.v_EquipmentProperty
 AS
 SELECT ep.ID,

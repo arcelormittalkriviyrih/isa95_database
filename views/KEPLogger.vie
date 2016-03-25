@@ -1,23 +1,25 @@
 IF OBJECT_ID ('dbo.v_kep_logger', 'V') IS NOT NULL
-DROP VIEW dbo.v_kep_logger;
+	DROP VIEW dbo.v_kep_logger;
 GO
 
 CREATE VIEW dbo.v_kep_logger
 AS
 SELECT ww.EquipmentID,
        ww.Description,
-       ww.Controller_ID,
+       ww.ControllerID Controller_ID,
        ww.Weight_VALUE,
        ww.Weight_TIMESTAMP,
        ww.Weight_OK_Value
 FROM (
 SELECT eq.ID EquipmentID,
        eq.Description,
+       CAST(eqp.value AS INT) ControllerID,
        ROW_NUMBER() OVER(PARTITION BY kl.Controller_ID ORDER BY kl.Weight_TIMESTAMP DESC) RowNumber,
        kl.* 
 FROM dbo.Equipment eq
-     INNER JOIN dbo.EquipmentProperty eqp ON (eqp.EquipmentID=eq.ID AND eqp.ClassPropertyID=1)
-     INNER JOIN dbo.KEP_logger kl ON (kl.Controller_ID=CAST(eqp.value AS INT) AND ISNUMERIC(eqp.value)=1)
+     INNER JOIN dbo.EquipmentProperty eqp ON (eqp.EquipmentID=eq.ID)
+     INNER JOIN dbo.EquipmentClassProperty ecp ON (ecp.ID=eqp.ClassPropertyID AND ecp.value=N'NK')
+     INNER JOIN dbo.KEP_logger kl ON (ISNUMERIC(eqp.value)=1 AND kl.Controller_ID=CAST(eqp.value AS INT))
 ) ww
 WHERE ww.RowNumber=1
 GO
