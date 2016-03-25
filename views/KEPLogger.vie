@@ -9,7 +9,7 @@ SELECT ww.EquipmentID,
        ww.Controller_ID,
        ww.Weight_VALUE,
        ww.Weight_TIMESTAMP,
-       ww.Weight_Status
+       ww.Weight_OK_Value
 FROM (
 SELECT eq.ID EquipmentID,
        eq.Description,
@@ -17,7 +17,7 @@ SELECT eq.ID EquipmentID,
        kl.* 
 FROM dbo.Equipment eq
      INNER JOIN dbo.EquipmentProperty eqp ON (eqp.EquipmentID=eq.ID AND eqp.ClassPropertyID=1)
-     INNER JOIN KEPServer.vimas.KEP_logger kl ON (kl.Controller_ID=CAST(eqp.value AS INT) AND ISNUMERIC(eqp.value)=1)
+     INNER JOIN dbo.KEP_logger kl ON (kl.Controller_ID=CAST(eqp.value AS INT) AND ISNUMERIC(eqp.value)=1)
 ) ww
 WHERE ww.RowNumber=1
 GO

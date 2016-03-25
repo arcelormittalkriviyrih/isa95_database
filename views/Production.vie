@@ -1,4 +1,8 @@
-﻿CREATE VIEW [dbo].v_ProductionResponse
+﻿IF OBJECT_ID ('dbo.v_ProductionResponse', 'V') IS NOT NULL
+	DROP VIEW dbo.v_ProductionResponse;
+GO
+
+CREATE VIEW dbo.v_ProductionResponse
 AS
 SELECT ProductionResponse.ID,
        ProductionResponse.ResponseState,

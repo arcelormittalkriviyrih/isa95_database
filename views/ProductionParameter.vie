@@ -1,3 +1,7 @@
+IF OBJECT_ID ('dbo.v_ProductionParameter_Files', 'V') IS NOT NULL
+	DROP VIEW dbo.v_ProductionParameter_Files;
+GO
+
 CREATE VIEW dbo.v_ProductionParameter_Files
 AS
 SELECT ProductionParameter.ProductSegmentID,
