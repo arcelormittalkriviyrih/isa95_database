@@ -17,3 +17,9 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 GO
+
+CREATE INDEX i1_kep_logger_weight ON dbo.kep_logger (Weight_TIMESTAMP)
+GO
+
+CREATE INDEX i2_kep_logger_ControllerID ON dbo.kep_logger (Controller_ID)
+GO

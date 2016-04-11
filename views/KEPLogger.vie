@@ -19,7 +19,7 @@ SELECT eq.ID EquipmentID,
 FROM dbo.Equipment eq
      INNER JOIN dbo.EquipmentProperty eqp ON (eqp.EquipmentID=eq.ID)
      INNER JOIN dbo.EquipmentClassProperty ecp ON (ecp.ID=eqp.ClassPropertyID AND ecp.value=N'NK')
-     INNER JOIN dbo.KEP_logger kl ON (ISNUMERIC(eqp.value)=1 AND kl.Controller_ID=CAST(eqp.value AS INT))
+     INNER JOIN dbo.KEP_logger kl ON (ISNUMERIC(eqp.value)=1 AND kl.Controller_ID=CAST(eqp.value AS INT) AND kl.Weight_TIMESTAMP>=DATEADD(hour,-24,GETDATE()))
 ) ww
 WHERE ww.RowNumber=1
 GO
