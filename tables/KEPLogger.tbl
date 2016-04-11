@@ -8,7 +8,7 @@ CREATE TABLE [dbo].[KEP_logger](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[Controller_ID] [int] NULL,
 	[Weight_VALUE] [real] NULL,
-	[Weight_TIMESTAMP] [datetime] NULL,
+	[Weight_TIMESTAMP] [datetimeoffset] NULL,
 	[WEIGHT_OK_VALUE] [bit] NULL,
 PRIMARY KEY CLUSTERED 
 (

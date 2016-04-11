@@ -106,10 +106,10 @@ CREATE TABLE [dbo].[BatchListEntry](
 	[ProductID] [int] NULL,
 	[OrderID] [nvarchar](50) NULL,
 	[StartCondition] [nvarchar](50) NULL,
-	[RequestedStartTime] [datetime] NULL,
-	[ActualStartTime] [datetime] NULL,
-	[RequestedEndTime] [datetime] NULL,
-	[ActualEndTime] [datetime] NULL,
+	[RequestedStartTime] [datetimeoffset] NULL,
+	[ActualStartTime] [datetimeoffset] NULL,
+	[RequestedEndTime] [datetimeoffset] NULL,
+	[ActualEndTime] [datetimeoffset] NULL,
 	[BatchPriority] [nvarchar](50) NULL,
 	[RequestedBatchSize] [nvarchar](50) NULL,
 	[ActualBatchSize] [nvarchar](50) NULL,
@@ -179,15 +179,15 @@ CREATE TABLE [dbo].[BatchProductionRecord](
 	[ID] [int] NOT NULL,
 	[BatchProductionRecordEntry] [int] NOT NULL,
 	[EquipmentScope] [int] NOT NULL,
-	[PublishedDate] [datetime] NOT NULL,
-	[CreationDate] [datetime] NOT NULL,
+	[PublishedDate] [datetimeoffset] NOT NULL,
+	[CreationDate] [datetimeoffset] NOT NULL,
 	[BatchID] [nvarchar](50) NOT NULL,
 	[BatchProductionRecordSpec] [nvarchar](50) NOT NULL,
 	[CampaginID] [nvarchar](50) NOT NULL,
 	[ChangeIndication] [nvarchar](50) NOT NULL,
 	[Delimiter] [nvarchar](50) NOT NULL,
 	[EquipmentID] [int] NOT NULL,
-	[ExpirationDate] [datetime] NOT NULL,
+	[ExpirationDate] [datetimeoffset] NOT NULL,
 	[Language] [nvarchar](50) NOT NULL,
 	[LastChangedDate] [nvarchar](50) NOT NULL,
 	[LotID] [int] NOT NULL,
@@ -231,7 +231,7 @@ GO
 CREATE TABLE [dbo].[BatchProductionRecordEntry](
 	[EntryID] [int] NOT NULL,
 	[ObjectType] [nvarchar](50) NOT NULL,
-	[TimeStamp] [datetime] NOT NULL,
+	[TimeStamp] [datetimeoffset] NOT NULL,
 	[ExternalReference] [nvarchar](50) NOT NULL,
 	[Description] [nvarchar](50) NOT NULL,
  CONSTRAINT [PK_BatchProductionRecordEntry] PRIMARY KEY CLUSTERED 
@@ -436,7 +436,7 @@ GO
 CREATE TABLE [dbo].[ControlRecipe](
 	[ID] [int] NOT NULL,
 	[Verscion] [nvarchar](50) NULL,
-	[VersionDate] [datetime] NULL,
+	[VersionDate] [datetimeoffset] NULL,
 	[Description] [nvarchar](50) NULL,
 	[BatchID] [nvarchar](50) NULL,
 	[Header] [int] NULL,
@@ -475,8 +475,8 @@ CREATE TABLE [dbo].[DataSet](
 	[ID] [int] NOT NULL,
 	[BatchProductionRecordEntry] [int] NOT NULL,
 	[TrendSystemReference] [nvarchar](50) NOT NULL,
-	[StartTime] [datetime] NOT NULL,
-	[EndTime] [datetime] NOT NULL,
+	[StartTime] [datetimeoffset] NOT NULL,
+	[EndTime] [datetimeoffset] NOT NULL,
 	[TimeSpecification] [int] NOT NULL,
 	[DelimitedDataBlock] [int] NULL,
  CONSTRAINT [PK_DataSet] PRIMARY KEY CLUSTERED 
@@ -644,8 +644,8 @@ GO
 CREATE TABLE [dbo].[EquipmentAssetMapping](
 	[EquipmentID] [int] NOT NULL,
 	[PhysicalAssetID] [int] NOT NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL
 ) ON [PRIMARY]
 
 GO
@@ -662,8 +662,8 @@ CREATE TABLE [dbo].[EquipmentCapability](
 	[CapabilityType] [nvarchar](50) NOT NULL,
 	[Reason] [nvarchar](50) NULL,
 	[EquipmentElementLevel] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[Quantity] [int] NULL,
@@ -1107,8 +1107,8 @@ CREATE TABLE [dbo].[GRecipeHeader](
 	[ID] [int] NOT NULL,
 	[Description] [nvarchar](50) NULL,
 	[DerivedFromID] [nvarchar](50) NULL,
-	[EffectiveDate] [datetime] NULL,
-	[ExpirationDate] [datetime] NULL,
+	[EffectiveDate] [datetimeoffset] NULL,
+	[ExpirationDate] [datetimeoffset] NULL,
  CONSTRAINT [PK_GRecipeHeader] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -1125,7 +1125,7 @@ CREATE TABLE [dbo].[GRecipeInformation](
 	[ID] [int] NOT NULL,
 	[Description] [nvarchar](50) NULL,
 	[Location] [nvarchar](50) NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
  CONSTRAINT [PK_GRecipeInformation] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -1192,8 +1192,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Header](
 	[ID] [int] NOT NULL,
-	[EffectiveDate] [datetime] NULL,
-	[ExpirationDate] [datetime] NULL,
+	[EffectiveDate] [datetimeoffset] NULL,
+	[ExpirationDate] [datetimeoffset] NULL,
 	[ProductID] [int] NOT NULL,
 	[ProductName] [nvarchar](50) NULL,
 	[BatchSize] [nvarchar](50) NULL,
@@ -1247,7 +1247,7 @@ GO
 CREATE TABLE [dbo].[Individualapproval](
 	[ID] [int] NOT NULL,
 	[ApprovedBy] [nvarchar](50) NULL,
-	[ApprovalDate] [datetime] NULL,
+	[ApprovalDate] [datetimeoffset] NULL,
 	[Description] [nvarchar](50) NULL,
 	[ApprovalHistory] [int] NULL,
  CONSTRAINT [PK_Individualapproval] PRIMARY KEY CLUSTERED 
@@ -1267,8 +1267,8 @@ CREATE TABLE [dbo].[JobList](
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[Workype] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
  CONSTRAINT [PK_JobList] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -1288,8 +1288,8 @@ CREATE TABLE [dbo].[JobOrder](
 	[WorkType] [nvarchar](50) NULL,
 	[WorkMasterID] [int] NOT NULL,
 	[WorkMasterVersion] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Priority] [nvarchar](50) NULL,
 	[Command] [nvarchar](50) NULL,
 	[CommandRule] [nvarchar](50) NULL,
@@ -1316,8 +1316,8 @@ CREATE TABLE [dbo].[JobResponse](
 	[JobOrderID] [int] NULL,
 	[WorkDirectiveID] [int] NULL,
 	[WorkDirectiveVersion] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[JobState] [nvarchar](50) NULL,
 	[JobResponse] [int] NULL,
 	[WorkResponse] [int] NULL,
@@ -1396,8 +1396,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[KPIDefinitionTimeRange](
 	[ID] [int] NOT NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Recurrence] [nvarchar](50) NULL,
 	[Duration] [nvarchar](50) NULL,
 	[KPIDefinitionID] [int] NULL,
@@ -1494,8 +1494,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[KPIInstanceTimeRange](
 	[ID] [int] NOT NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Recurrence] [nvarchar](50) NULL,
 	[Duration] [nvarchar](50) NULL,
 	[KPIInstanceID] [int] NULL,
@@ -1549,8 +1549,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[KPIValueTimeRange](
 	[ID] [int] NOT NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Recurrence] [nvarchar](50) NULL,
 	[Duration] [nvarchar](50) NULL,
 	[KPIValueID] [int] NULL,
@@ -1590,7 +1590,7 @@ CREATE TABLE [dbo].[ListHeader](
 	[Version] [nvarchar](50) NULL,
 	[Description] [nvarchar](50) NULL,
 	[Origin] [nvarchar](50) NULL,
-	[CreateDate] [datetime] NULL,
+	[CreateDate] [datetimeoffset] NULL,
 	[BatchList] [int] NULL,
 	[BatchInformation] [int] NULL,
  CONSTRAINT [PK_ListHeader] PRIMARY KEY CLUSTERED 
@@ -1645,7 +1645,7 @@ GO
 CREATE TABLE [dbo].[MasterRecipe](
 	[ID] [int] NOT NULL,
 	[Version] [nvarchar](50) NULL,
-	[VersionDate] [datetime] NULL,
+	[VersionDate] [datetimeoffset] NULL,
 	[Description] [nvarchar](50) NULL,
 	[Header] [int] NULL,
 	[Formula] [int] NULL,
@@ -1738,8 +1738,8 @@ CREATE TABLE [dbo].[MaterialCapability](
 	[Reason] [nvarchar](50) NULL,
 	[EquipmentElementLevel] [nvarchar](50) NULL,
 	[MaterialUse] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[Quantity] [int] NULL,
@@ -2358,7 +2358,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[ModificationLog](
 	[ID] [int] NOT NULL,
-	[ModifiedDate] [datetime] NULL,
+	[ModifiedDate] [datetimeoffset] NULL,
 	[Description] [nvarchar](50) NULL,
 	[Author] [nvarchar](50) NULL,
 	[ListHeader] [int] NULL,
@@ -2408,8 +2408,8 @@ CREATE TABLE [dbo].[OpEquipmentCapability](
 	[ConfidenceFactor] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[EquipmentUse] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Quantity] [int] NULL,
 	[OperationCapabilityID] [int] NULL,
 	[WorkCapabilityID] [int] NULL,
@@ -2479,9 +2479,9 @@ CREATE TABLE [dbo].[OperationsCapability](
 	[CapabilityType] [nvarchar](50) NULL,
 	[Reason] [nvarchar](50) NULL,
 	[ConfidenceFactor] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
-	[PublishedDate] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
 	[OperationsCapabilityInformation] [int] NULL,
  CONSTRAINT [PK_OperationsCapability] PRIMARY KEY CLUSTERED 
 (
@@ -2499,7 +2499,7 @@ CREATE TABLE [dbo].[OperationsCapabilityInformation](
 	[ID] [int] NOT NULL,
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [nvarchar](50) NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
  CONSTRAINT [PK_OperationsCapabilityInformation] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -2518,7 +2518,7 @@ CREATE TABLE [dbo].[OperationsDefinition](
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[OperationsType] [nvarchar](50) NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
 	[BillOfMaterialsID] [nvarchar](50) NULL,
 	[BillOfResourcesID] [nvarchar](50) NULL,
 	[OperationsResponse] [int] NULL,
@@ -2615,8 +2615,8 @@ CREATE TABLE [dbo].[OperationsPerfomance](
 	[HierarchyScope] [int] NULL,
 	[OperationsType] [nvarchar](50) NULL,
 	[OperationsScheduleID] [int] NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[PerformanceState] [nvarchar](50) NULL,
 	[PublishedDate] [nvarchar](50) NULL,
  CONSTRAINT [PK_OperationsPerfomance] PRIMARY KEY CLUSTERED 
@@ -2652,8 +2652,8 @@ CREATE TABLE [dbo].[OperationsRequest](
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[OperationsType] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Priority] [nvarchar](50) NULL,
 	[OperationsDefinitionID] [int] NULL,
 	[RequestState] [nvarchar](50) NULL,
@@ -2676,8 +2676,8 @@ CREATE TABLE [dbo].[OperationsResponse](
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[OperationsType] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[ResponseState] [nvarchar](50) NULL,
 	[OperationsPerfomance] [int] NULL,
  CONSTRAINT [PK_OperationsResponse] PRIMARY KEY CLUSTERED 
@@ -2697,8 +2697,8 @@ CREATE TABLE [dbo].[OperationsScedule](
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[OperationsType] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[SheduleState] [nvarchar](50) NULL,
 	[PublishedDate] [nvarchar](50) NULL,
  CONSTRAINT [PK_OperationsScedule] PRIMARY KEY CLUSTERED 
@@ -2791,8 +2791,8 @@ CREATE TABLE [dbo].[OpMaterialCapability](
 	[ConfidenceFactor] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[MaterialUse] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[AssemblyCapability] [int] NULL,
 	[AssemblyType] [nvarchar](50) NULL,
 	[AssemblyRelationship] [nvarchar](50) NULL,
@@ -2900,8 +2900,8 @@ CREATE TABLE [dbo].[OpPersonnelCapability](
 	[ConfidenceFactor] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[PersonnelUse] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Quantity] [int] NULL,
 	[OperationCapabilityID] [int] NULL,
 	[ProcessSegmentCapabilityID] [int] NULL,
@@ -2995,8 +2995,8 @@ CREATE TABLE [dbo].[OpPhysicalAssetCapability](
 	[ConfidenceFactor] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[PhysicalAssetUse] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Quantity] [int] NULL,
 	[ProcessSegmentCapabilityID] [int] NULL,
 	[OperationCapabilityID] [int] NULL,
@@ -3066,8 +3066,8 @@ CREATE TABLE [dbo].[OpProcessSegmentCapability](
 	[Reason] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[EquipmentElementLevel] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[ProcessSegmentCapability] [int] NULL,
 	[OpetationCapability] [int] NULL,
  CONSTRAINT [PK_OpProcessSegmentCapability] PRIMARY KEY CLUSTERED 
@@ -3108,8 +3108,8 @@ CREATE TABLE [dbo].[OpSegmentRequirement](
 	[HierarchyScope] [int] NULL,
 	[OperationsType] [nvarchar](50) NULL,
 	[ProcessSegmentID] [int] NULL,
-	[EarliestStartTime] [datetime] NULL,
-	[LatestEndTime] [datetime] NULL,
+	[EarliestStartTime] [datetimeoffset] NULL,
+	[LatestEndTime] [datetimeoffset] NULL,
 	[Duration] [nvarchar](50) NULL,
 	[OperationsDefinitionID] [int] NULL,
 	[SegmentState] [nvarchar](50) NULL,
@@ -3133,8 +3133,8 @@ CREATE TABLE [dbo].[OpSegmentResponse](
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[OperationsType] [nvarchar](50) NULL,
-	[ActualStartTime] [datetime] NULL,
-	[ActualEndTime] [datetime] NULL,
+	[ActualStartTime] [datetimeoffset] NULL,
+	[ActualEndTime] [datetimeoffset] NULL,
 	[SegmentState] [nvarchar](50) NULL,
 	[SegmentResponse] [int] NULL,
 	[RequiredByRequestedSegment] [nvarchar](50) NULL,
@@ -3155,7 +3155,7 @@ GO
 CREATE TABLE [dbo].[OrderedData](
 	[ID] [int] NOT NULL,
 	[OrderIndex] [nvarchar](50) NULL,
-	[TimeValue] [datetime] NULL,
+	[TimeValue] [datetimeoffset] NULL,
 	[DataSet] [int] NULL,
  CONSTRAINT [PK_OrderedData] PRIMARY KEY CLUSTERED 
 (
@@ -3276,8 +3276,8 @@ CREATE TABLE [dbo].[PersonnelCapability](
 	[CapabilityType] [nvarchar](50) NOT NULL,
 	[Reason] [nvarchar](50) NULL,
 	[EquipmentElementLevel] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[Quantity] [int] NULL,
@@ -3598,8 +3598,8 @@ CREATE TABLE [dbo].[PhysicalAssetCapability](
 	[CapabilityType] [nvarchar](50) NOT NULL,
 	[Reason] [nvarchar](50) NULL,
 	[EquipmentElementLevel] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[Quantity] [int] NULL,
@@ -3901,7 +3901,7 @@ CREATE TABLE [dbo].[ProcessElementLibrary](
 	[ID] [int] NOT NULL,
 	[Description] [nvarchar](50) NULL,
 	[Location] [nvarchar](50) NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
  CONSTRAINT [PK_ProcessElementLibrary] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -3939,7 +3939,7 @@ CREATE TABLE [dbo].[ProcessSegment](
 	[OperationsType] [nvarchar](50) NULL,
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
 	[Duration] [nvarchar](50) NULL,
 	[SegmentDependency] [nvarchar](50) NULL,
 	[ProcessSegment] [int] NULL,
@@ -3971,8 +3971,8 @@ CREATE TABLE [dbo].[ProcessSegmentCapability](
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[EquipmentElementLevel] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[ProcessSegmentCapability] [int] NULL,
 	[ProductionCapabilityID] [int] NULL,
  CONSTRAINT [PK_ProcessSegmentCapability] PRIMARY KEY CLUSTERED 
@@ -3992,7 +3992,7 @@ CREATE TABLE [dbo].[ProcessSegmentInformation](
 	[Description] [nvarchar](50) NULL,
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
  CONSTRAINT [PK_ProcessSegmentInformation] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -4011,7 +4011,7 @@ CREATE TABLE [dbo].[ProductDefinition](
 	[Description] [nvarchar](50) NULL,
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
 	[ProductProductionRule] [int] NULL,
 	[BillOfMaterialsID] [nvarchar](50) NULL,
 	[BillOfResourcesID] [nvarchar](50) NULL,
@@ -4049,7 +4049,7 @@ CREATE TABLE [dbo].[ProductInformation](
 	[Description] [nvarchar](50) NULL,
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
  CONSTRAINT [PK_ProductInformation] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -4067,12 +4067,12 @@ CREATE TABLE [dbo].[ProductionCapability](
 	[Description] [nvarchar](50) NULL,
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[PublishedDate] [datetime] NOT NULL,
+	[PublishedDate] [datetimeoffset] NOT NULL,
 	[CapabilityType] [nvarchar](50) NOT NULL,
 	[Reason] [nvarchar](50) NULL,
 	[EquipmentElementLevel] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
  CONSTRAINT [PK_ProductionCapability] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -4126,10 +4126,10 @@ CREATE TABLE [dbo].[ProductionPerformance](
 	[Description] [nvarchar](50) NULL,
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
 	[ProductionScheduleID] [int] NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[EquipmentElementLevel] [nvarchar](50) NULL,
 	[PerformanceState] [nvarchar](50) NULL,
  CONSTRAINT [PK_ProductionPerformance] PRIMARY KEY CLUSTERED 
@@ -4165,8 +4165,8 @@ CREATE TABLE [dbo].[ProductionRequest](
 	[Description] [nvarchar](50) NOT NULL,
 	[Location] [nvarchar](50) NOT NULL,
 	[HierarchyScope] [int] NOT NULL,
-	[StartTime] [datetime] NOT NULL,
-	[EndTime] [datetime] NOT NULL,
+	[StartTime] [datetimeoffset] NOT NULL,
+	[EndTime] [datetimeoffset] NOT NULL,
 	[Priority] [nvarchar](50) NOT NULL,
 	[RequestState] [nvarchar](50) NOT NULL,
 	[ProductionSchedule] [int] NULL,
@@ -4187,8 +4187,8 @@ CREATE TABLE [dbo].[ProductionResponse](
 	[ProductionRequestID] [int] NOT NULL,
 	[Location] [nvarchar](50) NOT NULL,
 	[HierarchyScope] [int] NOT NULL,
-	[StartTime] [datetime] NOT NULL,
-	[EndTime] [datetime] NOT NULL,
+	[StartTime] [datetimeoffset] NOT NULL,
+	[EndTime] [datetimeoffset] NOT NULL,
 	[ResponseState] [nvarchar](50) NOT NULL,
 	[ProductionPerfomance] [int] NULL,
  CONSTRAINT [PK_ProductionResponse] PRIMARY KEY CLUSTERED 
@@ -4209,8 +4209,8 @@ CREATE TABLE [dbo].[ProductionScedule](
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[PublishedDate] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[EquipmentElementLevel] [nvarchar](50) NULL,
 	[SceduleState] [nvarchar](50) NULL,
  CONSTRAINT [PK_ProductionScedule] PRIMARY KEY CLUSTERED 
@@ -4330,7 +4330,7 @@ GO
 CREATE TABLE [dbo].[RecipeElement](
 	[ID] [int] NOT NULL,
 	[Version] [nvarchar](50) NULL,
-	[VersionDate] [datetime] NULL,
+	[VersionDate] [datetimeoffset] NULL,
 	[Description] [nvarchar](50) NULL,
 	[RecipeElementType] [nvarchar](50) NOT NULL,
 	[BuildingBlockElementID] [int] NULL,
@@ -4394,7 +4394,7 @@ CREATE TABLE [dbo].[ResourceConstraintLibrary](
 	[ID] [int] NOT NULL,
 	[Description] [nvarchar](50) NULL,
 	[Location] [nvarchar](50) NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
  CONSTRAINT [PK_ResourceConstraintLibrary] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -4643,8 +4643,8 @@ CREATE TABLE [dbo].[SegmentRequirement](
 	[Description] [nvarchar](50) NULL,
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[EarliestStartTime] [datetime] NULL,
-	[LatestEndTime] [datetime] NULL,
+	[EarliestStartTime] [datetimeoffset] NULL,
+	[LatestEndTime] [datetimeoffset] NULL,
 	[Duration] [nvarchar](50) NULL,
 	[ProductionParameter] [int] NULL,
 	[SegmentRequirement] [int] NULL,
@@ -4668,8 +4668,8 @@ CREATE TABLE [dbo].[SegmentResponse](
 	[Description] [nvarchar](50) NULL,
 	[Location] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[ActualStartTime] [datetime] NULL,
-	[ActualEndTime] [datetime] NULL,
+	[ActualStartTime] [datetimeoffset] NULL,
+	[ActualEndTime] [datetimeoffset] NULL,
 	[SegmentResponse] [int] NULL,
 	[RequiredByRequestedSegmentResponse] [nvarchar](50) NULL,
 	[SegmentState] [nvarchar](50) NULL,
@@ -4761,8 +4761,8 @@ GO
 CREATE TABLE [dbo].[TimeSpecification](
 	[ID] [int] NOT NULL,
 	[Relative] [nvarchar](50) NULL,
-	[OffsetTime] [datetime] NULL,
-	[OffsetTimeFormat] [datetime] NULL,
+	[OffsetTime] [datetimeoffset] NULL,
+	[OffsetTimeFormat] [datetimeoffset] NULL,
  CONSTRAINT [PK_TimeSpecification] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -4800,7 +4800,7 @@ CREATE TABLE [dbo].[TransactionProfile](
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[PublishedScope] [nvarchar](50) NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
  CONSTRAINT [PK_TransactionProfile] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -4908,7 +4908,7 @@ CREATE TABLE [dbo].[WorkAlertInformation](
 	[ID] [int] NOT NULL,
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
  CONSTRAINT [PK_WorkAlertInformation] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -4946,8 +4946,8 @@ CREATE TABLE [dbo].[WorkCapability](
 	[CapabilityType] [nvarchar](50) NULL,
 	[Reason] [nvarchar](50) NULL,
 	[ConfidenceFactor] [nvarchar](50) NULL,
-	[StartTime] [datetime] NOT NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NOT NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[PublishedDate] [nvarchar](50) NULL,
 	[WorkCapabilityInformation] [int] NULL,
  CONSTRAINT [PK_WorkCapability] PRIMARY KEY CLUSTERED 
@@ -4966,7 +4966,7 @@ CREATE TABLE [dbo].[WorkCapabilityInformation](
 	[ID] [int] NOT NULL,
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
  CONSTRAINT [PK_WorkCapabilityInformation] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -4985,8 +4985,8 @@ CREATE TABLE [dbo].[WorkDefinition](
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [nvarchar](50) NULL,
 	[WorkType] [nvarchar](50) NULL,
-	[Duration] [datetime] NULL,
-	[PublishedDate] [datetime] NULL,
+	[Duration] [datetimeoffset] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
 	[OperationsDefinitionID] [int] NULL,
 	[Parameter] [nvarchar](50) NULL,
  CONSTRAINT [PK_WorkDefinition] PRIMARY KEY CLUSTERED 
@@ -5005,7 +5005,7 @@ CREATE TABLE [dbo].[WorkDefinitionInformation](
 	[ID] [int] NOT NULL,
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
  CONSTRAINT [PK_WorkDefinitionInformation] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -5107,7 +5107,7 @@ CREATE TABLE [dbo].[WorkflowSpecificationInformation](
 	[ID] [int] NOT NULL,
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
  CONSTRAINT [PK_WorkflowSpecificationInformation] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -5216,8 +5216,8 @@ CREATE TABLE [dbo].[WorkMasterCapability](
 	[CapabilityType] [nvarchar](50) NOT NULL,
 	[Reason] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[WorkCapability] [int] NULL,
  CONSTRAINT [PK_WorkMasterCapability] PRIMARY KEY CLUSTERED 
 (
@@ -5253,8 +5253,8 @@ CREATE TABLE [dbo].[WorkPerformance](
 	[HierarchyScope] [int] NULL,
 	[WorkType] [nvarchar](50) NULL,
 	[WorkScheduleID] [int] NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[WorkState] [nvarchar](50) NULL,
 	[PublishedDate] [nvarchar](50) NULL,
  CONSTRAINT [PK_WorkPerformance] PRIMARY KEY CLUSTERED 
@@ -5290,8 +5290,8 @@ CREATE TABLE [dbo].[WorkRequest](
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[Workype] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[Priority] [nvarchar](50) NULL,
 	[WorkRequest] [int] NULL,
 	[WorkSchedule] [int] NULL,
@@ -5313,8 +5313,8 @@ CREATE TABLE [dbo].[WorkResponse](
 	[HierarchyScope] [int] NULL,
 	[WorkType] [nvarchar](50) NULL,
 	[WorkRequestID] [int] NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[ResponseState] [nvarchar](50) NULL,
 	[WorkPerfomence] [int] NULL,
  CONSTRAINT [PK_WorkResponse] PRIMARY KEY CLUSTERED 
@@ -5350,10 +5350,10 @@ CREATE TABLE [dbo].[WorkSchedule](
 	[Description] [nvarchar](50) NULL,
 	[HierarchyScope] [int] NULL,
 	[WorkType] [nvarchar](50) NULL,
-	[StartTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[StartTime] [datetimeoffset] NULL,
+	[EndTime] [datetimeoffset] NULL,
 	[ScheduleState] [nvarchar](50) NULL,
-	[PublishedDate] [datetime] NULL,
+	[PublishedDate] [datetimeoffset] NULL,
 	[WorkShedule] [int] NULL,
  CONSTRAINT [PK_WorkScedule] PRIMARY KEY CLUSTERED 
 (
