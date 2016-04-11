@@ -424,13 +424,13 @@ IF OBJECT_ID ('dbo.ins_MaterialActual',N'P') IS NOT NULL
 GO
 
 CREATE PROCEDURE dbo.ins_MaterialActual
-   --@MaterialClassID                    HIERARCHYID,
+   --@MaterialClassID                    INT,
    --@MaterialDefinitionID               INT,
    @MaterialLotID                      INT,
    --@MaterialSubLotID                   INT,
    @Description                        NVARCHAR(50),
    --@Location                           NVARCHAR(50),
-   --@HierarchyScope                     HIERARCHYID,
+   --@HierarchyScope                     INT,
    --@MaterialUse                        NVARCHAR(50),
    @Quantity                           INT,
    --@AssemblyType                       NVARCHAR(50),
@@ -486,13 +486,13 @@ GO
 
 CREATE PROCEDURE dbo.upd_MaterialActual
    @ID                                 INT,
-   --@MaterialClassID                    HIERARCHYID,
+   --@MaterialClassID                    INT,
    --@MaterialDefinitionID               INT,
    @MaterialLotID                      INT,
    --@MaterialSubLotID                   INT,
    @Description                        NVARCHAR(50),
    --@Location                           NVARCHAR(50),
-   --@HierarchyScope                     HIERARCHYID,
+   --@HierarchyScope                     INT,
    --@MaterialUse                        NVARCHAR(50),
    @Quantity                           INT,
    --@AssemblyType                       NVARCHAR(50),
@@ -548,13 +548,13 @@ GO
 
 CREATE FUNCTION dbo.get_MaterialActual(@ID INT)
 RETURNS @retMaterialActual TABLE (ID                                 INT,
-                                  MaterialClassID                    HIERARCHYID,
+                                  MaterialClassID                    INT,
                                   MaterialDefinitionID               INT,
                                   MaterialLotID                      INT,
                                   MaterialSubLotID                   INT,
                                   Description                        NVARCHAR(50),
                                   Location                           NVARCHAR(50),
-                                  HierarchyScope                     HIERARCHYID,
+                                  HierarchyScope                     INT,
                                   MaterialUse                        NVARCHAR(50),
                                   Quantity                           INT,
                                   AssemblyType                       NVARCHAR(50),

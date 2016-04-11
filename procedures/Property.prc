@@ -15,8 +15,8 @@ IF OBJECT_ID ('dbo.ins_PropertyTypes',N'P') IS NOT NULL
 GO
 
 CREATE PROCEDURE dbo.ins_PropertyTypes
-   @Description                          NVARCHAR(50),
-   @PropertyTypesID             INT OUTPUT
+   @Description       NVARCHAR(50),
+   @PropertyTypesID   INT OUTPUT
 AS
 BEGIN
 

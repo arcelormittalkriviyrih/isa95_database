@@ -1,4 +1,8 @@
-﻿
+﻿--------------------------------------------------------------
+IF OBJECT_ID ('dbo.gen_EquipmentClass',N'SO') IS NULL
+   CREATE SEQUENCE dbo.gen_EquipmentClass AS INT START WITH 1 INCREMENT BY 1 NO CACHE;
+GO
+
 --------------------------------------------------------------
 -- Процедура вставки в таблицу EquipmentClass
 IF OBJECT_ID ('dbo.ins_EquipmentClass',N'P') IS NOT NULL
@@ -6,20 +10,26 @@ IF OBJECT_ID ('dbo.ins_EquipmentClass',N'P') IS NOT NULL
 GO
 
 CREATE PROCEDURE dbo.ins_EquipmentClass
-   @ID             HIERARCHYID,
+   @ParentID       INT,
    @Description    NVARCHAR(50),
    @Location       NVARCHAR(50),
-   @HierarchyScope HIERARCHYID,
-   @EquipmentLevel NVARCHAR(50)
+   @HierarchyScope INT,
+   @EquipmentLevel NVARCHAR(50),
+   @EquipmentClassID INT OUTPUT
 AS
 BEGIN
 
+  IF @EquipmentClassID IS NULL
+    SET @EquipmentClassID=NEXT VALUE FOR dbo.gen_EquipmentClass;
+
   INSERT INTO dbo.EquipmentClass(ID,
+                                 ParentID,
                                  Description,
                                  Location,
                                  HierarchyScope,
                                  EquipmentLevel)
-                         VALUES (@ID,
+                         VALUES (@EquipmentClassID,
+                                 @ParentID,
                                  @Description,
                                  @Location,
                                  @HierarchyScope,
@@ -35,16 +45,18 @@ IF OBJECT_ID ('dbo.upd_EquipmentClass',N'P') IS NOT NULL
 GO
 
 CREATE PROCEDURE dbo.upd_EquipmentClass
-   @ID             HIERARCHYID,
+   @ID             INT,
+   @ParentID       INT,
    @Description    NVARCHAR(50),
    @Location       NVARCHAR(50),
-   @HierarchyScope HIERARCHYID,
+   @HierarchyScope INT,
    @EquipmentLevel NVARCHAR(50)
 AS
 BEGIN
 
   UPDATE dbo.EquipmentClass
-  SET Description=@Description,
+  SET ParentID=@ParentID,
+      Description=@Description,
       Location=@Location,
       HierarchyScope=@HierarchyScope,
       EquipmentLevel=@EquipmentLevel
@@ -60,7 +72,7 @@ IF OBJECT_ID ('dbo.del_EquipmentClass',N'P') IS NOT NULL
 GO
 
 CREATE PROCEDURE dbo.del_EquipmentClass
-   @ID HIERARCHYID
+   @ID INT
 AS
 BEGIN
 
@@ -76,17 +88,19 @@ IF OBJECT_ID ('dbo.get_EquipmentClass', N'TF') IS NOT NULL
    DROP FUNCTION dbo.get_EquipmentClass;
 GO
 
-CREATE FUNCTION dbo.get_EquipmentClass(@ID HIERARCHYID)
-RETURNS @retEquipmentClass TABLE (ID             HIERARCHYID,
+CREATE FUNCTION dbo.get_EquipmentClass(@ID INT)
+RETURNS @retEquipmentClass TABLE (ID             INT,
+                                  ParentID       INT,
                                   Description    NVARCHAR(50),
                                   Location       NVARCHAR(50),
-                                  HierarchyScope HIERARCHYID,
+                                  HierarchyScope INT,
                                   EquipmentLevel NVARCHAR(50))
 AS
 BEGIN
 
   INSERT @retEquipmentClass
   SELECT ID,
+         ParentID,
          Description,
          Location,
          HierarchyScope,
@@ -110,7 +124,7 @@ CREATE PROCEDURE dbo.ins_EquipmentClassProperty
    @Value                                NVARCHAR(50),
    --@EquipmentClassProperty               INT,
    --@EquipmentCapabilityTestSpecification NVARCHAR(50),
-   @EquipmentClassID                     HIERARCHYID,
+   @EquipmentClassID                     INT,
    @EquipmentClassPropertyID             INT OUTPUT
 AS
 BEGIN
@@ -146,7 +160,7 @@ CREATE PROCEDURE dbo.upd_EquipmentClassProperty
    @Value                                NVARCHAR(50),
    --@EquipmentClassProperty               INT,
    --@EquipmentCapabilityTestSpecification NVARCHAR(50),
-   @EquipmentClassID                     HIERARCHYID
+   @EquipmentClassID                     INT
 AS
 BEGIN
 
@@ -190,7 +204,7 @@ RETURNS @retEquipmentClassProperty TABLE (ID                                   I
                                           Value                                NVARCHAR(50),
                                           EquipmentClassProperty               INT,
                                           EquipmentCapabilityTestSpecification NVARCHAR(50),
-                                          EquipmentClassID                     HIERARCHYID)
+                                          EquipmentClassID                     INT)
 AS
 BEGIN
 
@@ -347,10 +361,10 @@ GO
 CREATE PROCEDURE dbo.ins_Equipment
    @Description      NVARCHAR(50),
    --@Location         NVARCHAR(50),
-   --@HierarchyScope   HIERARCHYID,
+   --@HierarchyScope   INT,
    --@EquipmentLevel   NVARCHAR(50),
    --@Equipment        INT,
-   @EquipmentClassID HIERARCHYID,
+   @EquipmentClassID INT,
    @EquipmentID      INT OUTPUT
 AS
 BEGIN
@@ -386,10 +400,10 @@ CREATE PROCEDURE dbo.upd_Equipment
    @ID               INT,
    @Description      NVARCHAR(50),
    --@Location         NVARCHAR(50),
-   --@HierarchyScope   HIERARCHYID,
+   --@HierarchyScope   INT,
    --@EquipmentLevel   NVARCHAR(50),
    --@Equipment        INT,
-   @EquipmentClassID HIERARCHYID
+   @EquipmentClassID INT
 AS
 BEGIN
 
@@ -432,10 +446,10 @@ CREATE FUNCTION dbo.get_Equipment(@ID INT)
 RETURNS @retEquipment TABLE (ID               INT,
                              Description      NVARCHAR(50),
                              Location         NVARCHAR(50),
-                             HierarchyScope   HIERARCHYID,
+                             HierarchyScope   INT,
                              EquipmentLevel   NVARCHAR(50),
                              Equipment        INT,
-                             EquipmentClassID HIERARCHYID)
+                             EquipmentClassID INT)
 AS
 BEGIN
 
@@ -467,11 +481,11 @@ IF OBJECT_ID ('dbo.ins_EquipmentRequirement',N'P') IS NOT NULL
 GO
 
 CREATE PROCEDURE dbo.ins_EquipmentRequirement
-   @EquipmentClassID                   HIERARCHYID,
+   @EquipmentClassID                   INT,
    @EquipmentID                        INT,
    @Description                        NVARCHAR(50),
    --@Location                           NVARCHAR(50),
-   --@HierarchyScope                     HIERARCHYID,
+   --@HierarchyScope                     INT,
    @Quantity                           INT,
    --@RequiredByRequestedSegmentResponce NVARCHAR(50),
    @SegmentRequirementID               INT,
@@ -512,11 +526,11 @@ GO
 
 CREATE PROCEDURE dbo.upd_EquipmentRequirement
    @ID                                 INT,
-   @EquipmentClassID                   HIERARCHYID,
+   @EquipmentClassID                   INT,
    @EquipmentID                        INT,
    @Description                        NVARCHAR(50),
    --@Location                           NVARCHAR(50),
-   --@HierarchyScope                     HIERARCHYID,
+   --@HierarchyScope                     INT,
    @Quantity                           INT,
    --@RequiredByRequestedSegmentResponce NVARCHAR(50),
    @SegmentRequirementID               INT
@@ -562,11 +576,11 @@ GO
 
 CREATE FUNCTION dbo.get_EquipmentRequirement(@ID INT)
 RETURNS @retEquipmentRequirement TABLE (ID                                 INT,
-                                        EquipmentClassID                   HIERARCHYID,
+                                        EquipmentClassID                   INT,
                                         EquipmentID                        INT,
                                         Description                        NVARCHAR(50),
                                         Location                           NVARCHAR(50),
-                                        HierarchyScope                     HIERARCHYID,
+                                        HierarchyScope                     INT,
                                         Quantity                           INT,
                                         RequiredByRequestedSegmentResponce NVARCHAR(50),
                                         SegmentRequirementID               INT)
