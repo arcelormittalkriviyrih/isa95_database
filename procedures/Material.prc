@@ -289,6 +289,113 @@ END;
 GO
 
 --------------------------------------------------------------
+IF OBJECT_ID ('dbo.gen_MaterialDefinition',N'SO') IS NULL
+   CREATE SEQUENCE dbo.gen_MaterialDefinition AS INT START WITH 1 INCREMENT BY 1 NO CACHE;
+GO
+
+--------------------------------------------------------------
+-- Процедура вставки в таблицу MaterialDefinition
+IF OBJECT_ID ('dbo.ins_MaterialDefinition',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_MaterialDefinition;
+GO
+
+CREATE PROCEDURE dbo.ins_MaterialDefinition
+   @Description            NVARCHAR(50),
+   @Location               NVARCHAR(50),
+   @HierarchyScope         INT,
+   @MaterialClassID        INT,
+   @MaterialDefinitionID   INT OUTPUT
+AS
+BEGIN
+
+  IF @MaterialDefinitionID IS NULL
+    SET @MaterialDefinitionID=NEXT VALUE FOR dbo.gen_MaterialDefinition;
+
+  INSERT INTO dbo.MaterialDefinition(ID,
+                                     Description,
+                                     Location,
+                                     HierarchyScope,
+                                     MaterialClassID)
+                             VALUES (@MaterialDefinitionID,
+                                     @Description,
+                                     @Location,
+                                     @HierarchyScope,
+                                     @MaterialClassID);
+
+END;
+GO
+
+--------------------------------------------------------------
+-- Процедура редактирования таблицы MaterialDefinition
+IF OBJECT_ID ('dbo.upd_MaterialDefinition',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.upd_MaterialDefinition;
+GO
+
+CREATE PROCEDURE dbo.upd_MaterialDefinition
+   @ID                INT,
+   @Description       NVARCHAR(50),
+   @Location          NVARCHAR(50),
+   @HierarchyScope    INT,
+   @MaterialClassID   INT
+AS
+BEGIN
+
+  UPDATE dbo.MaterialDefinition
+  SET Description=@Description,
+      Location=@Location,
+      HierarchyScope=@HierarchyScope,
+      MaterialClassID=@MaterialClassID
+  WHERE ID=@ID;
+
+END;
+GO
+
+--------------------------------------------------------------
+-- Процедура удаления из таблицы MaterialDefinition
+IF OBJECT_ID ('dbo.del_MaterialDefinition',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.del_MaterialDefinition;
+GO
+
+CREATE PROCEDURE dbo.del_MaterialDefinition
+   @ID INT
+AS
+BEGIN
+
+  DELETE FROM dbo.MaterialDefinition
+  WHERE ID=@ID;
+
+END;
+GO
+
+--------------------------------------------------------------
+IF OBJECT_ID ('dbo.get_MaterialDefinition', N'TF') IS NOT NULL
+   DROP FUNCTION dbo.get_MaterialDefinition;
+GO
+
+CREATE FUNCTION dbo.get_MaterialDefinition(@ID INT)
+RETURNS @retMaterialDefinition TABLE (ID                INT,
+                                      Description       NVARCHAR(50),
+                                      Location          NVARCHAR(50),
+                                      HierarchyScope    INT,
+                                      MaterialClassID   INT)
+AS
+BEGIN
+
+  INSERT @retMaterialDefinition
+  SELECT ID,
+         Description,
+         Location,
+         HierarchyScope,
+         MaterialClassID
+  FROM dbo.MaterialDefinition
+  WHERE ID=@ID;
+
+  RETURN;
+
+END;
+GO
+
+--------------------------------------------------------------
 -- Процедура вставки в таблицу MaterialDefinitionProperty
 IF OBJECT_ID ('dbo.ins_MaterialDefinitionProperty',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_MaterialDefinitionProperty;
@@ -384,18 +491,18 @@ IF OBJECT_ID ('dbo.get_MaterialDefinitionProperty', N'TF') IS NOT NULL
 GO
 
 CREATE FUNCTION dbo.get_MaterialDefinitionProperty(@ID INT)
-RETURNS @retMaterialLotProperty TABLE (ID                           INT,
-                                       Description                  NVARCHAR(50),
-                                       Value                        NVARCHAR(50),
-                                       MaterialDefinitionProperty   INT,
-                                       MaterialTestSpecificationID  NVARCHAR(50),
-                                       MaterialDefinitionID         INT,
-                                       ClassPropertyID              INT,
-                                       PropertyType                 INT)
+RETURNS @retMaterialDefinitionProperty TABLE (ID                           INT,
+                                              Description                  NVARCHAR(50),
+                                              Value                        NVARCHAR(50),
+                                              MaterialDefinitionProperty   INT,
+                                              MaterialTestSpecificationID  NVARCHAR(50),
+                                              MaterialDefinitionID         INT,
+                                              ClassPropertyID              INT,
+                                              PropertyType                 INT)
 AS
 BEGIN
 
-  INSERT @retMaterialLotProperty
+  INSERT @retMaterialDefinitionProperty
   SELECT ID,
          Description,
          Value,
@@ -582,6 +689,100 @@ BEGIN
          RequiredByRequestedSegmentResponse,
          SegmentResponseID
   FROM dbo.MaterialActual
+  WHERE ID=@ID;
+
+  RETURN;
+
+END;
+GO
+
+--------------------------------------------------------------
+IF OBJECT_ID ('dbo.gen_MaterialClass',N'SO') IS NULL
+   CREATE SEQUENCE dbo.gen_MaterialClass AS INT START WITH 1 INCREMENT BY 1 NO CACHE;
+GO
+
+--------------------------------------------------------------
+-- Процедура вставки в таблицу MaterialClass
+IF OBJECT_ID ('dbo.ins_MaterialClass',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_MaterialClass;
+GO
+
+CREATE PROCEDURE dbo.ins_MaterialClass
+   @ParentID                     INT,
+   @Description                  NVARCHAR(50),
+   @MaterialClassID INT OUTPUT
+AS
+BEGIN
+
+  IF @MaterialClassID IS NULL
+    SET @MaterialClassID=NEXT VALUE FOR dbo.gen_MaterialClass;
+
+  INSERT INTO dbo.MaterialClass(ID,
+                                ParentID,
+                                Description)
+                        VALUES (@MaterialClassID,
+                                @ParentID,
+                                @Description);
+
+END;
+GO
+
+--------------------------------------------------------------
+-- Процедура редактирования таблицы MaterialClass
+IF OBJECT_ID ('dbo.upd_MaterialClass',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.upd_MaterialClass;
+GO
+
+CREATE PROCEDURE dbo.upd_MaterialClass
+   @ID            INT,
+   @ParentID      INT,
+   @Description   NVARCHAR(50)
+AS
+BEGIN
+
+  UPDATE dbo.MaterialClass
+  SET ParentID=@ParentID,
+      Description=@Description
+  WHERE ID=@ID;
+
+END;
+GO
+
+--------------------------------------------------------------
+-- Процедура удаления из таблицы MaterialClass
+IF OBJECT_ID ('dbo.del_MaterialClass',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.del_MaterialClass;
+GO
+
+CREATE PROCEDURE dbo.del_MaterialClass
+    @ID INT
+AS
+BEGIN
+
+  DELETE FROM dbo.MaterialClass
+  WHERE ID=@ID;
+
+END;
+GO
+
+--------------------------------------------------------------
+-- Процедура вычитки из таблицы MaterialClass
+IF OBJECT_ID ('dbo.get_MaterialClass', N'TF') IS NOT NULL
+   DROP FUNCTION dbo.get_MaterialClass;
+GO
+
+CREATE FUNCTION dbo.get_MaterialClass(@ID INT)
+RETURNS @retMaterialClass TABLE (ID            INT,
+                                 ParentID      INT,
+                                 Description   NVARCHAR(50))
+AS
+BEGIN
+
+  INSERT @retMaterialClass
+  SELECT ID,
+         ParentID,
+         Description
+  FROM dbo.MaterialClass
   WHERE ID=@ID;
 
   RETURN;

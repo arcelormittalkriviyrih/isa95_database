@@ -371,3 +371,124 @@ BEGIN
 END;
 GO
 
+--------------------------------------------------------------
+IF OBJECT_ID ('dbo.gen_ProductSegment',N'SO') IS NULL
+   CREATE SEQUENCE dbo.gen_ProductSegment AS INT START WITH 1 INCREMENT BY 1 NO CACHE;
+GO
+
+--------------------------------------------------------------
+-- Процедура вставки в таблицу ProductSegment
+IF OBJECT_ID ('dbo.ins_ProductSegment',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_ProductSegment;
+GO
+
+CREATE PROCEDURE dbo.ins_ProductSegment
+   @Description         NVARCHAR(50),
+   @Duration            NVARCHAR(50),
+   @SegmentDependency   NVARCHAR(50),
+   @ProductSegment      INT,
+   @SegmentResponse     INT,
+   @ProductDefinition   INT,
+   @ProductSegmentID    INT OUTPUT
+AS
+BEGIN
+
+  IF @ProductSegmentID IS NULL
+    SET @ProductSegmentID=NEXT VALUE FOR dbo.gen_ProductSegment;
+
+  INSERT INTO dbo.ProductSegment(ID,
+                                 Description,
+                                 Duration,
+                                 SegmentDependency,
+                                 ProductSegment,
+                                 SegmentResponse,
+                                 ProductDefinition)
+                         VALUES (@ProductSegmentID,
+                                 @Description,
+                                 @Duration,
+                                 @SegmentDependency,
+                                 @ProductSegment,
+                                 @SegmentResponse,
+                                 @ProductDefinition);
+
+END;
+GO
+
+--------------------------------------------------------------
+-- Процедура редактирования таблицы ProductSegment
+IF OBJECT_ID ('dbo.upd_ProductSegment',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.upd_ProductSegment;
+GO
+
+CREATE PROCEDURE dbo.upd_ProductSegment
+   @ID                  INT,
+   @Description         NVARCHAR(50),
+   @Duration            NVARCHAR(50),
+   @SegmentDependency   NVARCHAR(50),
+   @ProductSegment      INT,
+   @SegmentResponse     INT,
+   @ProductDefinition   INT
+AS
+BEGIN
+
+  UPDATE dbo.ProductSegment
+  SET Description=@Description,
+      Duration=@Duration,
+      SegmentDependency=@SegmentDependency,
+      ProductSegment=@ProductSegment,
+      SegmentResponse=@SegmentResponse,
+      ProductDefinition=@ProductDefinition
+  WHERE ID=@ID;
+
+END;
+GO
+
+--------------------------------------------------------------
+-- Процедура удаления из таблицы ProductSegment
+IF OBJECT_ID ('dbo.del_ProductSegment',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.del_ProductSegment;
+GO
+
+CREATE PROCEDURE dbo.del_ProductSegment
+    @ID INT
+AS
+BEGIN
+
+  DELETE FROM dbo.ProductSegment
+  WHERE ID=@ID;
+
+END;
+GO
+
+--------------------------------------------------------------
+-- Процедура вычитки из таблицы ProductSegment
+IF OBJECT_ID ('dbo.get_ProductSegment', N'TF') IS NOT NULL
+   DROP FUNCTION dbo.get_ProductSegment;
+GO
+
+CREATE FUNCTION dbo.get_ProductSegment(@ID INT)
+RETURNS @retProductSegment TABLE (ID                 INT PRIMARY KEY NOT NULL,
+                                  Description         NVARCHAR(50),
+                                  Duration            NVARCHAR(50),
+                                  SegmentDependency   NVARCHAR(50),
+                                  ProductSegment      INT,
+                                  SegmentResponse     INT,
+                                  ProductDefinition   INT)
+AS
+BEGIN
+
+  INSERT @retProductSegment
+  SELECT ID,
+         Description,
+         Duration,
+         SegmentDependency,
+         ProductSegment,
+         SegmentResponse,
+         ProductDefinition
+  FROM dbo.ProductSegment
+  WHERE ID=@ID;
+
+  RETURN;
+
+END;
+GO
