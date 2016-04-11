@@ -5,19 +5,21 @@ GO
 
 CREATE VIEW dbo.v_Property
 AS
-SELECT prop.ID, 
+SELECT prop.ID,
+       prop.Value,
        prop.Description
 FROM dbo.EquipmentClassProperty prop
 UNION ALL
 SELECT prop.ID, 
+       prop.Value,
        prop.Description
 FROM dbo.MaterialDefinitionProperty prop
 UNION ALL
 SELECT prop.ID,
+       prop.Value,
        prop.Description
 FROM dbo.PropertyTypes prop
 GO
-
 
 IF OBJECT_ID ('dbo.v_PrintProperties', N'V') IS NOT NULL
    DROP VIEW dbo.v_PrintProperties;

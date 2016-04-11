@@ -4280,6 +4280,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[PropertyTypes](
 	[ID] [int] NOT NULL,
+	[Value] [nvarchar](50) NULL,
 	[Description] [nvarchar](50) NULL,
  CONSTRAINT [PK_PropertyTypes] PRIMARY KEY CLUSTERED 
 (
