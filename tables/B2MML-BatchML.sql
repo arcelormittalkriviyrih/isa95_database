@@ -3220,23 +3220,7 @@ CREATE TABLE [dbo].[Person](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[PersonelRequirement]    Script Date: 08.12.2015 12:35:04 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[PersonelRequirement](
-	[PersonnelClassID] [nvarchar](50) NOT NULL,
-	[PersonID] [nvarchar](50) NOT NULL,
-	[Description] [nvarchar](50) NULL,
-	[PersonnelUse] [nvarchar](50) NULL,
-	[Quantity] [int] NULL,
-	[HierarchyScope] [nvarchar](50) NULL,
-	[PersonelRequirementProperty] [nvarchar](50) NULL,
-	[RequiredByRequestedSegment] [nvarchar](50) NULL
-) ON [PRIMARY]
 
-GO
 /****** Object:  Table [dbo].[PersonnelActual]    Script Date: 08.12.2015 12:35:04 ******/
 SET ANSI_NULLS ON
 GO
