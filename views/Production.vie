@@ -4,7 +4,8 @@ GO
 
 CREATE VIEW dbo.v_ProductionResponse
 AS
-SELECT ProductionResponse.ID,
+SELECT newID() ID,
+       ProductionResponse.ID ProductionResponseID,
        ProductionResponse.ResponseState,
        ProductionResponse.ProductionRequestID,
        EquipmentRequirement.EquipmentID,

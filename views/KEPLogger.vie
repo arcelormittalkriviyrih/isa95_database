@@ -4,14 +4,16 @@ GO
 
 CREATE VIEW dbo.v_kep_logger
 AS
-SELECT ww.EquipmentID,
+SELECT ww.UniqueID ID,
+       ww.EquipmentID,
        ww.Description,
        ww.ControllerID Controller_ID,
        ww.Weight_VALUE,
        ww.Weight_TIMESTAMP,
        ww.Weight_OK_Value
 FROM (
-SELECT eq.ID EquipmentID,
+SELECT newID() UniqueID,
+       eq.ID EquipmentID,
        eq.Description,
        CAST(eqp.value AS INT) ControllerID,
        ROW_NUMBER() OVER(PARTITION BY kl.Controller_ID ORDER BY kl.Weight_TIMESTAMP DESC) RowNumber,

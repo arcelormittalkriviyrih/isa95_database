@@ -4,7 +4,8 @@ GO
 
 CREATE VIEW dbo.v_ProductionParameter_Files
 AS
-SELECT ProductionParameter.ProductSegmentID,
+SELECT newID() ID,
+       ProductionParameter.ProductSegmentID,
        ProductionParameter.ProcessSegmentID,
        ProductionParameter.Parameter,
        ProductionParameter.PropertyType,

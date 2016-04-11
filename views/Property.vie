@@ -27,7 +27,8 @@ GO
 
 CREATE VIEW dbo.v_PrintProperties
 AS
-SELECT srp.ProductionResponse,
+SELECT newID() ID,
+       srp.ProductionResponse,
        epc.ID ClassPropertyID,
        N'EquipmentProperty' TypeProperty,
        epc.Description NameProperty,
@@ -38,7 +39,8 @@ FROM dbo.SegmentRequirement sr
      INNER JOIN dbo.EquipmentClassProperty epc ON (epc.ID=ep.ClassPropertyID)
 	 INNER JOIN dbo.SegmentResponse srp ON (srp.ProductionRequest=sr.ProductionRequest)
 UNION ALL
-SELECT sr.ProductionResponse,
+SELECT newID() ID,
+       sr.ProductionResponse,
        mdp.ID ClassPropertyID,
        N'MaterialLotProperty' TypeProperty,
        mdp.Description NameProperty,
@@ -48,7 +50,8 @@ FROM dbo.SegmentResponse sr
      INNER JOIN dbo.MaterialLotProperty mlp ON (mlp.MaterialLotID=ma.MaterialLotID)
      INNER JOIN dbo.MaterialDefinitionProperty mdp ON (mdp.ID=mlp.DefinitionPropertyID)
 UNION ALL
-SELECT srp.ProductionResponse,
+SELECT newID() ID,
+       srp.ProductionResponse,
        pt.ID ClassPropertyID,
        N'ProductionParameter' TypeProperty,
        pt.Description NameProperty,
@@ -58,12 +61,14 @@ FROM dbo.SegmentRequirement sr
      INNER JOIN dbo.PropertyTypes pt ON (pt.ID=pp.PropertyType)
 	 INNER JOIN dbo.SegmentResponse srp ON (srp.ProductionRequest=sr.ProductionRequest)
 UNION ALL
-SELECT sr.ProductionResponse,
+SELECT newID() ID,
+       sr.ProductionResponse,
        0 ClassPropertyID,
        N'Weight' TypeProperty,
        N'Weight' NameProperty,
        convert(nvarchar, ml.Quantity) ValueProperty
 FROM dbo.MaterialLot ml
      INNER JOIN dbo.MaterialActual ma ON (ma.MaterialLotID=ml.ID)
-     INNER JOIN dbo.SegmentResponse sr ON (sr.ID=ma.SegmentResponseID)       
+     INNER JOIN dbo.SegmentResponse sr ON (sr.ID=ma.SegmentResponseID)
 GO
+
