@@ -1,0 +1,37 @@
+﻿SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TestDataTypes](
+	[ID] [int] NOT NULL,
+	[f_nvarchar] [nvarchar](50) NULL,
+	[f_datetime] [datetime] NULL,
+	[f_date] [date] NULL,
+	[f_hierarchyid] [hierarchyid] NULL,
+	[f_real] [real] NULL,
+	[f_bit] [bit] NULL,
+	[f_varbinary] [varbinary](MAX) NULL,
+ CONSTRAINT [PK_TestDataTypes] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+INSERT INTO [dbo].[TestDataTypes](ID, f_nvarchar, f_datetime, f_date, f_hierarchyid, f_real, f_bit, f_varbinary)
+VALUES(1, N'Тест1', CURRENT_TIMESTAMP, CAST('2016-01-01' AS date), hierarchyid::Parse('/'), 11.0001, 1, CAST(N'Тест1' AS varbinary));
+
+INSERT INTO [dbo].[TestDataTypes](ID, f_nvarchar, f_datetime, f_date, f_hierarchyid, f_real, f_bit, f_varbinary)
+VALUES(2, N'Тест2', CURRENT_TIMESTAMP, CAST('2016-01-02' AS date), hierarchyid::Parse('/1/'), 12.0001, 0, CAST(N'Тест2' AS varbinary));
+
+INSERT INTO [dbo].[TestDataTypes](ID, f_nvarchar, f_datetime, f_date, f_hierarchyid, f_real, f_bit, f_varbinary)
+VALUES(3, N'Тест3', CURRENT_TIMESTAMP, CAST('2016-01-03' AS date), hierarchyid::Parse('/1/1/'), 13.0001, 1, CAST(N'Тест3' AS varbinary));
+
+INSERT INTO [dbo].[TestDataTypes](ID, f_nvarchar, f_datetime, f_date, f_hierarchyid, f_real, f_bit, f_varbinary)
+VALUES(4, N'Тест4', CURRENT_TIMESTAMP, CAST('2016-01-04' AS date), hierarchyid::Parse('/2/'), 14.0001, 0, CAST(N'Тест4' AS varbinary));
+
+INSERT INTO [dbo].[TestDataTypes](ID, f_nvarchar, f_datetime, f_date, f_hierarchyid, f_real, f_bit, f_varbinary)
+VALUES(5, N'Тест5', CURRENT_TIMESTAMP, CAST('2016-01-05' AS date), hierarchyid::Parse('/2/1/'), 15.0001, 1, CAST(N'Тест5' AS varbinary));
+
+GO
