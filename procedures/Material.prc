@@ -607,7 +607,7 @@ BEGIN
     @MaterialLotID        INT,
     @MaterialActualID     INT,
     @Quantity             INT,
-    @now                  DATETIME = CURRENT_TIMESTAMP,
+    @now                  DATETIMEOFFSET = CURRENT_TIMESTAMP,
     @err_message          NVARCHAR(255);
 
   SELECT @ProductionRequestID=sreq.ProductionRequest,

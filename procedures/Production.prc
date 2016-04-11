@@ -13,8 +13,8 @@ CREATE PROCEDURE dbo.ins_ProductionResponse
     @ProductionRequestID  INT,
     --@Location             NVARCHAR(50),
     --@HierarchyScope       INT,
-    @StartTime            DATETIME,
-    @EndTime              DATETIME,
+    @StartTime            DATETIMEOFFSET,
+    @EndTime              DATETIMEOFFSET,
     @ResponseState        NVARCHAR(50),
     --@ProductionPerfomance INT
     @ProductionResponseID INT OUTPUT
@@ -58,8 +58,8 @@ CREATE PROCEDURE dbo.upd_ProductionResponse
     @ProductionRequestID  INT,
     --@Location             NVARCHAR(50),
     --@HierarchyScope       INT,
-    @StartTime            DATETIME,
-    @EndTime              DATETIME,
+    @StartTime            DATETIMEOFFSET,
+    @EndTime              DATETIMEOFFSET,
     @ResponseState        NVARCHAR(50)--,
     --@ProductionPerfomance INT
 AS
@@ -106,8 +106,8 @@ RETURNS @retProductionResponse TABLE (ID                   INT PRIMARY KEY NOT N
                                       ProductionRequestID  INT,
                                       --Location             NVARCHAR(50),
                                       --HierarchyScope       INT,
-                                      StartTime            DATETIME,
-                                      EndTime              DATETIME,
+                                      StartTime            DATETIMEOFFSET,
+                                      EndTime              DATETIMEOFFSET,
                                       ResponseState        NVARCHAR(50)--,
                                       --ProductionPerfomance INT
                                      )
@@ -145,8 +145,8 @@ CREATE PROCEDURE dbo.ins_ProductionRequest
    @Description         NVARCHAR(50),
    --@Location            NVARCHAR(50),
    --@HierarchyScope      INT,
-   @StartTime           DATETIME,
-   @EndTime             DATETIME,
+   @StartTime           DATETIMEOFFSET,
+   @EndTime             DATETIMEOFFSET,
    @Priority            NVARCHAR(50),
    @RequestState        NVARCHAR(50),
    @ProductionSchedule  INT,
@@ -192,8 +192,8 @@ CREATE PROCEDURE dbo.upd_ProductionRequest
    @Description         NVARCHAR(50),
    --@Location            NVARCHAR(50),
    --@HierarchyScope      INT,
-   @StartTime           DATETIME,
-   @EndTime             DATETIME,
+   @StartTime           DATETIMEOFFSET,
+   @EndTime             DATETIMEOFFSET,
    @Priority            NVARCHAR(50),
    @RequestState        NVARCHAR(50),
    @ProductionSchedule  INT
@@ -242,8 +242,8 @@ RETURNS @retProductionRequest TABLE (ID                 INT PRIMARY KEY NOT NULL
                                      Description        NVARCHAR(50),
                                      Location           NVARCHAR(50),
                                      HierarchyScope     INT,
-                                     StartTime          DATETIME,
-                                     EndTime            DATETIME,
+                                     StartTime          DATETIMEOFFSET,
+                                     EndTime            DATETIMEOFFSET,
                                      Priority           NVARCHAR(50),
                                      RequestState       NVARCHAR(50),
                                      ProductionSchedule INT)
