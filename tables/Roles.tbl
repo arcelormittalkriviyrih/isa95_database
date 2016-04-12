@@ -1,0 +1,27 @@
+﻿SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE dbo.KPPRoles (
+   ID         INT PRIMARY KEY CLUSTERED IDENTITY(1,1),
+   RoleName   NVARCHAR(255) NOT NULL,
+   ADRoleName NVARCHAR(255) NULL,
+   CONSTRAINT UK1_RoleName UNIQUE(RoleName),
+   CONSTRAINT UK1_ADRoleName UNIQUE(ADRoleName),
+   sys.server_principals
+)
+GO
+
+ALTER TABLE dbo.KPPRoles WITH CHECK ADD CONSTRAINT [FK_KPPRoles_server_principals] FOREIGN KEY(ADRoleName) REFERENCES sys.server_principals (name)
+GO
+
+ALTER TABLE dbo.KPPRoles CHECK CONSTRAINT [FK_KPPRoles_server_principals]
+GO
+
+INSERT INTO dbo.KPPRoles(RoleName,ADRoleName) VALUES (N'Market',N'ASK-AD\KRR-LG-PA-LabelPrn_Market');
+INSERT INTO dbo.KPPRoles(RoleName,ADRoleName) VALUES (N'PA',N'ASK-AD\KRR-LG-PA-LabelPrn_PA');
+INSERT INTO dbo.KPPRoles(RoleName,ADRoleName) VALUES (N'WorkshopSpecs',N'ASK-AD\KRR-LG-PA-LabelPrn_WorkshopSpecs');
+INSERT INTO dbo.KPPRoles(RoleName,ADRoleName) VALUES (N'Marker',N'ASK-AD\KRR-LG-PA-LabelPrn_Marker');
+GO
