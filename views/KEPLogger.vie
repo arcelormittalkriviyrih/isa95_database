@@ -8,20 +8,25 @@ SELECT ww.UniqueID ID,
        ww.EquipmentID,
        ww.Description,
        ww.ControllerID Controller_ID,
-       ww.Weight_VALUE,
-       ww.Weight_TIMESTAMP,
-       ww.Weight_OK_Value
+       ww.WEIGHT__FIX_VALUE,
+	   ww.WEIGHT_CURRENT_VALUE,
+       ToDateTimeOffset(ww.WEIGHT__FIX_TIMESTAMP,0) WEIGHT__FIX_TIMESTAMP,
+       ww.WEIGHT_OK_VALUE,
+	   ww.AUTO_MANU_VALUE,
+	   ww.CMD_TAKE_WEIGHT_VALUE,	   
+	   ww.WEIGHT_STAB_VALUE,
+	   ww.WEIGHT_ZERO_VALUE
 FROM (
 SELECT newID() UniqueID,
        eq.ID EquipmentID,
        eq.Description,
        CAST(eqp.value AS INT) ControllerID,
-       ROW_NUMBER() OVER(PARTITION BY kl.Controller_ID ORDER BY kl.Weight_TIMESTAMP DESC) RowNumber,
+       ROW_NUMBER() OVER(PARTITION BY kl.WEIGHT__FIX_NUMERICID ORDER BY kl.WEIGHT__FIX_TIMESTAMP DESC) RowNumber,
        kl.* 
 FROM dbo.Equipment eq
      INNER JOIN dbo.EquipmentProperty eqp ON (eqp.EquipmentID=eq.ID)
      INNER JOIN dbo.EquipmentClassProperty ecp ON (ecp.ID=eqp.ClassPropertyID AND ecp.value=N'NK')
-     INNER JOIN dbo.KEP_logger kl ON (ISNUMERIC(eqp.value)=1 AND kl.Controller_ID=CAST(eqp.value AS INT) AND kl.Weight_TIMESTAMP>=DATEADD(hour,-24,GETDATE()))
+     INNER JOIN dbo.KEP_logger kl ON (ISNUMERIC(eqp.value)=1 AND kl.WEIGHT__FIX_NUMERICID=CAST(eqp.value AS INT) AND kl.WEIGHT__FIX_TIMESTAMP>=DATEADD(hour,-24,GETDATE()))
 ) ww
 WHERE ww.RowNumber=1
 GO

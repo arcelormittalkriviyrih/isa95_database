@@ -4,8 +4,7 @@ GO
 
 CREATE VIEW dbo.v_ProductionResponse
 AS
-SELECT newID() ID,
-       ProductionResponse.ID ProductionResponseID,
+SELECT ProductionResponse.ID ID,
        ProductionResponse.ResponseState,
        ProductionResponse.ProductionRequestID,
        EquipmentRequirement.EquipmentID,
@@ -21,4 +20,5 @@ SELECT newID() ID,
    AND (SegmentRequirement.ProductionRequest = ProductionRequest.ID)
    AND (EquipmentRequirement.SegmentRequirementID = SegmentRequirement.ID)
    AND (EquipmentRequirement.EquipmentID = Equipment.ID)
+   AND (Equipment.EquipmentClassID=3)
 GO

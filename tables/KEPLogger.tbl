@@ -6,10 +6,15 @@ GO
 
 CREATE TABLE [dbo].[KEP_logger](
 	[id] [int] IDENTITY(1,1) NOT NULL,
-	[Controller_ID] [int] NULL,
-	[Weight_VALUE] [real] NULL,
-	[Weight_TIMESTAMP] [datetimeoffset] NULL,
+	[AUTO_MANU_VALUE] [bit] NULL,
+	[CMD_TAKE_WEIGHT_VALUE] [bit] NULL,
+	[WEIGHT__FIX_NUMERICID] [int] NULL,
+	[WEIGHT__FIX_VALUE] [int] NULL,
+	[WEIGHT__FIX_TIMESTAMP] [datetime] NULL,
+	[WEIGHT_CURRENT_VALUE] [real] NULL,
 	[WEIGHT_OK_VALUE] [bit] NULL,
+	[WEIGHT_STAB_VALUE] [bit] NULL,
+	[WEIGHT_ZERO_VALUE] [bit] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -18,8 +23,8 @@ PRIMARY KEY CLUSTERED
 
 GO
 
-CREATE INDEX i1_kep_logger_weight ON dbo.kep_logger (Weight_TIMESTAMP)
+CREATE INDEX i1_kep_logger_weight_time ON dbo.kep_logger (WEIGHT__FIX_TIMESTAMP)
 GO
 
-CREATE INDEX i2_kep_logger_ControllerID ON dbo.kep_logger (Controller_ID)
+CREATE INDEX i2_kep_logger_ControllerID ON dbo.kep_logger (WEIGHT__FIX_NUMERICID)
 GO

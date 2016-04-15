@@ -20,7 +20,7 @@ BEGIN
     @err_message          NVARCHAR(255);
 
   SELECT @ProductionRequestID=sreq.ProductionRequest,
-         @Quantity=kl.Weight_VALUE
+         @Quantity=kl.WEIGHT_CURRENT_VALUE
   FROM dbo.v_kep_logger kl
        INNER JOIN dbo.EquipmentRequirement ereq ON (ereq.EquipmentID=kl.EquipmentID)
        INNER JOIN dbo.SegmentRequirement sreq ON (sreq.ID=ereq.SegmentRequirementID)
