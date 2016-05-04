@@ -1,0 +1,13 @@
+﻿SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE dbo.ServicePacksFiles (
+	[ID] [int] IDENTITY(1,1) PRIMARY KEY CLUSTERED,
+	[FileName] [nvarchar](255) NOT NULL,
+	[DateChange] [datetimeoffset] NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT UK1_FileName UNIQUE(FileName)
+)
+GO
