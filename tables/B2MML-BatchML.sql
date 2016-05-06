@@ -4652,6 +4652,7 @@ CREATE TABLE [dbo].[SegmentRequirement](
 	[RequiredByRequestedSegmentResponce] [nvarchar](50) NULL,
 	[SeqmentState] [nvarchar](50) NULL,
 	[ProductionRequest] [int] NULL,
+	[OperationsRequest] [int] NOT NULL,
  CONSTRAINT [PK_SegmentRequirement] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -8137,6 +8138,11 @@ ALTER TABLE [dbo].[SegmentRequirement]  WITH CHECK ADD  CONSTRAINT [FK_SegmentRe
 REFERENCES [dbo].[SegmentRequirement] ([ID])
 GO
 ALTER TABLE [dbo].[SegmentRequirement] CHECK CONSTRAINT [FK_SegmentRequirement_SegmentRequirement]
+GO
+ALTER TABLE [dbo].[SegmentRequirement] WITH CHECK ADD  CONSTRAINT [FK_SegmentRequirement_OperationsRequest] FOREIGN KEY([OperationsRequest])
+REFERENCES [dbo].[OperationsRequest] ([ID])
+GO
+ALTER TABLE [dbo].[SegmentRequirement] CHECK CONSTRAINT [FK_SegmentRequirement_OperationsRequest]
 GO
 ALTER TABLE [dbo].[SegmentResponse]  WITH CHECK ADD  CONSTRAINT [FK_SegmentResponse_ProductionRequest] FOREIGN KEY([ProductionRequest])
 REFERENCES [dbo].[ProductionRequest] ([ID])
