@@ -1,8 +1,7 @@
-IF OBJECT_ID ('dbo.v_ProductionParameter_Files', 'V') IS NOT NULL
-	DROP VIEW dbo.v_ProductionParameter_Files;
+drop view [dbo].[v_ProductionParameter_Files];
 GO
 
-CREATE VIEW dbo.v_ProductionParameter_Files
+CREATE VIEW [dbo].[v_ProductionParameter_Files]
 AS
 SELECT newID() ID,
        ProductionParameter.ProductSegmentID,
@@ -14,5 +13,8 @@ SELECT newID() ID,
        PropertyTypes.Value
 FROM [dbo].[Files] Files
      INNER JOIN [dbo].[ProductionParameter] ProductionParameter ON (ProductionParameter.Parameter=Files.ID)
-     INNER JOIN [dbo].[PropertyTypes] PropertyTypes ON (PropertyTypes.ID=ProductionParameter.PropertyType)
+     INNER JOIN [dbo].[PropertyTypes] PropertyTypes ON (PropertyTypes.ID=ProductionParameter.PropertyType);
+
 GO
+
+
