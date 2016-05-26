@@ -26,7 +26,7 @@ if OBJECT_ID ('dbo.gen_TestChildSeq',N'SO') IS NOT NULL
    DROP sequence [dbo].[gen_TestChildSeq];
 GO
 
-CREATE SEQUENCE [dbo].[gen_TestChildSeq];
+CREATE SEQUENCE [dbo].[gen_TestChildSeq] 
 GO
 
 if OBJECT_ID ('dbo.TestChild',N'U') IS NOT NULL
