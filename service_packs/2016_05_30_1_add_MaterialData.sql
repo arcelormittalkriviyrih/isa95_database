@@ -4,7 +4,7 @@ DECLARE	@MaterialClass_ID int,
 	@MP_ID int,
 	@MM_ID int,
 	@return_value int,
-		@MaterialDefinitionID int,
+		@MaterialDefinition_ID int,
 				@MaterialDefinitionPropertyID int;
 
 begin
@@ -30,61 +30,61 @@ SELECT @MM_ID=SCOPE_IDENTITY();
 
 
 
-
+SET @MaterialDefinition_ID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinition]
 		@Description = N'¹8',
 		@Location = NULL,
 		@HierarchyScope = NULL,
 		@MaterialClassID = @MaterialClass_ID,
-		@MaterialDefinitionID = @MaterialDefinitionID OUTPUT
+		@MaterialDefinitionID = @MaterialDefinition_ID OUTPUT
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'0.395',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @MA_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'12',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @LE_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'8',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @MP_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'8',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @MM_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
 
 
-
+SET @MaterialDefinition_ID=NULL;
 
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinition]
@@ -92,155 +92,155 @@ EXEC	@return_value = [dbo].[ins_MaterialDefinition]
 		@Location = NULL,
 		@HierarchyScope = NULL,
 		@MaterialClassID = @MaterialClass_ID,
-		@MaterialDefinitionID = @MaterialDefinitionID OUTPUT
+		@MaterialDefinitionID = @MaterialDefinition_ID OUTPUT
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'0.395',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @MA_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'12',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @LE_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'8',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @MP_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'8',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @MM_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
-
+SET @MaterialDefinition_ID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinition]
 		@Description = N'¹12',
 		@Location = NULL,
 		@HierarchyScope = NULL,
 		@MaterialClassID = @MaterialClass_ID,
-		@MaterialDefinitionID = @MaterialDefinitionID OUTPUT
+		@MaterialDefinitionID = @MaterialDefinition_ID OUTPUT
 
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'0.395',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @MA_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'12',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @LE_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'8',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @MP_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'8',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @MM_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
-
+SET @MaterialDefinition_ID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinition]
 		@Description = N'¹14',
 		@Location = NULL,
 		@HierarchyScope = NULL,
 		@MaterialClassID = @MaterialClass_ID,
-		@MaterialDefinitionID = @MaterialDefinitionID OUTPUT
+		@MaterialDefinitionID = @MaterialDefinition_ID OUTPUT
 
 
 
 
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'0.395',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @MA_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'12',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @LE_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'8',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @MP_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT
 
-
+SET @MaterialDefinitionPropertyID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 		@Description = NULL,
 		@Value = N'8',
-		@MaterialDefinitionID = @MaterialDefinitionID,
+		@MaterialDefinitionID = @MaterialDefinition_ID,
 		@ClassPropertyID = @MM_ID,
 		@PropertyType = NULL,
 		@MaterialDefinitionPropertyID = @MaterialDefinitionPropertyID OUTPUT;
