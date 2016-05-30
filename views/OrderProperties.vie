@@ -1,5 +1,5 @@
-﻿IF OBJECT_ID ('dbo.v_OrderProperties', 'V') IS NOT NULL
-   DROP VIEW [dbo].[v_OrderProperties];
+﻿IF OBJECT_ID ('dbo.v_OrderProperties', N'V') IS NOT NULL
+   DROP VIEW dbo.v_OrderProperties;
 GO
 
 CREATE VIEW [dbo].[v_OrderProperties]
@@ -27,4 +27,3 @@ AS
            AND mc.ID = md.MaterialClassID
            AND mr.SegmenRequirementID = sr.ID;
 GO
-
