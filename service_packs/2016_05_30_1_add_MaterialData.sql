@@ -9,10 +9,10 @@ DECLARE	@MaterialClass_ID int,
 
 begin
 
-  select @MaterialClass_ID = NEXT VALUE FOR dbo.gen_ClassDefinitionProperty;
+  select @MaterialClass_ID = 1;
 
 
-INSERT [dbo].[MaterialClass] ([ID], [ParentID], [Description]) VALUES (2, NULL, N'Профиль')
+INSERT [dbo].[MaterialClass] ([ID], [ParentID], [Description]) VALUES (@MaterialClass_ID, NULL, N'Профиль')
 
 
 INSERT [dbo].[MaterialClassProperty] ( [Description], [Value], [MaterialClassProperty], [MaterialTestSpecificationID], [MaterialClassID], [PropertyType], [UnitID]) VALUES ( N'Погонная масса [кг/м]', N'MA', NULL, NULL, @MaterialClass_ID, NULL, NULL);
