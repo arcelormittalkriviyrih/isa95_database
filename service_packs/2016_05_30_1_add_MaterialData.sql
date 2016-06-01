@@ -12,28 +12,27 @@ begin
   select @MaterialClass_ID = 1;
 
 
-INSERT [dbo].[MaterialClass] ([ID], [ParentID], [Description]) VALUES (@MaterialClass_ID, NULL, N'Профиль')
+INSERT [dbo].[MaterialClass] ([ID], [ParentID], [Description]) VALUES (@MaterialClass_ID, NULL, N'РџСЂРѕС„РёР»СЊ')
 
 
-INSERT [dbo].[MaterialClassProperty] ( [Description], [Value], [MaterialClassProperty], [MaterialTestSpecificationID], [MaterialClassID], [PropertyType], [UnitID]) VALUES ( N'Погонная масса [кг/м]', N'MA', NULL, NULL, @MaterialClass_ID, NULL, NULL);
+INSERT [dbo].[MaterialClassProperty] ( [Description], [Value], [MaterialClassProperty], [MaterialTestSpecificationID], [MaterialClassID], [PropertyType], [UnitID]) VALUES ( N'РџРѕРіРѕРЅРЅР°СЏ РјР°СЃСЃР° [РєРі/Рј]', N'MA', NULL, NULL, @MaterialClass_ID, NULL, NULL);
 SELECT @MA_ID=SCOPE_IDENTITY();
 
-INSERT [dbo].[MaterialClassProperty] ( [Description], [Value], [MaterialClassProperty], [MaterialTestSpecificationID], [MaterialClassID], [PropertyType], [UnitID]) VALUES ( N'Длинна [м]', N'LE', NULL, NULL, @MaterialClass_ID, NULL, NULL)
+INSERT [dbo].[MaterialClassProperty] ( [Description], [Value], [MaterialClassProperty], [MaterialTestSpecificationID], [MaterialClassID], [PropertyType], [UnitID]) VALUES ( N'Р”Р»РёРЅРЅР° [Рј]', N'LE', NULL, NULL, @MaterialClass_ID, NULL, NULL)
 SELECT @LE_ID=SCOPE_IDENTITY();
 
-INSERT [dbo].[MaterialClassProperty] ( [Description], [Value], [MaterialClassProperty], [MaterialTestSpecificationID], [MaterialClassID], [PropertyType], [UnitID]) VALUES ( N'Допуск плюс [%]', N'MP', NULL, NULL, @MaterialClass_ID, NULL, NULL)
+INSERT [dbo].[MaterialClassProperty] ( [Description], [Value], [MaterialClassProperty], [MaterialTestSpecificationID], [MaterialClassID], [PropertyType], [UnitID]) VALUES ( N'Р”РѕРїСѓСЃРє РїР»СЋСЃ [%]', N'MP', NULL, NULL, @MaterialClass_ID, NULL, NULL)
 SELECT @MP_ID=SCOPE_IDENTITY();
 
-INSERT [dbo].[MaterialClassProperty] ( [Description], [Value], [MaterialClassProperty], [MaterialTestSpecificationID], [MaterialClassID], [PropertyType], [UnitID]) VALUES ( N'Допуск минус [%]', N'MM', NULL, NULL, @MaterialClass_ID, NULL, NULL)
+INSERT [dbo].[MaterialClassProperty] ( [Description], [Value], [MaterialClassProperty], [MaterialTestSpecificationID], [MaterialClassID], [PropertyType], [UnitID]) VALUES ( N'Р”РѕРїСѓСЃРє РјРёРЅСѓСЃ [%]', N'MM', NULL, NULL, @MaterialClass_ID, NULL, NULL)
 SELECT @MM_ID=SCOPE_IDENTITY();
 
 
 
-
 SET @MaterialDefinition_ID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinition]
-		@Description = N'№8',
+		@Description = N'в„–8',
 		@Location = NULL,
 		@HierarchyScope = NULL,
 		@MaterialClassID = @MaterialClass_ID,
@@ -88,7 +87,7 @@ SET @MaterialDefinition_ID=NULL;
 
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinition]
-		@Description = N'№10',
+		@Description = N'в„–10',
 		@Location = NULL,
 		@HierarchyScope = NULL,
 		@MaterialClassID = @MaterialClass_ID,
@@ -140,7 +139,7 @@ EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 SET @MaterialDefinition_ID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinition]
-		@Description = N'№12',
+		@Description = N'в„–12',
 		@Location = NULL,
 		@HierarchyScope = NULL,
 		@MaterialClassID = @MaterialClass_ID,
@@ -192,7 +191,7 @@ EXEC	@return_value = [dbo].[ins_MaterialDefinitionProperty]
 SET @MaterialDefinition_ID=NULL;
 
 EXEC	@return_value = [dbo].[ins_MaterialDefinition]
-		@Description = N'№14',
+		@Description = N'в„–14',
 		@Location = NULL,
 		@HierarchyScope = NULL,
 		@MaterialClassID = @MaterialClass_ID,

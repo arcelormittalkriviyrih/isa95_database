@@ -1,3 +1,4 @@
+--тест
 if OBJECT_ID ('dbo.TestChild',N'U') IS NOT NULL
    DROP table [dbo].[TestChild];
 GO

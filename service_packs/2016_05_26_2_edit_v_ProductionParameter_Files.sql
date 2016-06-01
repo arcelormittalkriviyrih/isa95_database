@@ -1,3 +1,4 @@
+--тест
 drop view [dbo].[v_ProductionParameter_Files];
 GO
 
@@ -16,5 +17,4 @@ FROM [dbo].[Files] Files
      INNER JOIN [dbo].[PropertyTypes] PropertyTypes ON (PropertyTypes.ID=ProductionParameter.PropertyType);
 
 GO
-
 
