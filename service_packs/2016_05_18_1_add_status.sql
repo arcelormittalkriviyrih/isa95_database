@@ -1,6 +1,6 @@
 ALTER TABLE [dbo].[Files] ADD [Status] nVARCHAR(250) NULL;
 go
-update [dbo].[Files] set [Status]='Разработка';
+update [dbo].[Files] set [Status]=N'Разработка';
 go
 alter TABLE [dbo].[Files] ALTER COLUMN [Status] nVARCHAR(250) not NULL;
 go

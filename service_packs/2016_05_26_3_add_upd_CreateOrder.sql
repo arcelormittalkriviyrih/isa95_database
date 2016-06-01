@@ -48,9 +48,9 @@ BEGIN
    ELSE IF @TEMPLATE IS NULL
       RAISERROR ('TEMPLATE param required',16,1);
    ELSE IF NOT EXISTS (SELECT NULL FROM [dbo].[Files] WHERE [FileType]=N'Excel label' AND [ID]=@TEMPLATE)
-      RAISERROR ('Указанный Excel шаблон не существует в таблице Files',16,1);
+      RAISERROR (N'Указанный Excel шаблон не существует в таблице Files',16,1);
    ELSE IF NOT EXISTS (SELECT NULL FROM [dbo].[MaterialDefinition] WHERE [ID]=@PROFILE)
-      RAISERROR ('Указанный профиль не существует в таблице MaterialDefinition',16,1);
+      RAISERROR (N'Указанный профиль не существует в таблице MaterialDefinition',16,1);
    ELSE
       BEGIN
          DECLARE @tblParams TABLE(ID    NVARCHAR(50),
