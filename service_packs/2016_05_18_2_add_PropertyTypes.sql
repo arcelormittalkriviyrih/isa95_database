@@ -1,21 +1,18 @@
-﻿SET NUMERIC_ROUNDABORT OFF;
-SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
-GO
+﻿BEGIN TRANSACTION;
 
-BEGIN TRANSACTION;
-
-INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'STD',N'Стандарт');
-INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'LEN',N'Длина');
-INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'QMIN',N'Количество прутков (минимальное)');
-INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'CONTR',N'КОНТРАКТ №');
-INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'DIR',N'НАПРАВЛЕНИЕ');
-INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'PROD',N'Продукция');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'STANDARD',N'Стандарт');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'LENGTH',N'Длина');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'MIN_ROD',N'Количество прутков (минимальное)');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'CONTRACT_NO',N'КОНТРАКТ №');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'DIRECTION',N'НАПРАВЛЕНИЕ');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'PRODUCT',N'Продукция');
 INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'CLASS',N'Класс');
-INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'STCLASS',N'Марка стали');
-INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'CHEM',N'Хим. Анализ');
-INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'DIAM',N'Диаметр бунта'); 
-INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'ADR',N'Адрес поставщика');
-INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'ORDER',N'Заказ');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'STEEL_CLASS',N'Марка стали');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'CHEM_ANALYSIS',N'Хим. Анализ');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'BUNT_DIA',N'Диаметр бунта'); 
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'ADDRESS',N'Адрес поставщика');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'COMM_ORDER',N'Заказ');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'TEMPLATE',N'Шаблон бирки');
 
 COMMIT;
 GO
