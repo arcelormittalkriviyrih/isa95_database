@@ -1,3 +1,8 @@
+﻿SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+
 DECLARE	@MaterialClass_ID int,
 	@MA_ID int,
 	@LE_ID int,

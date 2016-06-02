@@ -1,3 +1,8 @@
+SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+
 --тест
 IF OBJECT_ID ('dbo.v_Orders', 'V') IS NOT NULL
    DROP VIEW [dbo].[v_Orders];
