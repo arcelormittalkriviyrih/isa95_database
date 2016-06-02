@@ -4,6 +4,9 @@ GO
 SET QUOTED_IDENTIFIER OFF
 GO
 
+--call sequence one time to increase number, because current DB already has one record
+select next value for dbo.gen_Files;
+
 /****** Object:  StoredProcedure [dbo].[upd_SegmentResponse]    Script Date: 30.05.2016 13:22:25 ******/
 IF OBJECT_ID ('dbo.upd_SegmentResponse',N'P') IS NOT NULL
 DROP PROCEDURE [dbo].[upd_SegmentResponse]
