@@ -1,5 +1,5 @@
 @echo on
-cd "C:\Nikama\jenkins_workspace\isa95_database\jenkins scripts"
+cd %WORKSPACE%
 @setlocal
 @set restoreDb=KRR-PA-ISA95_PRODUCTION
 @set backupPath=\\krr-sql-paclx02\KRR-SQL-PACLX02-Backups\Full\KRR-PA-ISA95_PRODUCTION
