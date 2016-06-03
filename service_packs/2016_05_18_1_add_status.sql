@@ -1,4 +1,4 @@
-ALTER TABLE [dbo].[Files] ADD [Status] nVARCHAR(250) NULL;
+﻿ALTER TABLE [dbo].[Files] ADD [Status] nVARCHAR(250) NULL;
 go
 update [dbo].[Files] set [Status]=N'Разработка';
 go

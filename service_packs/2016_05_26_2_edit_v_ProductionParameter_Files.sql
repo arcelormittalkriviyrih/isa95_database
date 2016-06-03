@@ -1,4 +1,4 @@
---тест
+﻿--тест
 drop view [dbo].[v_ProductionParameter_Files];
 GO
 

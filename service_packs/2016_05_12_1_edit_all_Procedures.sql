@@ -1,4 +1,4 @@
--- Пересоздаем все процедуры
+﻿-- Пересоздаем все процедуры
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF

@@ -1,4 +1,4 @@
---тест
+﻿--тест
 IF OBJECT_ID ('dbo.v_OrderPropertiesAll', N'V') IS NOT NULL
    DROP VIEW dbo.v_OrderPropertiesAll;
 GO

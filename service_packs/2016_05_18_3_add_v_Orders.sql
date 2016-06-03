@@ -1,4 +1,4 @@
--- создаем view
+﻿-- создаем view
 CREATE VIEW [dbo].[v_Orders]
 AS
 select opr.id,

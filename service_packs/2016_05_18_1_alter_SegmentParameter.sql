@@ -1,4 +1,4 @@
--- Обновление структур таблиц
+﻿-- Обновление структур таблиц
 IF NOT EXISTS(SELECT NULL
               FROM information_schema.columns
               WHERE table_name = 'SegmentParameter'
