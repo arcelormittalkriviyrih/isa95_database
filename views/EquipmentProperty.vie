@@ -1,16 +1,20 @@
-IF OBJECT_ID ('dbo.v_EquipmentProperty', 'V') IS NOT NULL
-	DROP VIEW dbo.v_EquipmentProperty;
+SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
 GO
 
-CREATE VIEW dbo.v_EquipmentProperty
+IF OBJECT_ID('dbo.v_EquipmentProperty', N'V') IS NOT NULL
+    DROP VIEW [dbo].[v_EquipmentProperty];
+GO
+
+CREATE VIEW [dbo].[v_EquipmentProperty]
 AS
-SELECT ep.ID,
-       ep.Description,
-       ep.Value,
-       ep.EquipmentProperty,
-       ep.EquipmentCapabilityTestSpecification,
-       ep.TestResult,
-       ep.EquipmentID,
-       ep.ClassPropertyID
-FROM dbo.EquipmentProperty ep
+     SELECT ep.ID,
+            ep.[Value],
+            ep.EquipmentID,
+            ecp.[Description],
+            ecp.[Value] Property
+     FROM dbo.EquipmentProperty ep,
+          dbo.EquipmentClassProperty ecp
+     WHERE ecp.ID = ep.ClassPropertyID;
 GO

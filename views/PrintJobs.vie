@@ -1,0 +1,16 @@
+﻿SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+
+IF OBJECT_ID('dbo.v_PrintJobs', N'V') IS NOT NULL
+    DROP VIEW [dbo].[v_PrintJobs];
+GO
+
+CREATE VIEW [dbo].[v_PrintJobs]
+AS
+     SELECT ID,
+            DispatchStatus
+     FROM dbo.JobOrder
+     WHERE WorkType = N'Print';
+GO
