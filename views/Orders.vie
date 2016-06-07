@@ -5,11 +5,11 @@ GO
 CREATE VIEW [dbo].[v_Orders]
 AS
 select opr.id,
-(select sp.value from SegmentParameter sp, PropertyTypes pt where pt.ID=sp.PropertyType and sp.OpSegmentRequirement=sr.id and pt.Value='ORDER') as [ORDER],
-(select sp.value from SegmentParameter sp, PropertyTypes pt where pt.ID=sp.PropertyType and sp.OpSegmentRequirement=sr.id and pt.Value='CONTR') as CONTR,
-(select sp.value from SegmentParameter sp, PropertyTypes pt where pt.ID=sp.PropertyType and sp.OpSegmentRequirement=sr.id and pt.Value='DIR') as DIR,
-(select f.Name from SegmentParameter sp, PropertyTypes pt, Files f where pt.ID=sp.PropertyType and sp.OpSegmentRequirement=sr.id and pt.Value='TEMPLATE' and sp.value=f.ID) as TMPL
+(select sp.value from SegmentParameter sp, PropertyTypes pt where pt.ID=sp.PropertyType and sp.OpSegmentRequirement=sr.id and pt.Value='COMM_ORDER') as COMM_ORDER,
+(select sp.value from SegmentParameter sp, PropertyTypes pt where pt.ID=sp.PropertyType and sp.OpSegmentRequirement=sr.id and pt.Value='CONTRACT_NO') as CONTRACT_NO,
+(select sp.value from SegmentParameter sp, PropertyTypes pt where pt.ID=sp.PropertyType and sp.OpSegmentRequirement=sr.id and pt.Value='DIRECTION') as DIRECTION,
+(select f.Name from SegmentParameter sp, PropertyTypes pt, Files f where pt.ID=sp.PropertyType and sp.OpSegmentRequirement=sr.id and pt.Value='TEMPLATE' and sp.value=f.ID) as TEMPLATE
 from OperationsRequest as opr,
 OpSegmentRequirement sr
-where opr.ID=sr.OperationsRequest
+where opr.ID=sr.OperationsRequest;
 GO

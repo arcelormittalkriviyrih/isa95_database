@@ -14,9 +14,9 @@ AS
           dbo.OpSegmentRequirement AS sr
      WHERE pt.ID = sp.PropertyType
            AND sp.OpSegmentRequirement = sr.id
-           AND pt.[Value] IN('STD', 'LEN', 'QMIN', 'PROD', 'CLASS', 'STCLASS', 'CHEM', 'DIAM', 'ADR', 'CONTR', 'DIR', 'ORDER','TEMPLATE')		   
+           AND pt.[Value] IN('STANDARD', 'LENGTH', 'MIN_ROD', 'PRODUCT', 'CLASS', 'STEEL_CLASS', 'CHEM_ANALYSIS', 'BUNT_DIA', 'ADDRESS', 'CONTRACT_NO', 'DIRECTION', 'COMM_ORDER','TEMPLATE')		   
      UNION ALL
-     SELECT mr.id,
+     SELECT 1000000000+mr.id,
             mc.Description,
             convert(nvarchar, md.ID) AS [Value],
             sr.OperationsRequest,
