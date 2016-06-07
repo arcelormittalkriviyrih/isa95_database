@@ -3,6 +3,26 @@ GO
 SET QUOTED_IDENTIFIER ON;
 GO
 
+IF OBJECT_ID('dbo.v_PrintFile', N'V') IS NOT NULL
+    DROP VIEW [dbo].[v_PrintFile];
+GO
+
+CREATE VIEW [dbo].[v_PrintFile]
+AS
+     SELECT mlp.ID,
+            f.Name,
+            f.FileType,
+            f.[Data],
+            pt.[Value] Property,
+            mlp.MaterialLotID
+     FROM [dbo].[Files] f,
+          dbo.MaterialLotProperty mlp,
+          dbo.PropertyTypes pt
+     WHERE mlp.[Value] = f.ID
+           AND mlp.PropertyType = pt.ID
+           AND pt.[Value] = N'TEMPLATE';
+GO
+
 IF OBJECT_ID('dbo.v_PrintProperties', N'V') IS NOT NULL
     DROP VIEW [dbo].[v_PrintProperties];
 GO
@@ -40,3 +60,20 @@ GO
 IF OBJECT_ID('dbo.v_JobOrders', N'V') IS NOT NULL
     DROP VIEW [dbo].[v_JobOrders];
 GO
+
+CREATE VIEW [dbo].[v_JobOrders]
+AS
+     SELECT ID,
+            DispatchStatus,
+		  WorkType,
+		  Command,
+		  CommandRule
+     FROM dbo.JobOrder;
+GO
+
+IF OBJECT_ID('dbo.v_PrintJobs', N'V') IS NOT NULL
+    DROP VIEW [dbo].[v_PrintJobs];
+GO
+
+update dbo.EquipmentClassProperty set [Value]='PRINTER_NAME' where [Value]='NP';
+update dbo.EquipmentClassProperty set [Value]='PRINTER_IP' where [Value]='IP';

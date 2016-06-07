@@ -1,0 +1,24 @@
+﻿SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+
+IF OBJECT_ID('dbo.v_PrintFile', N'V') IS NOT NULL
+    DROP VIEW [dbo].[v_PrintFile];
+GO
+
+CREATE VIEW [dbo].[v_PrintFile]
+AS
+     SELECT mlp.ID,
+            f.Name,
+            f.FileType,
+            f.[Data],
+            pt.[Value] Property,
+            mlp.MaterialLotID
+     FROM [dbo].[Files] f,
+          dbo.MaterialLotProperty mlp,
+          dbo.PropertyTypes pt
+     WHERE mlp.[Value] = f.ID
+           AND mlp.PropertyType = pt.ID
+           AND pt.[Value] = N'TEMPLATE';
+GO
