@@ -24,24 +24,25 @@ CREATE PROCEDURE [dbo].[upd_Order]
 @CHEM_ANALYSIS  NVARCHAR(50) = NULL
 AS
 BEGIN
-   DECLARE @OpSegmentRequirementID int;
+   DECLARE @OpSegmentRequirementID INT,
+           @err_message            NVARCHAR(255);
 
    IF @LENGTH IS NULL
-	  RAISERROR ('LENGTH param required',16,1);
+    THROW 60001, N'LENGTH param required', 1;
    ELSE IF @CONTRACT_NO IS NULL
-	  RAISERROR ('CONTRACT_NO param required',16,1);
+    THROW 60001, N'CONTRACT_NO param required', 1;
    ELSE IF @DIRECTION IS NULL
-	  RAISERROR ('DIRECTION param required',16,1);
+    THROW 60001, N'DIRECTION param required', 1;
    ELSE IF @COMM_ORDER IS NULL
-	  RAISERROR ('COMM_ORDER param required',16,1);
+    THROW 60001, N'COMM_ORDER param required', 1;
    ELSE IF @PROFILE IS NULL
-	  RAISERROR ('PROFILE param required',16,1);
+    THROW 60001, N'PROFILE param required', 1;
    ELSE IF @TEMPLATE IS NULL
-	  RAISERROR ('TEMPLATE param required',16,1);
+    THROW 60001, N'TEMPLATE param required', 1;
    ELSE IF NOT EXISTS (SELECT NULL FROM [dbo].[Files] WHERE [FileType]=N'Excel label' AND [ID]=@TEMPLATE)
-      RAISERROR (N'Указанный Excel шаблон не существует в таблице Files',16,1);
+      THROW 60010, N'Указанный Excel шаблон не существует в таблице Files', 1;
    ELSE IF NOT EXISTS (SELECT NULL FROM [dbo].[MaterialDefinition] WHERE [ID]=@PROFILE)
-      RAISERROR (N'Указанный профиль не существует в таблице MaterialDefinition',16,1);
+      THROW 60010, N'Указанный профиль не существует в таблице MaterialDefinition', 1;
    ELSE
       BEGIN
          DECLARE @tblParams TABLE(ID    NVARCHAR(50),
@@ -53,7 +54,10 @@ BEGIN
               INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=sp.PropertyType AND pt.Value=N'COMM_ORDER' AND sp.Value=@COMM_ORDER);
 
          IF @OpSegmentRequirementID IS NULL
-            RAISERROR ('Order [%s] not found',16,1,@COMM_ORDER);
+            BEGIN
+               SET @err_message = N'Order [' + CAST(@COMM_ORDER AS NVARCHAR) + N'] not found';
+               THROW 60010, @err_message, 1;
+            END;
 
          UPDATE [dbo].[OpMaterialRequirement]
          SET [MaterialClassID] = md.[MaterialClassID],

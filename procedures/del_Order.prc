@@ -11,11 +11,12 @@ CREATE PROCEDURE [dbo].[del_Order]
 @COMM_ORDER    NVARCHAR(50)
 AS
 BEGIN
-   DECLARE @OperationsRequestID    int,
-           @OpSegmentRequirementID int;
+   DECLARE @OperationsRequestID    INT,
+           @OpSegmentRequirementID INT,
+           @err_message            NVARCHAR(255);
 
    IF @COMM_ORDER IS NULL
-      RAISERROR ('COMM_ORDER param required',16,1);
+      THROW 60001, N'COMM_ORDER param required', 1;
 
    SELECT @OpSegmentRequirementID=sreq.ID,
           @OperationsRequestID=sreq.OperationsRequest
@@ -24,7 +25,10 @@ BEGIN
         INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=sp.PropertyType AND pt.Value=N'COMM_ORDER' AND sp.Value=@COMM_ORDER);
 
    IF @OpSegmentRequirementID IS NULL
-      RAISERROR ('Order [%s] not found',16,1,@COMM_ORDER);
+      BEGIN
+         SET @err_message = N'Order [' + CAST(@COMM_ORDER AS NVARCHAR) + N'] not found';
+         THROW 60010, @err_message, 1;
+      END;
 
    DELETE FROM [dbo].[SegmentParameter]
    WHERE OpSegmentRequirement=@OpSegmentRequirementID;

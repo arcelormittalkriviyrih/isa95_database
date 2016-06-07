@@ -30,8 +30,7 @@ BEGIN
   IF @ProductionRequestID IS NULL
     BEGIN
       SET @err_message = N'Для контроллера №' + CAST(@ControllerID AS NVARCHAR) + ' не найден ProductionRequest в состоянии "InProgress"';
-      RAISERROR (@err_message,11,1);
-      RETURN;
+      THROW 60010, @err_message, 1;
     END;
 
   EXEC dbo.ins_ProductionResponse @ProductionRequestID  = @ProductionRequestID,
