@@ -10,6 +10,11 @@ GO
 
 BEGIN TRANSACTION;
 
+--call sequence one time to increase number, because current DB already has 3 records records, but gen_EquipmentClass = 1
+select next value for dbo.gen_EquipmentClass;
+select next value for dbo.gen_EquipmentClass;
+select next value for dbo.gen_EquipmentClass;
+
 INSERT INTO [dbo].[EquipmentClass]([ParentID],[Description],[Code]) VALUES (1,N'Цеха',N'WORKSHOP');
 INSERT INTO [dbo].[EquipmentClass]([ParentID],[Description],[Code]) VALUES (1,N'Стороны станов',N'SIDE');
 UPDATE [dbo].[EquipmentClass] SET [Code]=N'MILL',[Description]=N'Станы' WHERE [Description]=N'Стан';
