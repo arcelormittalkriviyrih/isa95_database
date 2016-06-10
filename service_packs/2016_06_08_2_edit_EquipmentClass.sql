@@ -27,7 +27,8 @@ DECLARE @EquipmentClassID INT;
 
 SELECT @EquipmentClassID=[ID] FROM [dbo].[EquipmentClass] WHERE [Code]=N'SCALES';
 
-delete from [EquipmentClassProperty];
+delete from EquipmentProperty where ClassPropertyID in (1,2,3);
+delete from [EquipmentClassProperty] where id in (1,2,3);
 
 INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'Тип весов',N'SCALES_TYPE',@EquipmentClassID);
 INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'Идентификатор весов',N'SCALES_NO',@EquipmentClassID);

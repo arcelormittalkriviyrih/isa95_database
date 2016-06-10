@@ -17,9 +17,9 @@ SELECT @ScalesEquipmentClassID=[ID] FROM [dbo].[EquipmentClass] WHERE [Code]=N'S
 
 BEGIN TRANSACTION;
 
-delete from EquipmentProperty
-delete from EquipmentRequirement
-delete from Equipment
+delete from EquipmentProperty where EquipmentID<29;
+delete from EquipmentRequirement where EquipmentID<29;
+delete from Equipment where ID<29;
 
 --Блюминг АБК СГП
 SET @WorkShopEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
