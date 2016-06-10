@@ -23,3 +23,4 @@ FROM dbo.Equipment eq
 ) ww
 WHERE ww.RowNumber=1;
 GO
+

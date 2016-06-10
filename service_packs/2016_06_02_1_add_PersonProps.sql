@@ -82,7 +82,11 @@ SELECT eq.ID EquipmentID,
 FROM dbo.Equipment eq
      INNER JOIN dbo.EquipmentProperty eqp ON (eqp.EquipmentID=eq.ID)
      INNER JOIN dbo.EquipmentClassProperty ecp ON (ecp.ID=eqp.ClassPropertyID AND ecp.value=N'NK')
-     INNER JOIN dbo.KEP_logger kl ON (ISNUMERIC(eqp.value)=1 AND kl.WEIGHT__FIX_NUMERICID=CAST(eqp.value AS INT) AND kl.WEIGHT__FIX_TIMESTAMP>=DATEADD(hour,-24,GETDATE()))
+     INNER JOIN dbo.KEP_logger kl ON (ISNUMERIC(eqp.value)=1 AND kl.WEIGHT__FIX_NUMERICID=CAST(eqp.value AS INT) AND kl.WEIGHT__FIX_TIMESTAMP>=DATEADD(hour,-1,GETDATE()))
 ) ww
 WHERE ww.RowNumber=1
 GO
+
+CREATE NONCLUSTERED INDEX i_WEIGHT__FIX_TIMESTAMP
+ON [dbo].[KEP_logger] ([WEIGHT__FIX_TIMESTAMP])
+INCLUDE ([WEIGHT__FIX_NUMERICID],[WEIGHT_CURRENT_VALUE])

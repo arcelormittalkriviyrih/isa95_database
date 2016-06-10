@@ -75,5 +75,3 @@ IF OBJECT_ID('dbo.v_PrintJobs', N'V') IS NOT NULL
     DROP VIEW [dbo].[v_PrintJobs];
 GO
 
-update dbo.EquipmentClassProperty set [Value]='PRINTER_NAME' where [Value]='NP';
-update dbo.EquipmentClassProperty set [Value]='PRINTER_IP' where [Value]='IP';

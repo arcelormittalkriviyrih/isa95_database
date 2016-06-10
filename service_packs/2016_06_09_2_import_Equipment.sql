@@ -17,11 +17,15 @@ SELECT @ScalesEquipmentClassID=[ID] FROM [dbo].[EquipmentClass] WHERE [Code]=N'S
 
 BEGIN TRANSACTION;
 
+delete from EquipmentProperty
+delete from EquipmentRequirement
+delete from Equipment
+
 --Блюминг АБК СГП
 SET @WorkShopEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@WorkShopEquipmentID,N'Блюминг АБК СГП',NULL,@WorkShopEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 1',@WorkShopEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер Блюминга 2',@WorkShopEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Весы',@WorkShopEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Ручные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
@@ -36,12 +40,12 @@ INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]
 SET @MillEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@MillEquipmentID,N'ПС 150-1',@WorkShopEquipmentID,@MillEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 2',@MillEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер ПС 150-1',@MillEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Бунтовые',@MillEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Бунтовые',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'16',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
-INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'0',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'DOWN',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'ENTERED',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'PACK_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'4',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'PACK_WEIGHT'));
@@ -51,13 +55,15 @@ INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]
 SET @SideEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@SideEquipmentID,N'Левая',@MillEquipmentID,@SideEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 3',@SideEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер МС 250-1 левая',@SideEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'ZDesigner 140Xi4 203 dpi',@PrinterEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'PRINTER_NAME'));
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 1',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Карманные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'17',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'DOWN',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'11',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'CONTROLLER_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 2',@SideEquipmentID,@ScalesEquipmentClassID);
@@ -65,6 +71,7 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'18',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'DOWN',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'12',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'CONTROLLER_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 3',@SideEquipmentID,@ScalesEquipmentClassID);
@@ -72,6 +79,7 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'19',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'DOWN',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'13',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'CONTROLLER_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 4',@SideEquipmentID,@ScalesEquipmentClassID);
@@ -79,17 +87,19 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'20',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'DOWN',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'14',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'CONTROLLER_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @SideEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@SideEquipmentID,N'Правая',@MillEquipmentID,@SideEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 4',@SideEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер МС 250-1 правая',@SideEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 1',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Карманные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'21',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'DOWN',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'21',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'CONTROLLER_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 2',@SideEquipmentID,@ScalesEquipmentClassID);
@@ -97,6 +107,7 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'22',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'DOWN',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'22',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'CONTROLLER_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 3',@SideEquipmentID,@ScalesEquipmentClassID);
@@ -104,6 +115,7 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'23',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'DOWN',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'23',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'CONTROLLER_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 4',@SideEquipmentID,@ScalesEquipmentClassID);
@@ -111,13 +123,14 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'24',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'DOWN',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'24',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'CONTROLLER_NO'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @MillEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@MillEquipmentID,N'МС 250-2',@WorkShopEquipmentID,@MillEquipmentClassID);
 SET @SideEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@SideEquipmentID,N'Левая',@MillEquipmentID,@SideEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 5',@SideEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер МС 250-2 левая',@SideEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 1',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Карманные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
@@ -141,8 +154,6 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @SideEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@SideEquipmentID,N'Правая',@MillEquipmentID,@SideEquipmentClassID);
-SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 6',@SideEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 1',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Карманные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
@@ -157,6 +168,8 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'DOWN',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
+SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер МС 250-2 правая',@SideEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Упаковка',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Весы линии упаковки',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
@@ -169,7 +182,7 @@ INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]
 SET @SideEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@SideEquipmentID,N'Левая',@MillEquipmentID,@SideEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 7',@SideEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер МС 250-3 левая',@SideEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Упаковка',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Весы линии упаковки',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
@@ -201,7 +214,7 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 SET @SideEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@SideEquipmentID,N'Правая',@MillEquipmentID,@SideEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 8',@SideEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер МС 250-3 правая',@SideEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Упаковка',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Весы линии упаковки',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
@@ -239,51 +252,51 @@ INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]
 SET @SideEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@SideEquipmentID,N'Левая',@MillEquipmentID,@SideEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 9',@SideEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер МС 250-4 левая',@SideEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 1',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Карманные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'39',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
-INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'10',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'UP',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 2',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Карманные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'40',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
-INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'10',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'UP',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 3',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Карманные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'41',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
-INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'10',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'UP',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @SideEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@SideEquipmentID,N'Правая',@MillEquipmentID,@SideEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 10',@SideEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер МС 250-4 правая',@SideEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 1',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Карманные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'42',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
-INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'10',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'UP',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 2',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Карманные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'43',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
-INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'10',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'UP',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 3',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Карманные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'44',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
-INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'10',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'UP',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @MillEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
@@ -291,7 +304,7 @@ INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]
 SET @SideEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@SideEquipmentID,N'Левая',@MillEquipmentID,@SideEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 11',@SideEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер МС 250-5 левая',@SideEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 1',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Карманные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
@@ -323,7 +336,7 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 SET @SideEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@SideEquipmentID,N'Правая',@MillEquipmentID,@SideEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 12',@SideEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер МС 250-5 правая',@SideEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Карман 1',@SideEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Карманные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
@@ -359,12 +372,12 @@ INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]
 SET @MillEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@MillEquipmentID,N'ПС 6 (ПУ 8)',@WorkShopEquipmentID,@MillEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 13',@MillEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер ПС 150-6',@MillEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Бунтовые',@MillEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Бунтовые',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'53',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
-INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'0',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'UP',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'CALC',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'PACK_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
@@ -373,7 +386,7 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 SET @WorkShopEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@WorkShopEquipmentID,N'ЦПМ',NULL,@WorkShopEquipmentClassID);
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 14',@WorkShopEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер ЦПМП',@WorkShopEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Весы 1',@WorkShopEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Ручные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
@@ -381,8 +394,6 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'UP',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
-SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 15',@WorkShopEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Весы 2',@WorkShopEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Ручные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
@@ -390,8 +401,6 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'UP',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
-SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 16',@WorkShopEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Весы, линия гибки',@WorkShopEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Ручные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
@@ -400,7 +409,7 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'UP',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
 SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
-INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер 17',@WorkShopEquipmentID,@PrinterEquipmentClassID);
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер холодного волочения',@WorkShopEquipmentID,@PrinterEquipmentClassID);
 SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Весы, холодного волочения',@WorkShopEquipmentID,@ScalesEquipmentClassID);
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Ручные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
@@ -408,6 +417,24 @@ INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) V
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'UP',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
 INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
+
+--Блюминг 1 АБК комната мастеров
+SET @WorkShopEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@WorkShopEquipmentID,N'Блюминг 1 АБК комната мастеров',NULL,@WorkShopEquipmentClassID);
+SET @PrinterEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@PrinterEquipmentID,N'Принтер Блюминга 1',@WorkShopEquipmentID,@PrinterEquipmentClassID);
+SET @ScaleEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
+INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@ScaleEquipmentID,N'Весы',@WorkShopEquipmentID,@ScalesEquipmentClassID);
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'Ручные',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_TYPE'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'15',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'SCALES_NO'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'5',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_PRECISION'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (N'DOWN',@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'ROUND_RULE'));
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) VALUES (CAST(@PrinterEquipmentID AS NVARCHAR),@ScaleEquipmentID,dbo.get_EquipmentClassPropertyByValue(N'USED_PRINTER'));
+
+
+INSERT INTO [dbo].[EquipmentProperty]([Value],[EquipmentID],[ClassPropertyID]) 
+select N'Bullzip PDF Printer',ID,dbo.get_EquipmentClassPropertyByValue(N'PRINTER_NAME') from Equipment where EquipmentClassID=@PrinterEquipmentClassID and ID not in (select EquipmentID from EquipmentProperty where ClassPropertyID=dbo.get_EquipmentClassPropertyByValue(N'PRINTER_NAME'));
+
 
 COMMIT;
 GO

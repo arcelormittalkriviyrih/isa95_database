@@ -27,12 +27,21 @@ DECLARE @EquipmentClassID INT;
 
 SELECT @EquipmentClassID=[ID] FROM [dbo].[EquipmentClass] WHERE [Code]=N'SCALES';
 
+delete from [EquipmentClassProperty];
+
 INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'Тип весов',N'SCALES_TYPE',@EquipmentClassID);
 INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'Идентификатор весов',N'SCALES_NO',@EquipmentClassID);
 INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'Точность округления',N'ROUND_PRECISION',@EquipmentClassID);
 INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'Правило округления',N'ROUND_RULE',@EquipmentClassID);
 INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'Правило расчета увязки',N'PACK_RULE',@EquipmentClassID);
 INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'Вес увязки',N'PACK_WEIGHT',@EquipmentClassID);
+INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'Номер контроллера',N'CONTROLLER_NO',@EquipmentClassID);
+
+
+SELECT @EquipmentClassID=[ID] FROM [dbo].[EquipmentClass] WHERE [Code]=N'PRINTER';
+INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'IP адрес принтера',N'PRINTER_IP',@EquipmentClassID);
+INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'Имя принтера',N'PRINTER_NAME',@EquipmentClassID);
+
 
 COMMIT;
 GO
