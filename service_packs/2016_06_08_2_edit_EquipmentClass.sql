@@ -42,6 +42,7 @@ INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClas
 SELECT @EquipmentClassID=[ID] FROM [dbo].[EquipmentClass] WHERE [Code]=N'PRINTER';
 INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'IP адрес принтера',N'PRINTER_IP',@EquipmentClassID);
 INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'Имя принтера',N'PRINTER_NAME',@EquipmentClassID);
+INSERT INTO [dbo].[EquipmentClassProperty] ([Description],[Value],[EquipmentClassID]) VALUES (N'Идентификатор принтера',N'PRINTER_NO',@EquipmentClassID);
 
 
 COMMIT;
