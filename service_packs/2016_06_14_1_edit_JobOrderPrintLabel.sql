@@ -58,12 +58,12 @@ BEGIN
    INSERT INTO [dbo].[JobOrder] ([ID], [WorkType], [DispatchStatus], [Command], [CommandRule])
    VALUES (@JobOrderID,N'Print',N'ToPrint',@Command,@CommandRule);
 
-   IF @PrinterID IS NOT NULL
+   IF @EquipmentID IS NOT NULL
 	  BEGIN
 		 INSERT INTO [dbo].[OpEquipmentRequirement] ([EquipmentClassID], [EquipmentID], [JobOrderID])
 		 SELECT eq.[EquipmentClassID],eq.[ID],@JobOrderID
 		 FROM [dbo].[Equipment] eq
-		 WHERE [ID]=@PrinterID;
+		 WHERE [ID]=@EquipmentID;
 	  END;
 
    INSERT INTO [dbo].[Parameter] ([Value], [JobOrder], [PropertyType])
