@@ -14,10 +14,15 @@ AS
      FROM dbo.Person p,
           dbo.PersonProperty pp,
           dbo.PersonnelClassProperty pcp,
-          dbo.Equipment e
+          dbo.Equipment e,
+		  dbo.EquipmentClassProperty ecp,
+		  dbo.EquipmentProperty ep
      WHERE pp.PersonID = p.ID
            AND pcp.Value = 'WORK_WITH'
            AND pcp.ID = pp.ClassPropertyID
            AND p.ID = dbo.getCurrentPerson()
-           AND e.ID = pp.Value;
+           AND ep.Value = pp.Value
+		   AND ecp.Value='SCALES_NO'
+		   AND ep.EquipmentID=e.ID
+		   AND ep.ClassPropertyID=ecp.ID;
 GO

@@ -18,7 +18,8 @@ AS
      FROM [dbo].[Files] f,
           dbo.MaterialLotProperty mlp,
           dbo.PropertyTypes pt
-     WHERE mlp.[Value] = f.ID
+     WHERE ISNUMERIC(mlp.[Value] + '.0e0')=1
+	       AND mlp.[Value] = f.ID
            AND mlp.PropertyType = pt.ID
            AND pt.[Value] = N'TEMPLATE';
 GO

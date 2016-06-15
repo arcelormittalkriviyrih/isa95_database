@@ -36,7 +36,3 @@ AS
      FROM dbo.MaterialLot ml
      WHERE ml.FactoryNumber IS NOT NULL;
 GO
-
-IF OBJECT_ID('dbo.v_JobOrders', N'V') IS NOT NULL
-    DROP VIEW [dbo].[v_JobOrders];
-GO

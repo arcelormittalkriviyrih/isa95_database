@@ -9,32 +9,23 @@ GO
 
 CREATE VIEW [dbo].[v_PrintTemplate]
 AS
-SELECT newID() ID,
-	  N'EquipmentProperty' [TypeProperty],
-       ecp.[Value] AS [PropertyCode],
-       ecp.[Description],
-       NULL AS [Value]
-FROM dbo.EquipmentClassProperty ecp
-UNION ALL
-SELECT newID() ID,
-       N'MaterialProperty' [TypeProperty],
-       mcp.[Value] AS [PropertyCode],
-       mcp.[Description],
-       NULL AS [Value]
-FROM dbo.MaterialClassProperty mcp
-UNION ALL
-SELECT newID() ID,
+SELECT NEWID() ID,
        N'PropertyTypes' [TypeProperty],
        mcp.[Value] AS [PropertyCode],
        mcp.[Description],
        NULL AS [Value]
 FROM dbo.PropertyTypes mcp
 UNION ALL
-SELECT newID() ID,
-	  N'PersonnelProperty' [TypeProperty],
-       pcp.[Value] AS [PropertyCode],
-       pcp.[Description],
+SELECT NEWID() ID,
+       N'Weight' [TypeProperty],
+       N'WEIGHT' [PropertyCode],
+       N'МАССА' [Description],
        NULL AS [Value]
-FROM dbo.PersonnelClassProperty pcp;
+UNION ALL
+SELECT NEWID() ID,
+       N'FactoryNumber' [TypeProperty],
+       N'FactoryNumber' [PropertyCode],
+       N'№ бирки для штрих-кода' [Description],
+       NULL AS [Value];
 
 GO

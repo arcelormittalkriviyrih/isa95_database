@@ -27,8 +27,9 @@ AS
 		   AND ep.ClassPropertyID=ecp.ID;
 GO
 
-drop view  [dbo].[v_ScalesShortInfo];
-go
+IF OBJECT_ID('dbo.v_ScalesShortInfo', N'V') IS NOT NULL
+    DROP VIEW [dbo].[v_ScalesShortInfo];
+GO
 
 CREATE VIEW [dbo].[v_ScalesShortInfo]
 AS
