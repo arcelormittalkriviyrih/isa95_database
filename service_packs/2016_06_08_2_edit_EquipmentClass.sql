@@ -1,4 +1,8 @@
-﻿-- Обновление структур таблиц
+﻿SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+-- Обновление структур таблиц
 IF NOT EXISTS(SELECT NULL
               FROM information_schema.columns
               WHERE table_name = 'EquipmentClass'
