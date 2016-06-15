@@ -1,29 +1,29 @@
 ﻿--------------------------------------------------------------
--- Процедура ins_CreateOrder
-IF OBJECT_ID ('dbo.ins_Order',N'P') IS NOT NULL
-   DROP PROCEDURE dbo.ins_Order;
+-- Процедура ins_WorkDefinition
+IF OBJECT_ID ('dbo.ins_WorkDefinition',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_WorkDefinition;
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[ins_Order]
+CREATE PROCEDURE [dbo].[ins_WorkDefinition]
 @COMM_ORDER     NVARCHAR(50),
-@PROD_ORDER     NVARCHAR(50) = NULL,
+@PROD_ORDER     NVARCHAR(50),
 @CONTRACT_NO    NVARCHAR(50),
 @DIRECTION      NVARCHAR(50),
 @SIZE           NVARCHAR(50),
 @LENGTH         NVARCHAR(50),
 @TOLERANCE      NVARCHAR(50) = NULL,
-@CLASS          NVARCHAR(50) = NULL,
-@STEEL_CLASS    NVARCHAR(50) = NULL,
-@MELT_NO        NVARCHAR(50) = NULL,
-@PART_NO        NVARCHAR(50) = NULL,
+@CLASS          NVARCHAR(50),
+@STEEL_CLASS    NVARCHAR(50),
+@MELT_NO        NVARCHAR(50),
+@PART_NO        NVARCHAR(50),
 @MIN_ROD        NVARCHAR(50) = NULL,
 @BUYER_ORDER_NO NVARCHAR(50) = NULL,
-@BRIGADE_NO     NVARCHAR(50) = NULL,
-@PROD_DATE      NVARCHAR(50) = NULL,
-@UTVK           NVARCHAR(50) = NULL,
+@BRIGADE_NO     NVARCHAR(50),
+@PROD_DATE      NVARCHAR(50),
+@UTVK           NVARCHAR(50),
 @LEAVE_NO       NVARCHAR(50) = NULL,
 @MATERIAL_NO    NVARCHAR(50) = NULL,
 @BUNT_DIA       NVARCHAR(50) = NULL,
@@ -33,8 +33,7 @@ CREATE PROCEDURE [dbo].[ins_Order]
 @TEMPLATE       INT
 AS
 BEGIN
-   DECLARE @OperationsRequestID     INT,
-           @OpSegmentRequirementID  INT,
+   DECLARE @WorkDefinitionID     INT,
            @err_message             NVARCHAR(255);
 
    DECLARE @tblParams TABLE(ID    NVARCHAR(50),
@@ -42,11 +41,13 @@ BEGIN
 
    IF @COMM_ORDER IS NULL
     THROW 60001, N'COMM_ORDER param required', 1;
-   ELSE IF EXISTS (SELECT NULL FROM [dbo].[v_SegmentParameter_Order] WHERE [Value]=@COMM_ORDER)
+   ELSE IF EXISTS (SELECT NULL FROM [dbo].[v_ParameterSpecification_Order] WHERE [Value]=@COMM_ORDER)
       BEGIN
-         SET @err_message = N'Заказ [' + CAST(@COMM_ORDER AS NVARCHAR) + N'] уже существует';
+         SET @err_message = N'WorkDefinition [' + CAST(@COMM_ORDER AS NVARCHAR) + N'] already exists';
          THROW 60010, @err_message, 1;
       END;
+   ELSE IF @PROD_ORDER IS NULL
+    THROW 60001, N'PROD_ORDER param required', 1;
    ELSE IF @CONTRACT_NO IS NULL
     THROW 60001, N'CONTRACT_NO param required', 1;
    ELSE IF @DIRECTION IS NULL
@@ -55,16 +56,27 @@ BEGIN
     THROW 60001, N'SIZE param required', 1;
    ELSE IF @LENGTH IS NULL
     THROW 60001, N'LENGTH param required', 1;
+   ELSE IF @CLASS IS NULL
+    THROW 60001, N'CLASS param required', 1;
+   ELSE IF @STEEL_CLASS IS NULL
+    THROW 60001, N'STEEL_CLASS param required', 1;
+   ELSE IF @MELT_NO IS NULL
+    THROW 60001, N'MELT_NO param required', 1;
+   ELSE IF @PART_NO IS NULL
+    THROW 60001, N'PART_NO param required', 1;
+   ELSE IF @BRIGADE_NO IS NULL
+    THROW 60001, N'BRIGADE_NO param required', 1;
+   ELSE IF @PROD_DATE IS NULL
+    THROW 60001, N'PROD_DATE param required', 1;
+   ELSE IF @UTVK IS NULL
+    THROW 60001, N'UTVK param required', 1;
    ELSE IF @TEMPLATE IS NULL
     THROW 60001, N'TEMPLATE param required', 1;
    ELSE IF NOT EXISTS (SELECT NULL FROM [dbo].[Files] WHERE [FileType]=N'Excel label' AND [ID]=@TEMPLATE)
       THROW 60010, N'Указанный Excel шаблон не существует в таблице Files', 1;
 
-   SET @OperationsRequestID=NEXT VALUE FOR [dbo].[gen_OperationsRequest];
-   INSERT INTO [dbo].[OperationsRequest] ([ID]) VALUES (@OperationsRequestID);
-
-   SET @OpSegmentRequirementID=NEXT VALUE FOR [dbo].[gen_OpSegmentRequirement];
-   INSERT INTO [dbo].[OpSegmentRequirement] ([ID],[OperationsRequest]) VALUES (@OpSegmentRequirementID,@OperationsRequestID);
+   SET @WorkDefinitionID=NEXT VALUE FOR [dbo].[gen_WorkDefinition];
+   INSERT INTO [dbo].[WorkDefinition] ([ID]) VALUES (@WorkDefinitionID);
 
    INSERT @tblParams
    SELECT N'COMM_ORDER',@COMM_ORDER WHERE @COMM_ORDER IS NOT NULL
@@ -113,8 +125,8 @@ BEGIN
    UNION ALL
    SELECT N'TEMPLATE',CAST(@TEMPLATE AS NVARCHAR(50)) WHERE @TEMPLATE IS NOT NULL;
 
-   INSERT INTO [dbo].[SegmentParameter] ([Value],[OpSegmentRequirement],[PropertyType])
-   SELECT t.value,@OpSegmentRequirementID,pt.ID
+   INSERT INTO [dbo].[ParameterSpecification] ([Value],[WorkDefinitionID],[PropertyType])
+   SELECT t.value,@WorkDefinitionID,pt.ID
    FROM @tblParams t INNER JOIN [dbo].[PropertyTypes] pt ON (pt.value=t.ID);
 
 END;

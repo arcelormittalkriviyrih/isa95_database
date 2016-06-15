@@ -8,7 +8,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE PROCEDURE [dbo].[ins_JobOrderPrintLabel]
-@PrinterID      INT = NULL,
+@PrinterID      NVARCHAR(255) = NULL,
 @MaterialLotID  INT,
 @Command        NVARCHAR(50),
 @CommandRule    NVARCHAR(50) = NULL
@@ -17,7 +17,9 @@ AS
 BEGIN
 
    DECLARE @JobOrderID  INT,
-           @err_message NVARCHAR(255);
+           @err_message NVARCHAR(255),
+		 @EquipmentID INT;
+    
 
    IF @Command IS NULL
       THROW 60001, N'Command param required', 1;
@@ -27,10 +29,19 @@ BEGIN
       THROW 60001, N'MaterialLotID param required', 1;   
    ELSE IF @CommandRule IS NULL AND @Command=N'Email' 
       THROW 60001, N'CommandRule param required for Email Command', 1;   
-   ELSE IF @PrinterID IS NOT NULL AND NOT EXISTS (SELECT NULL FROM [dbo].[Equipment] WHERE [ID]=@PrinterID)
+   ELSE IF @PrinterID IS NOT NULL 
       BEGIN
-         SET @err_message = N'Принтер с кодом [' + CAST(@PrinterID AS NVARCHAR) + N'] не существует';
-         THROW 60010, @err_message, 1;
+	   SET @EquipmentID = (SELECT ep.EquipmentID
+					   FROM dbo.EquipmentClassProperty ecp,
+						   dbo.EquipmentProperty ep
+					   WHERE ecp.[Value] = N'PRINTER_NO'
+						 and ecp.ID=ep.ClassPropertyID
+						 and ep.[Value]=@PrinterID);
+	    IF @EquipmentID IS NULL
+	     BEGIN
+		   SET @err_message = N'Принтер с идентификатором "' + @PrinterID + N'" не существует';
+		   THROW 60010, @err_message, 1;
+	     END;
       END;
    ELSE IF NOT EXISTS (SELECT NULL FROM [dbo].[MaterialLot] WHERE [ID]=@MaterialLotID)
       BEGIN

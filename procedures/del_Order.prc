@@ -1,5 +1,5 @@
 ﻿--------------------------------------------------------------
--- Процедура del_CreateOrder
+-- Процедура del_Order
 IF OBJECT_ID ('dbo.del_Order',N'P') IS NOT NULL
    DROP PROCEDURE dbo.del_Order;
 GO
@@ -18,11 +18,9 @@ BEGIN
    IF @COMM_ORDER IS NULL
       THROW 60001, N'COMM_ORDER param required', 1;
 
-   SELECT @OpSegmentRequirementID=sreq.ID,
-          @OperationsRequestID=sreq.OperationsRequest
-   FROM [dbo].[OpSegmentRequirement] sreq
-        INNER JOIN  [dbo].[SegmentParameter] sp ON (sp.OpSegmentRequirement=sreq.ID)
-        INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=sp.PropertyType AND pt.Value=N'COMM_ORDER' AND sp.Value=@COMM_ORDER);
+   SELECT @OpSegmentRequirementID=spo.OpSegmentRequirement
+   FROM [dbo].[v_SegmentParameter_Order] spo
+   WHERE spo.Value=@COMM_ORDER;
 
    IF @OpSegmentRequirementID IS NULL
       BEGIN
@@ -32,9 +30,6 @@ BEGIN
 
    DELETE FROM [dbo].[SegmentParameter]
    WHERE OpSegmentRequirement=@OpSegmentRequirementID;
-
-   DELETE FROM [dbo].[OpMaterialRequirement]
-   WHERE [SegmenRequirementID]=@OpSegmentRequirementID;
 
    DELETE [dbo].[OpSegmentRequirement]
    WHERE ID=@OpSegmentRequirementID;
