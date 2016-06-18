@@ -18,6 +18,15 @@ INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'ADDRESS',N'А
 INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'COMM_ORDER',N'Заказ');
 INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'TEMPLATE',N'Шаблон бирки');
 
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'BAR_WEIGHT',N'Вес прутка');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'BAR_QUANTITY',N'Количество прутков');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'MAX_WEIGHT',N'Максимальный вес');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'MIN_WEIGHT',N'Минимальный вес');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'DEVIATION',N'Отклонение');
+
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'MEASURE_TIME',N'Дата и время взвешивания');
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'AUTO_MANU_VALUE',N'Режим ввода веса');
+
 COMMIT;
 GO
 
