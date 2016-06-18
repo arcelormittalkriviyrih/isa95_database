@@ -10,10 +10,10 @@ GO
 CREATE PROCEDURE [dbo].[ins_Order]
 @COMM_ORDER     NVARCHAR(50),
 @PROD_ORDER     NVARCHAR(50) = NULL,
-@CONTRACT_NO    NVARCHAR(50),
-@DIRECTION      NVARCHAR(50),
-@SIZE           NVARCHAR(50),
-@LENGTH         NVARCHAR(50),
+@CONTRACT_NO    NVARCHAR(50) = NULL,
+@DIRECTION      NVARCHAR(50) = NULL,
+@SIZE           NVARCHAR(50) = NULL,
+@LENGTH         NVARCHAR(50) = NULL,
 @TOLERANCE      NVARCHAR(50) = NULL,
 @CLASS          NVARCHAR(50) = NULL,
 @STEEL_CLASS    NVARCHAR(50) = NULL,
@@ -30,7 +30,7 @@ CREATE PROCEDURE [dbo].[ins_Order]
 @PRODUCT        NVARCHAR(50) = NULL,
 @STANDARD       NVARCHAR(50) = NULL,
 @CHEM_ANALYSIS  NVARCHAR(50) = NULL,
-@TEMPLATE       INT
+@TEMPLATE       INT          = NULL
 AS
 BEGIN
    DECLARE @OperationsRequestID     INT,
@@ -47,7 +47,7 @@ BEGIN
          SET @err_message = N'Заказ [' + CAST(@COMM_ORDER AS NVARCHAR) + N'] уже существует';
          THROW 60010, @err_message, 1;
       END;
-   ELSE IF @CONTRACT_NO IS NULL
+/*   ELSE IF @CONTRACT_NO IS NULL
     THROW 60001, N'CONTRACT_NO param required', 1;
    ELSE IF @DIRECTION IS NULL
     THROW 60001, N'DIRECTION param required', 1;
@@ -56,8 +56,8 @@ BEGIN
    ELSE IF @LENGTH IS NULL
     THROW 60001, N'LENGTH param required', 1;
    ELSE IF @TEMPLATE IS NULL
-    THROW 60001, N'TEMPLATE param required', 1;
-   ELSE IF NOT EXISTS (SELECT NULL FROM [dbo].[Files] WHERE [FileType]=N'Excel label' AND [ID]=@TEMPLATE)
+    THROW 60001, N'TEMPLATE param required', 1;*/
+   ELSE IF @TEMPLATE IS NOT NULL AND NOT EXISTS (SELECT NULL FROM [dbo].[Files] WHERE [FileType]=N'Excel label' AND [ID]=@TEMPLATE)
       THROW 60010, N'Указанный Excel шаблон не существует в таблице Files', 1;
 
    SET @OperationsRequestID=NEXT VALUE FOR [dbo].[gen_OperationsRequest];

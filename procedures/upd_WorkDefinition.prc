@@ -9,11 +9,11 @@ GO
 
 CREATE PROCEDURE [dbo].[upd_WorkDefinition] 
 @COMM_ORDER     NVARCHAR(50),
-@PROD_ORDER     NVARCHAR(50) = NULL,
-@CONTRACT_NO    NVARCHAR(50),
-@DIRECTION      NVARCHAR(50),
-@SIZE           NVARCHAR(50),
-@LENGTH         NVARCHAR(50),
+@PROD_ORDER     NVARCHAR(50),
+@CONTRACT_NO    NVARCHAR(50) = NULL,
+@DIRECTION      NVARCHAR(50) = NULL,
+@SIZE           NVARCHAR(50) = NULL,
+@LENGTH         NVARCHAR(50) = NULL,
 @TOLERANCE      NVARCHAR(50) = NULL,
 @CLASS          NVARCHAR(50) = NULL,
 @STEEL_CLASS    NVARCHAR(50) = NULL,
@@ -30,7 +30,7 @@ CREATE PROCEDURE [dbo].[upd_WorkDefinition]
 @PRODUCT        NVARCHAR(50) = NULL,
 @STANDARD       NVARCHAR(50) = NULL,
 @CHEM_ANALYSIS  NVARCHAR(50) = NULL,
-@TEMPLATE       INT
+@TEMPLATE       INT          = NULL
 AS
 BEGIN
    DECLARE @WorkDefinitionID     INT,
@@ -40,7 +40,7 @@ BEGIN
     THROW 60001, N'COMM_ORDER param required', 1;
    ELSE IF @PROD_ORDER IS NULL
     THROW 60001, N'PROD_ORDER param required', 1;
-   ELSE IF @CONTRACT_NO IS NULL
+/*   ELSE IF @CONTRACT_NO IS NULL
     THROW 60001, N'CONTRACT_NO param required', 1;
    ELSE IF @DIRECTION IS NULL
     THROW 60001, N'DIRECTION param required', 1;
@@ -63,8 +63,8 @@ BEGIN
    ELSE IF @UTVK IS NULL
     THROW 60001, N'UTVK param required', 1;
    ELSE IF @TEMPLATE IS NULL
-    THROW 60001, N'TEMPLATE param required', 1;
-   ELSE IF NOT EXISTS (SELECT NULL FROM [dbo].[Files] WHERE [FileType]=N'Excel label' AND [ID]=@TEMPLATE)
+    THROW 60001, N'TEMPLATE param required', 1;*/
+   ELSE IF @TEMPLATE IS NOT NULL AND NOT EXISTS (SELECT NULL FROM [dbo].[Files] WHERE [FileType]=N'Excel label' AND [ID]=@TEMPLATE)
       THROW 60010, N'Указанный Excel шаблон не существует в таблице Files', 1;
 
    DECLARE @tblParams TABLE(ID    NVARCHAR(50),

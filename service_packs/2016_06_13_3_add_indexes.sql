@@ -23,3 +23,18 @@ CREATE NONCLUSTERED INDEX [i_WEIGHT__FIX_TIMESTAMP] ON [dbo].[KEP_logger]
 INCLUDE ([WEIGHT_CURRENT_VALUE]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 70) ON [PRIMARY]
 GO
 
+IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='i1_JobOrder_StartTime_WorkType' AND object_id = OBJECT_ID('[dbo].[JobOrder]'))
+   DROP INDEX [i1_JobOrder_StartTime_WorkType] ON [dbo].[JobOrder]
+GO
+
+CREATE INDEX i1_JobOrder_StartTime_WorkType ON [dbo].[JobOrder] ([StartTime] ASC, [WorkType] ASC)
+GO
+
+IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='i1_WorkRequest_StartTime' AND object_id = OBJECT_ID('[dbo].[WorkRequest]'))
+   DROP INDEX [i1_WorkRequest_StartTime] ON [dbo].[WorkRequest]
+GO
+
+CREATE INDEX i1_WorkRequest_StartTime ON [dbo].[WorkRequest] ([StartTime])
+GO
+
+
