@@ -4,26 +4,12 @@ GO
 
 CREATE VIEW [dbo].[v_OrderProperties]
 AS
-     SELECT sp.ID,
-            pt.Description,
-            sp.[Value],
-            sr.OperationsRequest
-     FROM dbo.SegmentParameter AS sp,
-          dbo.PropertyTypes AS pt,
-          dbo.OpSegmentRequirement AS sr
-     WHERE pt.ID = sp.PropertyType
-           AND sp.OpSegmentRequirement = sr.id
-           AND pt.[Value] IN('STANDARD', 'LENGTH', 'MIN_ROD', 'PRODUCT', 'CLASS', 'STEEL_CLASS', 'CHEM_ANALYSIS', 'BUNT_DIA', 'ADDRESS')
-     UNION ALL
-     SELECT 1000000000+mr.id,
-            mc.Description,
-            md.Description AS [Value],
-            sr.OperationsRequest
-     FROM dbo.OpMaterialRequirement AS mr,
-          dbo.MaterialDefinition AS md,
-          dbo.MaterialClass AS mc,
-          dbo.OpSegmentRequirement AS sr
-     WHERE md.ID = mr.MaterialDefinitionID
-           AND mc.ID = md.MaterialClassID
-           AND mr.SegmenRequirementID = sr.ID;
+SELECT sp.ID,
+       pt.Description,
+       sp.[Value],
+       sr.OperationsRequest,
+       pt.[Value] Property
+FROM dbo.OpSegmentRequirement sr
+     INNER JOIN dbo.SegmentParameter sp ON (sp.OpSegmentRequirement=sr.id)
+     INNER JOIN dbo.PropertyTypes pt ON (pt.ID=sp.PropertyType AND pt.[Value] IN ('PROD_ORDER','SIZE','LENGTH','TOLERANCE','CLASS','STEEL_CLASS','MELT_NO','PART_NO','MIN_ROD','BUYER_ORDER_NO','BRIGADE_NO','PROD_DATE','UTVK','LEAVE_NO','MATERIAL_NO','BUNT_DIA','PRODUCT','STANDARD','CHEM_ANALYSIS'))
 GO
