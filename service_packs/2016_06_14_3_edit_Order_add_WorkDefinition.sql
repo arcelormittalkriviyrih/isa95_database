@@ -27,13 +27,17 @@ GO
 
 CREATE VIEW [dbo].[v_Parameter_Order] WITH SCHEMABINDING
 AS
-SELECT p.ID, p.[Value], p.[Description], p.JobOrder, p.Parameter, p.PropertyType
+SELECT p.[ID], p.[Value], p.[Description], p.[JobOrder], p.[Parameter], p.[PropertyType], er.[EquipmentID]
 FROM [dbo].[Parameter] p
-     INNER JOIN[dbo].[PropertyTypes] pt ON (pt.ID=p.PropertyType AND pt.Value=N'COMM_ORDER')
+     INNER JOIN [dbo].[JobOrder] jo ON (jo.[ID]=p.[JobOrder] AND jo.[WorkType]=N'INIT')
+     INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=p.[PropertyType] AND pt.[Value]=N'COMM_ORDER')
+     INNER JOIN [dbo].[OpEquipmentRequirement] er ON (er.[JobOrderID]=p.[JobOrder])
 GO
 
-CREATE UNIQUE CLUSTERED INDEX [u_Parameter_Order] ON [dbo].[v_Parameter_Order] (Value)
+CREATE UNIQUE CLUSTERED INDEX [u_Parameter_Order] ON [dbo].[v_Parameter_Order] ([EquipmentID],[Value])
 GO
+
+--------------------------------------------------------------
 
 IF OBJECT_ID('dbo.gen_MaterialLotNumber', N'SO') IS NULL 
    CREATE SEQUENCE dbo.gen_MaterialLotNumber AS INT START WITH 1 INCREMENT BY 1 MINVALUE 1 MAXVALUE 9999 CYCLE NO CACHE;
