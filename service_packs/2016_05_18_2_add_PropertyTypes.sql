@@ -27,6 +27,9 @@ INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'DEVIATION',N'
 INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'MEASURE_TIME',N'Дата и время взвешивания');
 INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'AUTO_MANU_VALUE',N'Режим ввода веса');
 
+INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'SANDWICH_MODE',N'Режим бутерброда');
+
+
 COMMIT;
 GO
 
