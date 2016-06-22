@@ -26,6 +26,7 @@ delete from EquipmentProperty where EquipmentID<29;
 delete from EquipmentRequirement where EquipmentID<29;
 delete from Equipment where ID<29;
 
+
 --Блюминг АБК СГП
 SET @WorkShopEquipmentID=NEXT VALUE FOR dbo.gen_Equipment;
 INSERT INTO [dbo].[Equipment] ([ID],[Description],[Equipment],[EquipmentClassID]) VALUES (@WorkShopEquipmentID,N'Блюминг АБК СГП',NULL,@WorkShopEquipmentClassID);
