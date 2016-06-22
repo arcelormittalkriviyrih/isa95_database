@@ -3,7 +3,7 @@ GO
 SET QUOTED_IDENTIFIER ON;
 GO
 
-DECLARE @PrinterEquipmentClassID INT;
+DECLARE @ScalesEquipmentClassID INT;
 		
 SELECT @ScalesEquipmentClassID=[ID] FROM [dbo].[EquipmentClass] WHERE [Code]=N'SCALES';
 
