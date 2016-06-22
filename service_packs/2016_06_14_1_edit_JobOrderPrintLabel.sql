@@ -1,9 +1,4 @@
-﻿SET ANSI_NULLS ON;
-GO
-SET QUOTED_IDENTIFIER ON;
-GO
-
-
+﻿--------------------------------------------------------------
 -- Процедура ins_JobOrderPrintLabel
 IF OBJECT_ID ('dbo.ins_JobOrderPrintLabel',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderPrintLabel;
@@ -16,7 +11,8 @@ CREATE PROCEDURE [dbo].[ins_JobOrderPrintLabel]
 @PrinterID      NVARCHAR(255) = NULL,
 @MaterialLotID  INT,
 @Command        NVARCHAR(50),
-@CommandRule    NVARCHAR(50) = NULL
+@CommandRule    NVARCHAR(50) = NULL,
+@WorkRequestID  INT = NULL
 
 AS
 BEGIN
@@ -55,8 +51,8 @@ BEGIN
       END;
 
    SET @JobOrderID=NEXT VALUE FOR [dbo].[gen_JobOrder];
-   INSERT INTO [dbo].[JobOrder] ([ID], [WorkType], [DispatchStatus], [Command], [CommandRule])
-   VALUES (@JobOrderID,N'Print',N'ToPrint',@Command,@CommandRule);
+   INSERT INTO [dbo].[JobOrder] ([ID], [WorkType], [DispatchStatus], [Command], [CommandRule], [WorkRequest])
+   VALUES (@JobOrderID,N'Print',N'ToPrint',@Command,@CommandRule,@WorkRequestID);
 
    IF @EquipmentID IS NOT NULL
 	  BEGIN
