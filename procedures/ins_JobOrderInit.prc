@@ -26,6 +26,11 @@ BEGIN
 
    DECLARE @JobOrderID  INT;
 
+   UPDATE [dbo].[JobOrder]
+   SET [WorkType]=N'INIT_LOG'
+   WHERE [WorkRequest]=@WorkRequestID
+     AND [WorkType]=N'INIT';
+
    SET @JobOrderID=NEXT VALUE FOR [dbo].[gen_JobOrder];
    INSERT INTO [dbo].[JobOrder] ([ID], [WorkType], [StartTime], [WorkRequest])
    VALUES (@JobOrderID,N'INIT',CURRENT_TIMESTAMP,@WorkRequestID);

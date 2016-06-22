@@ -16,7 +16,7 @@ AS
 BEGIN
 
    SET @MaterialLotID=NEXT VALUE FOR [dbo].[gen_MaterialLot];
-   INSERT INTO [dbo].[WorkRequest] ([ID],[FactoryNumber],[Status],[Quantity])
+   INSERT INTO [dbo].[MaterialLot] ([ID],[FactoryNumber],[Status],[Quantity])
    VALUES (@MaterialLotID,@FactoryNumber,@Status,@Quantity);
 
 END;

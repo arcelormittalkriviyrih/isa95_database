@@ -70,10 +70,10 @@ BEGIN
                                                 @MaterialLotID = @MaterialLotID,
                                                 @Command       = N'Print';
          END;
-   END TRY;
+   END TRY
    BEGIN CATCH
       EXEC [dbo].[ins_ErrorLog];
-   END CATCH;
+   END CATCH
 END
 GO
 
