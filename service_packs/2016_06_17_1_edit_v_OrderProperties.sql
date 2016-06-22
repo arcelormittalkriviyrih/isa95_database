@@ -1,4 +1,9 @@
-﻿IF OBJECT_ID ('dbo.v_OrderPropertiesAll', N'V') IS NOT NULL
+﻿SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+
+IF OBJECT_ID ('dbo.v_OrderPropertiesAll', N'V') IS NOT NULL
    DROP VIEW dbo.v_OrderPropertiesAll;
 GO
 

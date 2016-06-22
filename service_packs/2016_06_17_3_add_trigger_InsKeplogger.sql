@@ -35,6 +35,7 @@ BEGIN
            @WEIGHT__FIX_TIMESTAMP DATETIME,
            @FactoryNumber   [NVARCHAR](12),
            @PrinterID       [NVARCHAR](50),
+           @MEASURE_TIME    [NVARCHAR](50),
            @JobOrderID      INT,
            @MaterialLotID   INT;
 
@@ -60,9 +61,10 @@ BEGIN
                                          @Quantity      = @WEIGHT__FIX_VALUE,
                                          @MaterialLotID = @MaterialLotID OUTPUT;
 
+            SET @MEASURE_TIME=CONVERT(NVARCHAR,@WEIGHT__FIX_TIMESTAMP,121);
             EXEC [dbo].[ins_MaterialLotPropertyByJobOrder] @MaterialLotID   = @MaterialLotID,
                                                            @JobOrderID      = @JobOrderID,
-                                                           @MEASURE_TIME    = @WEIGHT__FIX_TIMESTAMP,
+                                                           @MEASURE_TIME    = @MEASURE_TIME,
                                                            @AUTO_MANU_VALUE = @AUTO_MANU_VALUE;
 
             SET @PrinterID = [dbo].[get_EquipmentPropertyValue](@WEIGHT__FIX_NUMERICID,N'USED_PRINTER');
