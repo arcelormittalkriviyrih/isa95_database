@@ -30,8 +30,8 @@ BEGIN
    INSERT INTO [dbo].[JobOrder] ([ID], [WorkType], [StartTime], [WorkRequest])
    VALUES (@JobOrderID,N'INIT',CURRENT_TIMESTAMP,@WorkRequestID);
 
-   INSERT INTO [dbo].[OpMaterialRequirement] ([MaterialClassID],[MaterialDefinitionID]/*,[SegmenRequirementID]*/)
-   SELECT md.[MaterialClassID],md.[ID]
+   INSERT INTO [dbo].[OpMaterialRequirement] ([MaterialClassID],[MaterialDefinitionID],[JobOrderID])
+   SELECT md.[MaterialClassID],md.[ID],@JobOrderID
    FROM [dbo].[MaterialDefinition] md
    WHERE md.[ID]=@ProfileID;
 

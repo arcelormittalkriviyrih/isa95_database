@@ -25,9 +25,19 @@ BEGIN
 
    DECLARE @WorkRequestID INT;
 
-   SET @WorkRequestID=NEXT VALUE FOR [dbo].[gen_WorkRequest];
-   INSERT INTO [dbo].[WorkRequest] ([ID],[StartTime])
-   VALUES (@WorkRequestID,CURRENT_TIMESTAMP);
+   SELECT @WorkRequestID=jo.[WorkRequest]
+   FROM [dbo].[v_Parameter_Order] po
+        INNER JOIN [dbo].[JobOrder] jo ON (jo.[ID]=po.[JobOrder])
+   WHERE po.[Value]=@COMM_ORDER
+     AND po.[EquipmentID]=@EquipmentID;
+
+   IF @WorkRequestID IS NULL
+      BEGIN
+         SET @WorkRequestID=NEXT VALUE FOR [dbo].[gen_WorkRequest];
+
+         INSERT INTO [dbo].[WorkRequest] ([ID],[StartTime])
+         VALUES (@WorkRequestID,CURRENT_TIMESTAMP);
+      END;
 
    EXEC [dbo].[ins_JobOrderInit] @WorkRequestID = @WorkRequestID,
                                  @EquipmentID   = @EquipmentID,
@@ -41,7 +51,6 @@ BEGIN
                                  @SAMPLE_WEIGHT = @SAMPLE_WEIGHT,
                                  @SAMPLE_LENGTH = @SAMPLE_LENGTH,
                                  @DEVIATION     = @DEVIATION;
-
 
 END;
 GO
