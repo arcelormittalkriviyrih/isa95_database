@@ -21,23 +21,10 @@ BEGIN
    FROM [dbo].[v_Parameter_Order] pso
    WHERE pso.[JobOrder]=@JobOrderID;
 
-   INSERT INTO [dbo].[MaterialLotProperty] ([Value],[MaterialLotID],[PropertyType])
-   SELECT ps.[Value],@MaterialLotID,pt.[ID]
-   FROM [dbo].[ParameterSpecification] ps
-        INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=ps.[PropertyType])
-        INNER JOIN [dbo].[v_ParameterSpecification_Order] pso ON (pso.WorkDefinitionID=ps.[WorkDefinitionID] AND pso.[Value]=@COMM_ORDER);
-
-   DECLARE @tblParams TABLE(ID    NVARCHAR(50),
-                            Value NVARCHAR(50));
-
-   INSERT @tblParams
-   SELECT N'MEASURE_TIME',@MEASURE_TIME WHERE @MEASURE_TIME IS NOT NULL
-   UNION ALL
-   SELECT N'AUTO_MANU_VALUE',@AUTO_MANU_VALUE WHERE @AUTO_MANU_VALUE IS NOT NULL
-
-   INSERT INTO [dbo].[MaterialLotProperty] ([Value],[MaterialLotID],[PropertyType])
-   SELECT t.value,@MaterialLotID,pt.ID
-   FROM @tblParams t INNER JOIN [dbo].[PropertyTypes] pt ON (pt.value=t.ID);
+   EXEC [dbo].[ins_MaterialLotPropertyByCommOrder] @MaterialLotID   = @MaterialLotID,
+                                                   @COMM_ORDER      = @COMM_ORDER,
+                                                   @MEASURE_TIME    = @MEASURE_TIME,
+                                                   @AUTO_MANU_VALUE = @AUTO_MANU_VALUE;
 
 END;
 GO
