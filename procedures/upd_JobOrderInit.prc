@@ -19,23 +19,28 @@ CREATE PROCEDURE [dbo].[upd_JobOrderInit]
 @MIN_WEIGHT      NVARCHAR(50),
 @SAMPLE_WEIGHT   NVARCHAR(50),
 @SAMPLE_LENGTH   NVARCHAR(50),
-@DEVIATION       NVARCHAR(50)
+@DEVIATION       NVARCHAR(50),
+@SANDWICH_MODE   NVARCHAR(50),
+@AUTO_MANU_VALUE  NVARCHAR(50)
+
 
 AS
 BEGIN
 
-   EXEC [dbo].[ins_JobOrderInit] @WorkRequestID = @WorkRequestID,
-                                 @EquipmentID   = @EquipmentID,
-                                 @ProfileID     = @ProfileID,
-                                 @COMM_ORDER    = @COMM_ORDER,
-                                 @LENGTH        = @LENGTH,
-                                 @BAR_WEIGHT    = @BAR_WEIGHT,
-                                 @BAR_QUANTITY  = @BAR_QUANTITY,
-                                 @MAX_WEIGHT    = @MAX_WEIGHT,
-                                 @MIN_WEIGHT    = @MIN_WEIGHT,
-                                 @SAMPLE_WEIGHT = @SAMPLE_WEIGHT,
-                                 @SAMPLE_LENGTH = @SAMPLE_LENGTH,
-                                 @DEVIATION     = @DEVIATION;
+   EXEC [dbo].[ins_JobOrderInit] @WorkRequestID   = @WorkRequestID,
+                                 @EquipmentID     = @EquipmentID,
+                                 @ProfileID       = @ProfileID,
+                                 @COMM_ORDER      = @COMM_ORDER,
+                                 @LENGTH          = @LENGTH,
+                                 @BAR_WEIGHT      = @BAR_WEIGHT,
+                                 @BAR_QUANTITY    = @BAR_QUANTITY,
+                                 @MAX_WEIGHT      = @MAX_WEIGHT,
+                                 @MIN_WEIGHT      = @MIN_WEIGHT,
+                                 @SAMPLE_WEIGHT   = @SAMPLE_WEIGHT,
+                                 @SAMPLE_LENGTH   = @SAMPLE_LENGTH,
+                                 @DEVIATION       = @DEVIATION,
+                                 @SANDWICH_MODE   = @SANDWICH_MODE,
+                                 @AUTO_MANU_VALUE = @AUTO_MANU_VALUE;
 
 END;
 GO
