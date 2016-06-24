@@ -47,7 +47,7 @@ FROM dbo.OpSegmentRequirement sr
      INNER JOIN [dbo].[v_SegmentParameter_Order] spo ON (spo.OpSegmentRequirement=sp.OpSegmentRequirement)
 WHERE NOT EXISTS (SELECT NULL 
                   FROM [dbo].[v_ParameterSpecification_Order] pso 
-                  WHERE (spo.[Value]=pso.[Value]));
+                  WHERE (spo.[Value]=pso.[Value]))
 
 IF OBJECT_ID ('dbo.v_OrderProperties', N'V') IS NOT NULL
    DROP VIEW dbo.v_OrderProperties;
