@@ -22,6 +22,9 @@ BEGIN
    WHERE po.[Value]=@COMM_ORDER
      AND po.[EquipmentID]=@EquipmentID;
 
+   IF @WorkRequestID IS NULL
+    THROW 60001, N'WorkRequest not found', 1;
+
    EXEC [dbo].[ins_JobOrderOPCCommandTakeWeight] @WorkRequestID = @WorkRequestID,
                                                  @EquipmentID   = @EquipmentID;
 

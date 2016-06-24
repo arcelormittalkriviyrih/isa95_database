@@ -19,7 +19,7 @@ BEGIN
                             Value NVARCHAR(50));
 
    INSERT @tblParams
-   SELECT ps.[Value],pt.[ID]
+   SELECT pt.[Value],ps.[Value]
    FROM [dbo].[ParameterSpecification] ps
         INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=ps.[PropertyType])
         INNER JOIN [dbo].[v_ParameterSpecification_Order] pso ON (pso.WorkDefinitionID=ps.[WorkDefinitionID] AND pso.[Value]=@COMM_ORDER)
