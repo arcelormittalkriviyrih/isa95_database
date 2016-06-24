@@ -6,27 +6,33 @@ GO
 
 CREATE TABLE [dbo].[KEP_logger](
 	[id] [int] IDENTITY(1,1) NOT NULL,
-	[AUTO_MANU_VALUE] [bit] NULL,
-	[CMD_TAKE_WEIGHT_VALUE] [bit] NULL,
-	[WEIGHT__FIX_NUMERICID] [int] NULL,
-	[WEIGHT__FIX_VALUE] [int] NULL,
-	[WEIGHT__FIX_TIMESTAMP] [datetime] NULL,
-	[WEIGHT_CURRENT_VALUE] [real] NULL,
-	[WEIGHT_OK_VALUE] [bit] NULL,
-	[WEIGHT_STAB_VALUE] [bit] NULL,
-	[WEIGHT_ZERO_VALUE] [bit] NULL,
+	[AUTO_MANU] [bit] NULL,
+	[COUNT_BAR] [int] NULL,
+	[NUMBER_POCKET] [int] NULL,
+	[POCKET_LOC] [bit] NULL,
+	[REM_BAR] [int] NULL,
+	[WEIGHT_CURRENT] [real] NULL,
+	[TIMESTAMP] [datetime] NULL,
+	[WEIGHT_FIX] [int] NULL,
+	[WEIGHT_OK] [bit] NULL,
+	[WEIGHT_SP_MAX] [real] NULL,
+	[WEIGHT_SP_MIN] [real] NULL,
+	[WEIGHT_STAB] [bit] NULL,
+	[WEIGHT_ZERO] [bit] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+
 GO
 
-CREATE NONCLUSTERED INDEX [i_WEIGHT__FIX_TIMESTAMP] ON [dbo].[KEP_logger]
+CREATE NONCLUSTERED INDEX [i1_kep_logger_timestamp] ON [dbo].[KEP_logger]
 (
-	 [WEIGHT__FIX_TIMESTAMP] ASC, [WEIGHT__FIX_NUMERICID] ASC
+	[TIMESTAMP] ASC,
+	[NUMBER_POCKET] ASC
 )
-INCLUDE ([WEIGHT_CURRENT_VALUE]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+INCLUDE ([WEIGHT_CURRENT]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 70) ON [PRIMARY]
 GO
 
 
@@ -47,52 +53,30 @@ BEGIN
 
    SET NOCOUNT ON;
 
-   DECLARE @WEIGHT__FIX_NUMERICID INT,
-           @WEIGHT_OK_VALUE       BIT,
-           @AUTO_MANU_VALUE       BIT,
-           @WEIGHT__FIX_VALUE     INT,
-           @WEIGHT__FIX_TIMESTAMP DATETIME,
+   DECLARE @NUMBER_POCKET   INT, --WEIGHT__FIX_NUMERICID
+           @WEIGHT_OK       BIT, --WEIGHT_OK_VALUE
+           @AUTO_MANU       BIT, --AUTO_MANU_VALUE
+           @WEIGHT_FIX      INT, --WEIGHT__FIX_VALUE
+           @TIMESTAMP       DATETIME, --WEIGHT__FIX_TIMESTAMP
+           @EquipmentID     INT,
            @FactoryNumber   [NVARCHAR](12),
            @PrinterID       [NVARCHAR](50),
+           @MEASURE_TIME    [NVARCHAR](50),
            @JobOrderID      INT,
            @MaterialLotID   INT;
 
-   SELECT @WEIGHT__FIX_NUMERICID=[WEIGHT__FIX_NUMERICID],
-          @WEIGHT_OK_VALUE=[WEIGHT_OK_VALUE],
-          @AUTO_MANU_VALUE=[AUTO_MANU_VALUE],
-          @WEIGHT__FIX_VALUE=[WEIGHT__FIX_VALUE],
-          @WEIGHT__FIX_TIMESTAMP=[WEIGHT__FIX_TIMESTAMP]
+   SELECT @NUMBER_POCKET=[NUMBER_POCKET],
+          @WEIGHT_OK=[WEIGHT_OK],
+          @AUTO_MANU=[AUTO_MANU],
+          @WEIGHT_FIX=[WEIGHT_FIX],
+          @TIMESTAMP=[TIMESTAMP]
    FROM INSERTED;
 
-   BEGIN TRY
-      IF @WEIGHT_OK_VALUE=1
-         BEGIN
-            SELECT TOP 1 @JobOrderID=jo.[ID]
-            FROM [dbo].[JobOrder] jo
-                 INNER JOIN [dbo].[OpEquipmentRequirement] er ON (er.[JobOrderID]=jo.[ID] AND er.EquipmentID=@WEIGHT__FIX_NUMERICID)
-            WHERE jo.[WorkType]=N'INIT'
-            ORDER BY jo.[StartTime] DESC
-
-            SET @FactoryNumber=[dbo].[get_GenMaterialLotNumber](@WEIGHT__FIX_NUMERICID,NEXT VALUE FOR dbo.gen_MaterialLotNumber);
-            EXEC [dbo].[ins_MaterialLot] @FactoryNumber = @FactoryNumber,
-                                         @Status        = N'0',
-                                         @Quantity      = @WEIGHT__FIX_VALUE,
-                                         @MaterialLotID = @MaterialLotID OUTPUT;
-
-            EXEC [dbo].[ins_MaterialLotPropertyByJobOrder] @MaterialLotID   = @MaterialLotID,
-                                                           @JobOrderID      = @JobOrderID,
-                                                           @MEASURE_TIME    = @WEIGHT__FIX_TIMESTAMP,
-                                                           @AUTO_MANU_VALUE = @AUTO_MANU_VALUE;
-
-            SET @PrinterID = [dbo].[get_EquipmentPropertyValue](@WEIGHT__FIX_NUMERICID,N'USED_PRINTER');
-            EXEC [dbo].[ins_JobOrderPrintLabel] @PrinterID     = @PrinterID,
-                                                @MaterialLotID = @MaterialLotID,
-                                                @Command       = N'Print';
-         END;
-   END TRY;
-   BEGIN CATCH
-      EXEC [dbo].[ins_ErrorLog];
-   END CATCH;
+   IF @WEIGHT_OK=1
+      EXEC loopback.[KRR-PA-ISA95_PRODUCTION].[dbo].[ins_JobOrderPrintLabelByControllerNo] @CONTROLLER_NO = @NUMBER_POCKET,
+                                                                                           @TIMESTAMP     = @TIMESTAMP,
+                                                                                           @WEIGHT_FIX    = @WEIGHT_FIX,
+                                                                                           @AUTO_MANU     = @AUTO_MANU;
 END
 GO
 
