@@ -114,10 +114,9 @@ BEGIN
    FROM INSERTED;
 
    IF @WEIGHT_OK=1
-      EXEC loopback.[KRR-PA-ISA95_PRODUCTION].[dbo].[ins_JobOrderPrintLabelByControllerNo] @CONTROLLER_NO = @NUMBER_POCKET,
-                                                                                           @TIMESTAMP     = @TIMESTAMP,
-                                                                                           @WEIGHT_FIX    = @WEIGHT_FIX,
-                                                                                           @AUTO_MANU     = @AUTO_MANU;
+      EXEC [KRR-SQL-PACLX02-PALBP].[KRR-PA-ISA95_PRODUCTION].[dbo].[ins_JobOrderPrintLabelByControllerNo] @CONTROLLER_NO = @NUMBER_POCKET,
+                                                                                                          @TIMESTAMP     = @TIMESTAMP,
+                                                                                                          @WEIGHT_FIX    = @WEIGHT_FIX,
+                                                                                                          @AUTO_MANU     = @AUTO_MANU;
 END
 GO
-
