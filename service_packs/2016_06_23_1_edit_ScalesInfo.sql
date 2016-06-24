@@ -32,8 +32,10 @@ GO
 
 ----------------------------------------------------------
 SET NUMERIC_ROUNDABORT OFF;
+GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
+
 
 IF OBJECT_ID ('dbo.v_ScalesDetailInfo',N'V') IS NOT NULL
    DROP VIEW dbo.[v_ScalesDetailInfo];
@@ -66,4 +68,4 @@ FROM dbo.Equipment eq
      INNER JOIN dbo.KEP_logger kl ON (ISNUMERIC(eqp.value)=1 AND kl.[NUMBER_POCKET]=CAST(eqp.value AS INT) AND kl.[TIMESTAMP]>=DATEADD(hour,-1,GETDATE()))
 ) ww
 WHERE ww.RowNumber=1;
-----------------------------------------------------------
+GO

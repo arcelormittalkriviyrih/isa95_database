@@ -48,6 +48,7 @@ FROM dbo.OpSegmentRequirement sr
 WHERE NOT EXISTS (SELECT NULL 
                   FROM [dbo].[v_ParameterSpecification_Order] pso 
                   WHERE (spo.[Value]=pso.[Value]))
+GO
 
 IF OBJECT_ID ('dbo.v_OrderProperties', N'V') IS NOT NULL
    DROP VIEW dbo.v_OrderProperties;
