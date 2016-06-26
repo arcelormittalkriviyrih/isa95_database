@@ -31,12 +31,6 @@ WHERE ww.RowNumber=1;
 GO
 
 ----------------------------------------------------------
-SET NUMERIC_ROUNDABORT OFF;
-GO
-SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
-GO
-
-
 IF OBJECT_ID ('dbo.v_ScalesDetailInfo',N'V') IS NOT NULL
    DROP VIEW dbo.[v_ScalesDetailInfo];
 GO
@@ -49,6 +43,8 @@ SELECT ww.EquipmentID as ID,
        ww.WEIGHT_STAB,
        ww.WEIGHT_ZERO,
        ww.AUTO_MANU,
+       ww.POCKET_LOC,
+       ww.PACK_SANDWICH,
        CAST(0 as bit) as ALARM,
        ww.COUNT_BAR RodsQuanity,
        ww.REM_BAR RodsLeft 
@@ -61,7 +57,9 @@ SELECT eq.ID EquipmentID,
        kl.[WEIGHT_ZERO],
        kl.[COUNT_BAR],
        kl.[REM_BAR],
-       kl.[AUTO_MANU]
+       kl.[AUTO_MANU],
+       kl.[POCKET_LOC],
+       kl.[PACK_SANDWICH]
 FROM dbo.Equipment eq
      INNER JOIN dbo.EquipmentProperty eqp ON (eqp.EquipmentID=eq.ID)
      INNER JOIN dbo.EquipmentClassProperty ecp ON (ecp.ID=eqp.ClassPropertyID AND ecp.value=N'CONTROLLER_NO')
