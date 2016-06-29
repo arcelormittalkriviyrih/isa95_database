@@ -1,4 +1,4 @@
-﻿IF OBJECT_ID ('dbo.v_LatestWorkRequests', N'V') IS NOT NULL
+IF OBJECT_ID ('dbo.v_LatestWorkRequests', N'V') IS NOT NULL
    DROP VIEW dbo.v_LatestWorkRequests;
 GO
 
