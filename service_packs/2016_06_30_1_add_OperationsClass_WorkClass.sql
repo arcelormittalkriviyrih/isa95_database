@@ -36,7 +36,7 @@ WITH CHECK ADD CONSTRAINT FK_OperationsClassID_WorkClassID FOREIGN KEY(Operation
 REFERENCES OperationsClass (ID)
 GO
 
-ALTER TABLE OperationsClass
+ALTER TABLE OperationsDefinition
 ADD
 	OperationsClassID INT NULL
 	CONSTRAINT FK_OperationsClass_OperationsDefinition FOREIGN KEY (OperationsClassID)
