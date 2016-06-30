@@ -1,0 +1,6 @@
+﻿IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='u1_MaterialLotProperty' AND object_id = OBJECT_ID('[dbo].[MaterialLotProperty]'))
+   DROP INDEX [u1_MaterialLotProperty] ON [dbo].[MaterialLotProperty]
+GO
+
+CREATE UNIQUE INDEX [u1_MaterialLotProperty] ON [dbo].[MaterialLotProperty] ([MaterialLotID],[PropertyType]) INCLUDE ([Value])
+GO
