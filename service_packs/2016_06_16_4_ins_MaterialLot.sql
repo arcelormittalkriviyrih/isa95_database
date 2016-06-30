@@ -4,6 +4,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF OBJECT_ID ('dbo.ins_MaterialLot',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_MaterialLot;
+GO
 
 CREATE PROCEDURE [dbo].[ins_MaterialLot]
 @FactoryNumber   NVARCHAR(250),
