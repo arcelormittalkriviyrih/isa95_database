@@ -40,14 +40,14 @@ BEGIN
                             Value NVARCHAR(50));
 
    IF @COMM_ORDER IS NULL
-    THROW 60001, N'COMM_ORDER param required', 1;
+    THROW 60001, N'Параметр "Коммерческий заказ" обязательный', 1;
    ELSE IF EXISTS (SELECT NULL FROM [dbo].[v_ParameterSpecification_Order] WHERE [Value]=@COMM_ORDER)
       BEGIN
          SET @err_message = N'WorkDefinition [' + CAST(@COMM_ORDER AS NVARCHAR) + N'] already exists';
          THROW 60010, @err_message, 1;
       END;
    ELSE IF @PROD_ORDER IS NULL
-    THROW 60001, N'PROD_ORDER param required', 1;
+    THROW 60001, N'Параметр "Производственный заказ" обязательный', 1;
 /*   ELSE IF @CONTRACT_NO IS NULL
     THROW 60001, N'CONTRACT_NO param required', 1;
    ELSE IF @DIRECTION IS NULL
@@ -69,9 +69,9 @@ BEGIN
    ELSE IF @PROD_DATE IS NULL
     THROW 60001, N'PROD_DATE param required', 1;
    ELSE IF @UTVK IS NULL
-    THROW 60001, N'UTVK param required', 1;
+    THROW 60001, N'UTVK param required', 1;*/
    ELSE IF @TEMPLATE IS NULL
-    THROW 60001, N'TEMPLATE param required', 1;*/
+    THROW 60001, N'Параметр "Шаблон бирки" обязательный', 1;
    ELSE IF @TEMPLATE IS NOT NULL AND NOT EXISTS (SELECT NULL FROM [dbo].[Files] WHERE [FileType]=N'Excel label' AND [ID]=@TEMPLATE)
       THROW 60010, N'Указанный Excel шаблон не существует в таблице Files', 1;
 

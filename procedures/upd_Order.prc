@@ -37,7 +37,7 @@ BEGIN
            @err_message            NVARCHAR(255);
 
    IF @COMM_ORDER IS NULL
-    THROW 60001, N'COMM_ORDER param required', 1;
+    THROW 60001, N'Параметр "Коммерческий заказ" обязательный', 1;
 /*   ELSE IF @CONTRACT_NO IS NULL
     THROW 60001, N'CONTRACT_NO param required', 1;
    ELSE IF @DIRECTION IS NULL
@@ -45,9 +45,9 @@ BEGIN
    ELSE IF @SIZE IS NULL
     THROW 60001, N'SIZE param required', 1;
    ELSE IF @LENGTH IS NULL
-    THROW 60001, N'LENGTH param required', 1;
+    THROW 60001, N'LENGTH param required', 1;*/
    ELSE IF @TEMPLATE IS NULL
-    THROW 60001, N'TEMPLATE param required', 1;*/
+    THROW 60001, N'Параметр "Шаблон бирки" обязательный', 1;
    ELSE IF @TEMPLATE IS NOT NULL AND NOT EXISTS (SELECT NULL FROM [dbo].[Files] WHERE [FileType]=N'Excel label' AND [ID]=@TEMPLATE)
       THROW 60010, N'Указанный Excel шаблон не существует в таблице Files', 1;
 
@@ -60,7 +60,7 @@ BEGIN
 
    IF @OpSegmentRequirementID IS NULL
       BEGIN
-         SET @err_message = N'Order [' + CAST(@COMM_ORDER AS NVARCHAR) + N'] not found';
+         SET @err_message = N'Коммерческий заказ [' + CAST(@COMM_ORDER AS NVARCHAR) + N'] не найден';
          THROW 60010, @err_message, 1;
       END;
 
@@ -131,4 +131,3 @@ BEGIN
    */
 
 END;
-GO

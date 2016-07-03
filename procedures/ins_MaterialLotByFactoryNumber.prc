@@ -36,6 +36,11 @@ CREATE PROCEDURE [dbo].[ins_MaterialLotByFactoryNumber]
 AS
 BEGIN
 
+	IF @TEMPLATE IS NULL
+		THROW 60001, N'Параметр "Шаблон бирки" обязательный', 1;
+   ELSE IF @COMM_ORDER IS NULL
+    THROW 60001, N'Параметр "Коммерческий заказ" обязательный', 1;
+
    DECLARE @MaterialLotID       INT,
            @MaterialLotCopyID   INT,
            @Quantity            INT,

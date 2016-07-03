@@ -41,7 +41,7 @@ BEGIN
                             Value NVARCHAR(50));
 
    IF @COMM_ORDER IS NULL
-    THROW 60001, N'COMM_ORDER param required', 1;
+    THROW 60001, N'Параметр "Коммерческий заказ" обязательный', 1;
    ELSE IF EXISTS (SELECT NULL FROM [dbo].[v_SegmentParameter_Order] WHERE [Value]=@COMM_ORDER)
       BEGIN
          SET @err_message = N'Заказ [' + CAST(@COMM_ORDER AS NVARCHAR) + N'] уже существует';
@@ -54,9 +54,9 @@ BEGIN
    ELSE IF @SIZE IS NULL
     THROW 60001, N'SIZE param required', 1;
    ELSE IF @LENGTH IS NULL
-    THROW 60001, N'LENGTH param required', 1;
+    THROW 60001, N'LENGTH param required', 1;*/
    ELSE IF @TEMPLATE IS NULL
-    THROW 60001, N'TEMPLATE param required', 1;*/
+    THROW 60001, N'Параметр "Шаблон бирки" обязательный', 1;
    ELSE IF @TEMPLATE IS NOT NULL AND NOT EXISTS (SELECT NULL FROM [dbo].[Files] WHERE [FileType]=N'Excel label' AND [ID]=@TEMPLATE)
       THROW 60010, N'Указанный Excel шаблон не существует в таблице Files', 1;
 
