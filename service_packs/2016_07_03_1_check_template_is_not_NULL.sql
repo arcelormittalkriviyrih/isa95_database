@@ -556,7 +556,7 @@ BEGIN
    */
 
 END;
-
+GO
 --------------------------------------------------------------
 -- Процедура ins_CreateOrder
 IF OBJECT_ID ('dbo.ins_Order',N'P') IS NOT NULL
