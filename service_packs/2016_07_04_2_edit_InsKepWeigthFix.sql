@@ -1,46 +1,4 @@
-﻿
-/****** Object:  Table [dbo].[KEP_weigth_fix]    Script Date: 01.07.2016 12:05:04 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[KEP_weigth_fix](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[AUTO_MANU] [bit] NOT NULL,
-	[NUMBER_POCKET] [int] NOT NULL,
-	[TIMESTAMP] [datetime] NOT NULL,
-	[WEIGHT_FIX] [int] NOT NULL,
-	[WEIGHT_OK] [bit] NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-CREATE INDEX [i1_KEP_weigth_fix] ON [dbo].[KEP_weigth_fix] ([NUMBER_POCKET]) INCLUDE ([TIMESTAMP],[ID])
-GO
-
-IF OBJECT_ID ('dbo.InsKepWeigthFix_archive',N'TR') IS NOT NULL
-   DROP TRIGGER [dbo].[InsKepWeigthFix_archive];
-GO
-
-CREATE TRIGGER [dbo].[InsKepWeigthFix_archive] ON [dbo].[KEP_weigth_fix]
-AFTER INSERT
-AS
-BEGIN
-
-   INSERT INTO [dbo].[KEP_weigth_fix_archive] SELECT * FROM INSERTED;
-
-END
-GO
-
-EXEC sp_settriggerorder @triggername=N'[dbo].[InsKepWeigthFix_archive]', @order=N'First', @stmttype=N'INSERT'
-
-
-IF OBJECT_ID ('dbo.InsKepWeigthFix',N'TR') IS NOT NULL
+﻿IF OBJECT_ID ('dbo.InsKepWeigthFix',N'TR') IS NOT NULL
    DROP TRIGGER [dbo].[InsKepWeigthFix];
 GO
 
