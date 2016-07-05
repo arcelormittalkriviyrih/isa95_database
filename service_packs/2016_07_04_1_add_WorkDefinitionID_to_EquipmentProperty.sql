@@ -1,13 +1,8 @@
-﻿IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='i1_EquipmentClassProperty_Value' AND object_id = OBJECT_ID('[dbo].[EquipmentClassProperty]'))
-   DROP INDEX [i1_EquipmentClassProperty_Value] ON [dbo].[EquipmentClassProperty]
+﻿SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
 GO
 
-IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='u1_EquipmentClassProperty_Value' AND object_id = OBJECT_ID('[dbo].[EquipmentClassProperty]'))
-   DROP INDEX [u1_EquipmentClassProperty_Value] ON [dbo].[EquipmentClassProperty]
-GO
-
-CREATE UNIQUE INDEX [u1_EquipmentClassProperty_Value] ON [dbo].[EquipmentClassProperty] ([Value])
-GO
 
 --fix duplicates data
 update EquipmentProperty set ClassPropertyId=110 where ClassPropertyId=45;
@@ -18,6 +13,19 @@ update EquipmentProperty set ClassPropertyId=118 where ClassPropertyId=53;
 update EquipmentProperty set ClassPropertyId=119 where ClassPropertyId=54;
 update EquipmentProperty set ClassPropertyId=120 where ClassPropertyId=55;
 delete from EquipmentClassProperty where id>43 and id<110;
+
+IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='i1_EquipmentClassProperty_Value' AND object_id = OBJECT_ID('[dbo].[EquipmentClassProperty]'))
+   DROP INDEX [i1_EquipmentClassProperty_Value] ON [dbo].[EquipmentClassProperty]
+GO
+
+IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='u1_EquipmentClassProperty_Value' AND object_id = OBJECT_ID('[dbo].[EquipmentClassProperty]'))
+   DROP INDEX [u1_EquipmentClassProperty_Value] ON [dbo].[EquipmentClassProperty]
+GO
+
+
+CREATE UNIQUE INDEX [u1_EquipmentClassProperty_Value] ON [dbo].[EquipmentClassProperty] ([Value])
+GO
+
 
 IF NOT EXISTS (SELECT NULL FROM [dbo].[EquipmentClassProperty] WHERE [Value]=N'WORK_DEFINITION_ID')
    INSERT INTO [dbo].[EquipmentClassProperty]([Description],[Value],[EquipmentClassID]) (SELECT N'Текущий WorkDefinition',N'WORK_DEFINITION_ID',eqc.[ID] FROM [dbo].[EquipmentClass] eqc WHERE eqc.[Code]=N'SCALES')
