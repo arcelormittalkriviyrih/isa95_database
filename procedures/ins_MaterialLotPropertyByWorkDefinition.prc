@@ -1,18 +1,17 @@
 ﻿--------------------------------------------------------------
--- Процедура ins_MaterialLotPropertyByCommOrder
-IF OBJECT_ID ('dbo.ins_MaterialLotPropertyByCommOrder',N'P') IS NOT NULL
-   DROP PROCEDURE dbo.ins_MaterialLotPropertyByCommOrder;
+-- Процедура ins_MaterialLotPropertyByWorkDefinition
+IF OBJECT_ID ('dbo.ins_MaterialLotPropertyByWorkDefinition',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_MaterialLotPropertyByWorkDefinition;
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[ins_MaterialLotPropertyByCommOrder]
-@JobOrderID      INT,
-@MaterialLotID   INT,
-@COMM_ORDER      NVARCHAR(50),
-@MEASURE_TIME    NVARCHAR(50),
-@AUTO_MANU_VALUE NVARCHAR(50)
+CREATE PROCEDURE [dbo].[ins_MaterialLotPropertyByWorkDefinition]
+@WorkDefinitionID INT,
+@MaterialLotID    INT,
+@MEASURE_TIME     NVARCHAR(50),
+@AUTO_MANU_VALUE  NVARCHAR(50)
 AS
 BEGIN
 
@@ -20,10 +19,10 @@ BEGIN
                             Value NVARCHAR(50));
 
    INSERT @tblParams
-   SELECT pt.[Value],p.[Value]
-   FROM [dbo].[Parameter] p
-        INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=p.[PropertyType] AND pt.[Value] NOT IN (N'WORK_DEFINITION_ID'))
-   WHERE (p.JobOrder=@JobOrderID)
+   SELECT pt.[Value],sp.[Value]
+   FROM [dbo].[ParameterSpecification] sp
+        INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=sp.[PropertyType])
+   WHERE (sp.WorkDefinitionID=@WorkDefinitionID)
    UNION ALL
    SELECT N'MEASURE_TIME',@MEASURE_TIME WHERE @MEASURE_TIME IS NOT NULL
    UNION ALL

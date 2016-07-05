@@ -21,6 +21,7 @@ BEGIN
               @PrinterID       [NVARCHAR](50),
               @MEASURE_TIME    [NVARCHAR](50),
               @JobOrderID      INT,
+              @WorkDefinitionID INT,
               @MaterialLotID   INT,
               @err_message     NVARCHAR(255);
 
@@ -30,13 +31,14 @@ BEGIN
             SET @err_message = N'By CONTROLLER_NO=[' + @CONTROLLER_NO + N'] EquipmentID not found';
             THROW 60010, @err_message, 1;
          END;
-
+/*
       SELECT TOP 1 @JobOrderID=jo.[ID]
       FROM [dbo].[JobOrder] jo
            INNER JOIN [dbo].[OpEquipmentRequirement] er ON (er.[JobOrderID]=jo.[ID] AND er.EquipmentID=@EquipmentID)
       WHERE jo.[WorkType]=N'INIT'
       ORDER BY jo.[StartTime] DESC;
-
+*/
+      SET @JobOrderID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'JOB_ORDER_ID');
       IF @JobOrderID IS NULL
          BEGIN
             SET @err_message = N'JobOrder is missing for EquipmentID=[' + CAST(@EquipmentID AS NVARCHAR) + N']';
@@ -48,13 +50,19 @@ BEGIN
                                    @Status        = N'0',
                                    @Quantity      = @WEIGHT_FIX,
                                    @MaterialLotID = @MaterialLotID OUTPUT;
-      
+
       SET @MEASURE_TIME=CONVERT(NVARCHAR,@TIMESTAMP,121);
+      SET @WorkDefinitionID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'WORK_DEFINITION_ID');
+      EXEC [dbo].[ins_MaterialLotPropertyByWorkDefinition] @WorkDefinitionID = @WorkDefinitionID,
+                                                           @MaterialLotID    = @MaterialLotID,
+                                                           @MEASURE_TIME     = @MEASURE_TIME,
+                                                           @AUTO_MANU_VALUE  = @AUTO_MANU;
+/*
       EXEC [dbo].[ins_MaterialLotPropertyByJobOrder] @MaterialLotID   = @MaterialLotID,
                                                      @JobOrderID      = @JobOrderID,
                                                      @MEASURE_TIME    = @MEASURE_TIME,
                                                      @AUTO_MANU_VALUE = @AUTO_MANU;
-      
+*/
       SET @PrinterID = [dbo].[get_EquipmentPropertyValue](@EquipmentID,N'USED_PRINTER');
       EXEC [dbo].[ins_JobOrderPrintLabel] @PrinterID     = @PrinterID,
                                           @MaterialLotID = @MaterialLotID,

@@ -8,10 +8,18 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE PROCEDURE [dbo].[ins_JobOrderOPCCommandTakeWeight]
-@WorkRequestID   INT,
 @EquipmentID     INT
 AS
 BEGIN
+
+DECLARE @JobOrderID    INT,
+        @WorkRequestID INT;
+
+SET @JobOrderID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'JOB_ORDER_ID');
+
+SELECT @WorkRequestID=jo.[WorkRequest]
+FROM [dbo].[JobOrder] jo
+WHERE jo.[ID]=@JobOrderID;
 
 EXEC [dbo].[ins_JobOrderOPCCommand] @WorkRequestID = @WorkRequestID,
                                     @EquipmentID   = @EquipmentID,
