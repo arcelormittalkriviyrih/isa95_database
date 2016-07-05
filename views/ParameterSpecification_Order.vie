@@ -8,11 +8,12 @@ GO
 
 CREATE VIEW [dbo].[v_ParameterSpecification_Order] WITH SCHEMABINDING
 AS
-SELECT sp.ID, sp.[Value], sp.[Description], sp.WorkDefinitionID, sp.PropertyType
+SELECT sp.ID, sp.[Value], sp.[Description], sp.[WorkDefinitionID], oes.[EquipmentID], sp.PropertyType
 FROM [dbo].[ParameterSpecification] sp
+     INNER JOIN [dbo].[OpEquipmentSpecification] oes ON (oes.[WorkDefinition]=sp.WorkDefinitionID)
      INNER JOIN[dbo].[PropertyTypes] pt ON (pt.ID=sp.PropertyType AND pt.Value=N'COMM_ORDER')
 GO
 
-CREATE UNIQUE CLUSTERED INDEX [u_ParameterSpecification_Order] ON [dbo].[v_ParameterSpecification_Order] (Value)
+CREATE UNIQUE CLUSTERED INDEX [u_ParameterSpecification_Order] ON [dbo].[v_ParameterSpecification_Order] ([Value],[WorkDefinitionID],[EquipmentID])
 GO
 

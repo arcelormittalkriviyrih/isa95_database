@@ -4,19 +4,19 @@ GO
 
 CREATE VIEW [dbo].[v_LatestWorkRequests]
 AS
-WITH WorkRequest AS (SELECT wr.[WorkRequestID],wr.[JobOrderID],wr.[EquipmentID],wr.[ProfileID],comm_order
-                     FROM (SELECT ROW_NUMBER() OVER (PARTITION BY er.[EquipmentID] ORDER BY jo.[StartTime] DESC) RowNumber,
-                                  wr.[ID] WorkRequestID,
-                                  jo.[ID] JobOrderID,
-                                  er.[EquipmentID],
-                                  mr.[MaterialDefinitionID] ProfileID,
-                                  po.[Value] COMM_ORDER
-                           FROM [dbo].[WorkRequest] wr
-                                INNER JOIN [dbo].[JobOrder] jo ON (jo.[WorkRequest]=wr.[ID])
-                                LEFT OUTER JOIN [dbo].[OpMaterialRequirement] mr ON (mr.[JobOrderID]=jo.[ID])
-                                INNER JOIN [dbo].[OpEquipmentRequirement] er ON (er.[JobOrderID]=jo.[ID])
-                                INNER JOIN [dbo].[v_Parameter_Order] po ON (po.[JobOrder]=jo.[ID])) wr
-                           WHERE wr.RowNumber=1) 
+WITH WorkRequest AS (SELECT wr.[ID] WorkRequestID,
+                            jo.[ID] JobOrderID,
+                            er.[EquipmentID],
+                            mr.[MaterialDefinitionID] ProfileID,
+                            po.[Value] COMM_ORDER,
+                            dbo.get_EquipmentPropertyValue(er.[EquipmentID],N'WORK_DEFINITION_ID') WORK_DEFINITION_ID
+                     FROM [dbo].[WorkRequest] wr
+                          INNER JOIN [dbo].[JobOrder] jo ON (jo.[WorkRequest]=wr.[ID])
+                          INNER JOIN [dbo].[EquipmentProperty] ep ON (ep.[ClassPropertyID]=dbo.get_EquipmentClassPropertyByValue(N'JOB_ORDER_ID') AND ep.[Value]=CAST(jo.[ID] AS NVARCHAR))
+                          ---LEFT OUTER JOIN [dbo].[Parameter] p ON (p.[JobOrder]=jo.[ID] AND p.[PropertyType] IN (SELECT pt.[ID] FROM [dbo].[PropertyTypes] pt WHERE pt.[Value]=N'WORK_DEFINITION_ID'))
+                          LEFT OUTER JOIN [dbo].[OpMaterialRequirement] mr ON (mr.[JobOrderID]=jo.[ID])
+                          INNER JOIN [dbo].[OpEquipmentRequirement] er ON (er.[JobOrderID]=jo.[ID])
+                          INNER JOIN [dbo].[v_Parameter_Order] po ON (po.[JobOrder]=jo.[ID])) 
 SELECT newID() ID,
        wr.[WorkRequestID],
        wr.[JobOrderID],
@@ -25,18 +25,18 @@ SELECT newID() ID,
        pt.[Value] PropertyType,
        par.[Value]
 FROM [dbo].[Parameter] par
-     INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=par.[PropertyType])
+     INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=par.[PropertyType] AND pt.[Value] NOT IN (N'COMM_ORDER'))
      INNER JOIN WorkRequest wr ON (wr.[JobOrderID]=par.[JobOrder])
 UNION ALL
 SELECT newID() ID,
-       wr.[WorkRequestID],
-       wr.[JobOrderID],
-       wr.[EquipmentID],
-       wr.[ProfileID],
+       -1,
+       -1,
+       oes.[EquipmentID],
+       -1,
        pt.[Value] PropertyType,
        ps.[Value]
-FROM [dbo].[v_ParameterSpecification_Order] pso
-     INNER JOIN WorkRequest wr ON (wr.COMM_ORDER=pso.[Value])
-     INNER JOIN [dbo].[ParameterSpecification] ps ON (ps.[WorkDefinitionID]=pso.[WorkDefinitionID])
-     INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=ps.[PropertyType] AND pt.[Value] IN (N'BRIGADE_NO',N'PROD_DATE'))
+FROM [dbo].[ParameterSpecification] ps
+     INNER JOIN [dbo].[OpEquipmentSpecification] oes ON (oes.[WorkDefinition]=ps.WorkDefinitionID)
+     INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=ps.[PropertyType] AND pt.[Value] IN (N'COMM_ORDER',N'BRIGADE_NO',N'PROD_DATE'))
+WHERE ps.[WorkDefinitionID]=dbo.get_EquipmentPropertyValue(oes.[EquipmentID],N'WORK_DEFINITION_ID')
 GO

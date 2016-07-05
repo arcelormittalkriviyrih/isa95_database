@@ -8,6 +8,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE PROCEDURE [dbo].[ins_WorkDefinition]
+@EquipmentID    INT,
 @COMM_ORDER     NVARCHAR(50),
 @PROD_ORDER     NVARCHAR(50),
 @CONTRACT_NO    NVARCHAR(50) = NULL,
@@ -33,15 +34,17 @@ CREATE PROCEDURE [dbo].[ins_WorkDefinition]
 @TEMPLATE       INT          = NULL
 AS
 BEGIN
-   DECLARE @WorkDefinitionID     INT,
-           @err_message             NVARCHAR(255);
+   DECLARE @WorkDefinitionID           INT,
+           @OperationsSegmentID        INT,
+           @OpEquipmentSpecificationID INT,
+           @err_message                NVARCHAR(255);
 
    DECLARE @tblParams TABLE(ID    NVARCHAR(50),
                             Value NVARCHAR(50));
 
    IF @COMM_ORDER IS NULL
     THROW 60001, N'Параметр "Коммерческий заказ" обязательный', 1;
-   ELSE IF EXISTS (SELECT NULL FROM [dbo].[v_ParameterSpecification_Order] WHERE [Value]=@COMM_ORDER)
+   ELSE IF EXISTS (SELECT NULL FROM [dbo].[v_ParameterSpecification_Order] WHERE [Value]=@COMM_ORDER AND [EquipmentID]=@EquipmentID)
       BEGIN
          SET @err_message = N'WorkDefinition [' + CAST(@COMM_ORDER AS NVARCHAR) + N'] already exists';
          THROW 60010, @err_message, 1;
@@ -76,7 +79,32 @@ BEGIN
       THROW 60010, N'Указанный Excel шаблон не существует в таблице Files', 1;
 
    SET @WorkDefinitionID=NEXT VALUE FOR [dbo].[gen_WorkDefinition];
-   INSERT INTO [dbo].[WorkDefinition] ([ID]) VALUES (@WorkDefinitionID);
+   INSERT INTO [dbo].[WorkDefinition] ([ID],[WorkType],[PublishedDate]) VALUES (@WorkDefinitionID,N'Standard',CURRENT_TIMESTAMP);
+
+   SET @OperationsSegmentID=NEXT VALUE FOR [dbo].[gen_OperationsSegment];
+   INSERT INTO [dbo].[OperationsSegment] ([ID],[OperationsType]) VALUES (@OperationsSegmentID,N'Standard');
+
+   SET @OpEquipmentSpecificationID=NEXT VALUE FOR [dbo].[gen_OpEquipmentSpecification];
+   INSERT INTO [dbo].[OpEquipmentSpecification]([ID],[EquipmentClassID],[EquipmentID],[OperationSegmentID],[WorkDefinition])
+   SELECT @OpEquipmentSpecificationID,eq.[EquipmentClassID],eq.[ID],@OperationsSegmentID,@WorkDefinitionID
+   FROM [dbo].[Equipment] eq
+   WHERE eq.[ID]=@EquipmentID;
+
+   DECLARE @EquipmentPropertyValue NVARCHAR(50);
+   SET @EquipmentPropertyValue=CAST(@WorkDefinitionID AS NVARCHAR);
+   EXEC [dbo].[upd_EquipmentProperty] @EquipmentID = @EquipmentID,
+                                      @EquipmentClassPropertyValue = N'WORK_DEFINITION_ID',
+                                      @EquipmentPropertyValue = @EquipmentPropertyValue;
+
+   DECLARE @JobOrderID INT;
+   SET @JobOrderID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'JOB_ORDER_ID');
+   IF @JobOrderID IS NOT NULL
+      BEGIN
+         INSERT INTO [dbo].[Parameter] ([Value],[JobOrder],[PropertyType])
+         SELECT CAST(@WorkDefinitionID AS NVARCHAR),@JobOrderID,pt.ID
+         FROM [dbo].[PropertyTypes] pt 
+         WHERE (pt.value=N'WORK_DEFINITION_ID');
+      END;
 
    INSERT @tblParams
    SELECT N'COMM_ORDER',@COMM_ORDER WHERE @COMM_ORDER IS NOT NULL

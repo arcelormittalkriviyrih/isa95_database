@@ -27,7 +27,8 @@ CREATE PROCEDURE [dbo].[ins_JobOrderInit]
 AS
 BEGIN
 
-   DECLARE @JobOrderID  INT;
+   DECLARE @JobOrderID       INT,
+           @WorkDefinitionID NVARCHAR(50);
 
    UPDATE [dbo].[JobOrder]
    SET [WorkType]=N'INIT_LOG'
@@ -38,6 +39,12 @@ BEGIN
    INSERT INTO [dbo].[JobOrder] ([ID], [WorkType], [StartTime], [WorkRequest])
    VALUES (@JobOrderID,N'INIT',CURRENT_TIMESTAMP,@WorkRequestID);
 
+   DECLARE @EquipmentPropertyValue NVARCHAR(50);
+   SET @EquipmentPropertyValue=CAST(@JobOrderID AS NVARCHAR);
+   EXEC [dbo].[upd_EquipmentProperty] @EquipmentID = @EquipmentID,
+                                      @EquipmentClassPropertyValue = N'JOB_ORDER_ID',
+                                      @EquipmentPropertyValue = @EquipmentPropertyValue;
+
    INSERT INTO [dbo].[OpMaterialRequirement] ([MaterialClassID],[MaterialDefinitionID],[JobOrderID])
    SELECT md.[MaterialClassID],md.[ID],@JobOrderID
    FROM [dbo].[MaterialDefinition] md
@@ -47,6 +54,8 @@ BEGIN
    SELECT eq.[EquipmentClassID],eq.[ID],@JobOrderID
    FROM [dbo].[Equipment] eq 
    WHERE eq.[ID]=@EquipmentID;
+
+   SET @WorkDefinitionID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'WORK_DEFINITION_ID');
 
    DECLARE @tblParams TABLE(ID    NVARCHAR(50),
                             Value NVARCHAR(50));
@@ -74,7 +83,9 @@ BEGIN
    UNION ALL
    SELECT N'AUTO_MANU_VALUE',@AUTO_MANU_VALUE WHERE @AUTO_MANU_VALUE IS NOT NULL
    UNION ALL
-   SELECT N'NEMERA',@NEMERA WHERE @NEMERA IS NOT NULL;
+   SELECT N'NEMERA',@NEMERA WHERE @NEMERA IS NOT NULL
+   UNION ALL
+   SELECT N'WORK_DEFINITION_ID',@WorkDefinitionID WHERE @WorkDefinitionID IS NOT NULL;
 
    INSERT INTO [dbo].[Parameter] ([Value],[JobOrder],[PropertyType])
    SELECT t.value,@JobOrderID,pt.ID
