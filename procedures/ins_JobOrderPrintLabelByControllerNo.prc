@@ -36,7 +36,13 @@ BEGIN
            INNER JOIN [dbo].[OpEquipmentRequirement] er ON (er.[JobOrderID]=jo.[ID] AND er.EquipmentID=@EquipmentID)
       WHERE jo.[WorkType]=N'INIT'
       ORDER BY jo.[StartTime] DESC;
-      
+
+      IF @JobOrderID IS NULL
+         BEGIN
+            SET @err_message = N'JobOrder is missing for EquipmentID=[' + CAST(@EquipmentID AS NVARCHAR) + N']';
+            THROW 60010, @err_message, 1;
+         END;
+
       SET @FactoryNumber=[dbo].[get_GenMaterialLotNumber](@EquipmentID,NEXT VALUE FOR dbo.gen_MaterialLotNumber);
       EXEC [dbo].[ins_MaterialLot] @FactoryNumber = @FactoryNumber,
                                    @Status        = N'0',

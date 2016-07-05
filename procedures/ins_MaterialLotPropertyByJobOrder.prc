@@ -21,7 +21,8 @@ BEGIN
    FROM [dbo].[v_Parameter_Order] pso
    WHERE pso.[JobOrder]=@JobOrderID;
 
-   EXEC [dbo].[ins_MaterialLotPropertyByCommOrder] @MaterialLotID   = @MaterialLotID,
+   EXEC [dbo].[ins_MaterialLotPropertyByCommOrder] @JobOrderID      = @JobOrderID,
+                                                   @MaterialLotID   = @MaterialLotID,
                                                    @COMM_ORDER      = @COMM_ORDER,
                                                    @MEASURE_TIME    = @MEASURE_TIME,
                                                    @AUTO_MANU_VALUE = @AUTO_MANU_VALUE;
