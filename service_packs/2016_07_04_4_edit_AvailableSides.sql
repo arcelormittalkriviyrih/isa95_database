@@ -23,7 +23,7 @@ AS
      WHERE pp.PersonID = p.ID
            AND pcp.Value = 'WORK_WITH'
            AND pcp.ID = pp.ClassPropertyID
-      --     AND p.ID = dbo.getCurrentPerson()
+           AND p.ID = dbo.getCurrentPerson()
            AND ep.Value = pp.Value
            AND ecp.Value = 'SIDE_ID'
            AND ep.EquipmentID = side.ID

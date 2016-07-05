@@ -9,12 +9,58 @@ GO
 CREATE UNIQUE INDEX [u1_EquipmentClassProperty_Value] ON [dbo].[EquipmentClassProperty] ([Value])
 GO
 
+--fix duplicates data
+update EquipmentProperty set ClassPropertyId=110 where ClassPropertyId=45;
+update EquipmentProperty set ClassPropertyId=111 where ClassPropertyId=46;
+update EquipmentProperty set ClassPropertyId=112 where ClassPropertyId=47;
+update EquipmentProperty set ClassPropertyId=113 where ClassPropertyId=48;
+update EquipmentProperty set ClassPropertyId=118 where ClassPropertyId=53;
+update EquipmentProperty set ClassPropertyId=119 where ClassPropertyId=54;
+update EquipmentProperty set ClassPropertyId=120 where ClassPropertyId=55;
+delete from EquipmentClassProperty where id>43 and id<110;
+
 IF NOT EXISTS (SELECT NULL FROM [dbo].[EquipmentClassProperty] WHERE [Value]=N'WORK_DEFINITION_ID')
    INSERT INTO [dbo].[EquipmentClassProperty]([Description],[Value],[EquipmentClassID]) (SELECT N'Текущий WorkDefinition',N'WORK_DEFINITION_ID',eqc.[ID] FROM [dbo].[EquipmentClass] eqc WHERE eqc.[Code]=N'SCALES')
 GO
 
 IF NOT EXISTS (SELECT NULL FROM [dbo].[EquipmentClassProperty] WHERE [Value]=N'JOB_ORDER_ID')
    INSERT INTO [dbo].[EquipmentClassProperty]([Description],[Value],[EquipmentClassID]) (SELECT N'Текущий JobOrder',N'JOB_ORDER_ID',eqc.[ID] FROM [dbo].[EquipmentClass] eqc WHERE eqc.[Code]=N'SCALES')
+GO
+
+IF OBJECT_ID ('dbo.v_WorkDefinitionPropertiesAll', N'V') IS NOT NULL
+   DROP VIEW dbo.v_WorkDefinitionPropertiesAll;
+GO
+
+CREATE VIEW [dbo].[v_WorkDefinitionPropertiesAll]
+AS
+SELECT ps.[ID],
+       pt.[Description],
+       ps.[Value],
+       pso.[Value] comm_order,
+       es.[EquipmentID],
+       ps.[WorkDefinitionID],
+       pt.[Value] Property
+FROM [dbo].[ParameterSpecification] ps
+     INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=ps.[PropertyType])
+     INNER JOIN [dbo].[v_ParameterSpecification_Order] pso ON (pso.WorkDefinitionID=ps.[WorkDefinitionID])
+     INNER JOIN [dbo].[OpEquipmentSpecification] es ON (es.[WorkDefinition]=ps.[WorkDefinitionID])
+UNION ALL
+SELECT sp.ID,
+       pt.Description,
+       sp.[Value],
+       spo.[Value] comm_order,
+       eq.[ID] [EquipmentID],
+       NULL,
+       pt.[Value] Property
+FROM dbo.OpSegmentRequirement sr
+     INNER JOIN dbo.SegmentParameter sp ON (sp.OpSegmentRequirement=sr.id)
+     INNER JOIN dbo.PropertyTypes pt ON (pt.ID=sp.PropertyType)
+     INNER JOIN [dbo].[v_SegmentParameter_Order] spo ON (spo.OpSegmentRequirement=sp.OpSegmentRequirement)
+     CROSS JOIN [dbo].[Equipment] eq
+WHERE NOT EXISTS (SELECT NULL 
+                  FROM [dbo].[v_ParameterSpecification_Order] pso 
+                  WHERE (pso.[Value]=spo.[Value])
+                    AND (pso.[EquipmentID]=eq.[ID]));
 GO
 
 --------------------------------------------------------------
@@ -485,42 +531,6 @@ BEGIN
 END;
 GO
 
-
-IF OBJECT_ID ('dbo.v_WorkDefinitionPropertiesAll', N'V') IS NOT NULL
-   DROP VIEW dbo.v_WorkDefinitionPropertiesAll;
-GO
-
-CREATE VIEW [dbo].[v_WorkDefinitionPropertiesAll]
-AS
-SELECT ps.[ID],
-       pt.[Description],
-       ps.[Value],
-       pso.[Value] comm_order,
-       es.[EquipmentID],
-       ps.[WorkDefinitionID],
-       pt.[Value] Property
-FROM [dbo].[ParameterSpecification] ps
-     INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=ps.[PropertyType])
-     INNER JOIN [dbo].[v_ParameterSpecification_Order] pso ON (pso.WorkDefinitionID=ps.[WorkDefinitionID])
-     INNER JOIN [dbo].[OpEquipmentSpecification] es ON (es.[WorkDefinition]=ps.[WorkDefinitionID])
-UNION ALL
-SELECT sp.ID,
-       pt.Description,
-       sp.[Value],
-       spo.[Value] comm_order,
-       eq.[ID] [EquipmentID],
-       NULL,
-       pt.[Value] Property
-FROM dbo.OpSegmentRequirement sr
-     INNER JOIN dbo.SegmentParameter sp ON (sp.OpSegmentRequirement=sr.id)
-     INNER JOIN dbo.PropertyTypes pt ON (pt.ID=sp.PropertyType)
-     INNER JOIN [dbo].[v_SegmentParameter_Order] spo ON (spo.OpSegmentRequirement=sp.OpSegmentRequirement)
-     CROSS JOIN [dbo].[Equipment] eq
-WHERE NOT EXISTS (SELECT NULL 
-                  FROM [dbo].[v_ParameterSpecification_Order] pso 
-                  WHERE (pso.[Value]=spo.[Value])
-                    AND (pso.[EquipmentID]=eq.[ID]));
-GO
 
 IF OBJECT_ID ('dbo.v_LatestWorkRequests', N'V') IS NOT NULL
    DROP VIEW dbo.v_LatestWorkRequests;
