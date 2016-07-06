@@ -1,5 +1,5 @@
 ﻿--------------------------------------------------------------
--- Процедура ins_WorkRequest
+-- Процедура ins_JobOrderOPCCommand
 IF OBJECT_ID ('dbo.ins_JobOrderOPCCommand',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderOPCCommand;
 GO
