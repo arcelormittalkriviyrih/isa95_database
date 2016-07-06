@@ -8,6 +8,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE PROCEDURE [dbo].[ins_WorkDefinition]
+@WorkType       NVARCHAR(50),
 @EquipmentID    INT,
 @COMM_ORDER     NVARCHAR(50),
 @PROD_ORDER     NVARCHAR(50),
@@ -44,7 +45,7 @@ BEGIN
 
    IF @COMM_ORDER IS NULL
     THROW 60001, N'Параметр "Коммерческий заказ" обязательный', 1;
-   ELSE IF EXISTS (SELECT NULL FROM [dbo].[v_ParameterSpecification_Order] WHERE [Value]=@COMM_ORDER AND [EquipmentID]=@EquipmentID)
+   ELSE IF @WorkType IN (N'Standart') AND EXISTS (SELECT NULL FROM [dbo].[v_ParameterSpecification_Order] WHERE [Value]=@COMM_ORDER AND [EquipmentID]=@EquipmentID)
       BEGIN
          SET @err_message = N'WorkDefinition [' + CAST(@COMM_ORDER AS NVARCHAR) + N'] already exists';
          THROW 60010, @err_message, 1;
@@ -79,7 +80,7 @@ BEGIN
       THROW 60010, N'Указанный Excel шаблон не существует в таблице Files', 1;
 
    SET @WorkDefinitionID=NEXT VALUE FOR [dbo].[gen_WorkDefinition];
-   INSERT INTO [dbo].[WorkDefinition] ([ID],[WorkType],[PublishedDate]) VALUES (@WorkDefinitionID,N'Standard',CURRENT_TIMESTAMP);
+   INSERT INTO [dbo].[WorkDefinition] ([ID],[WorkType],[PublishedDate]) VALUES (@WorkDefinitionID,@WorkType,CURRENT_TIMESTAMP);
 
    SET @OperationsSegmentID=NEXT VALUE FOR [dbo].[gen_OperationsSegment];
    INSERT INTO [dbo].[OperationsSegment] ([ID],[OperationsType]) VALUES (@OperationsSegmentID,N'Standard');
@@ -96,6 +97,12 @@ BEGIN
                                       @EquipmentClassPropertyValue = N'WORK_DEFINITION_ID',
                                       @EquipmentPropertyValue = @EquipmentPropertyValue;
 
+   IF @WorkType IN (N'Standard')
+      EXEC [dbo].[upd_EquipmentProperty] @EquipmentID = @EquipmentID,
+                                         @EquipmentClassPropertyValue = N'STANDARD_WORK_DEFINITION_ID',
+                                         @EquipmentPropertyValue = @EquipmentPropertyValue;
+
+/*
    DECLARE @JobOrderID INT;
    SET @JobOrderID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'JOB_ORDER_ID');
    IF @JobOrderID IS NOT NULL
@@ -105,7 +112,7 @@ BEGIN
          FROM [dbo].[PropertyTypes] pt 
          WHERE (pt.value=N'WORK_DEFINITION_ID');
       END;
-
+*/
    INSERT @tblParams
    SELECT N'COMM_ORDER',@COMM_ORDER WHERE @COMM_ORDER IS NOT NULL
    UNION ALL

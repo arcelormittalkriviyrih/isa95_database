@@ -4,39 +4,13 @@ GO
 
 CREATE VIEW [dbo].[v_LatestWorkRequests]
 AS
-WITH WorkRequest AS (SELECT wr.[ID] WorkRequestID,
-                            jo.[ID] JobOrderID,
-                            er.[EquipmentID],
-                            mr.[MaterialDefinitionID] ProfileID,
-                            po.[Value] COMM_ORDER,
-                            dbo.get_EquipmentPropertyValue(er.[EquipmentID],N'WORK_DEFINITION_ID') WORK_DEFINITION_ID
-                     FROM [dbo].[WorkRequest] wr
-                          INNER JOIN [dbo].[JobOrder] jo ON (jo.[WorkRequest]=wr.[ID])
-                          INNER JOIN [dbo].[EquipmentProperty] ep ON (ep.[ClassPropertyID]=dbo.get_EquipmentClassPropertyByValue(N'JOB_ORDER_ID') AND ep.[Value]=CAST(jo.[ID] AS NVARCHAR))
-                          ---LEFT OUTER JOIN [dbo].[Parameter] p ON (p.[JobOrder]=jo.[ID] AND p.[PropertyType] IN (SELECT pt.[ID] FROM [dbo].[PropertyTypes] pt WHERE pt.[Value]=N'WORK_DEFINITION_ID'))
-                          LEFT OUTER JOIN [dbo].[OpMaterialRequirement] mr ON (mr.[JobOrderID]=jo.[ID])
-                          INNER JOIN [dbo].[OpEquipmentRequirement] er ON (er.[JobOrderID]=jo.[ID])
-                          INNER JOIN [dbo].[v_Parameter_Order] po ON (po.[JobOrder]=jo.[ID])) 
 SELECT newID() ID,
-       wr.[WorkRequestID],
-       wr.[JobOrderID],
-       wr.[EquipmentID],
-       wr.[ProfileID],
-       pt.[Value] PropertyType,
-       par.[Value]
-FROM [dbo].[Parameter] par
-     INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=par.[PropertyType] AND pt.[Value] NOT IN (N'COMM_ORDER'))
-     INNER JOIN WorkRequest wr ON (wr.[JobOrderID]=par.[JobOrder])
-UNION ALL
-SELECT newID() ID,
-       -1,
-       -1,
-       oes.[EquipmentID],
-       -1,
-       pt.[Value] PropertyType,
-       ps.[Value]
-FROM [dbo].[ParameterSpecification] ps
-     INNER JOIN [dbo].[OpEquipmentSpecification] oes ON (oes.[WorkDefinition]=ps.WorkDefinitionID)
-     INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=ps.[PropertyType] AND pt.[Value] IN (N'COMM_ORDER',N'BRIGADE_NO',N'PROD_DATE'))
-WHERE ps.[WorkDefinitionID]=dbo.get_EquipmentPropertyValue(oes.[EquipmentID],N'WORK_DEFINITION_ID')
-GO
+       wr.WorkRequestID,
+       wr.JobOrderID,
+       eq.[ID] EquipmentID,
+       wr.ProfileID,
+       wr.WorkType,
+       wr.PropertyType,
+       wr.Value
+FROM dbo.Equipment eq
+     CROSS APPLY dbo.get_LatestWorkRequests(eq.[ID]) wr

@@ -1,43 +1,42 @@
 ﻿--------------------------------------------------------------
--- Процедура ins_JobOrderInit
-IF OBJECT_ID ('dbo.ins_JobOrderInit',N'P') IS NOT NULL
-   DROP PROCEDURE dbo.ins_JobOrderInit;
+-- Процедура ins_JobOrder
+IF OBJECT_ID ('dbo.ins_JobOrder',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_JobOrder;
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[ins_JobOrderInit]
+CREATE PROCEDURE [dbo].[ins_JobOrder]
+@WorkType         NVARCHAR(50),
 @WorkRequestID    INT,
 @EquipmentID      INT,
-@ProfileID        INT,
-@COMM_ORDER       NVARCHAR(50),
-@LENGTH           NVARCHAR(50),
-@BAR_WEIGHT       NVARCHAR(50),
-@BAR_QUANTITY     NVARCHAR(50),
-@MAX_WEIGHT       NVARCHAR(50),
-@MIN_WEIGHT       NVARCHAR(50),
-@SAMPLE_WEIGHT    NVARCHAR(50),
-@SAMPLE_LENGTH    NVARCHAR(50),
-@DEVIATION        NVARCHAR(50),
-@SANDWICH_MODE    NVARCHAR(50),
-@AUTO_MANU_VALUE  NVARCHAR(50),
-@NEMERA           NVARCHAR(50)
-
+@ProfileID        INT          = NULL,
+@COMM_ORDER       NVARCHAR(50) = NULL,
+@LENGTH           NVARCHAR(50) = NULL,
+@BAR_WEIGHT       NVARCHAR(50) = NULL,
+@BAR_QUANTITY     NVARCHAR(50) = NULL,
+@MAX_WEIGHT       NVARCHAR(50) = NULL,
+@MIN_WEIGHT       NVARCHAR(50) = NULL,
+@SAMPLE_WEIGHT    NVARCHAR(50) = NULL,
+@SAMPLE_LENGTH    NVARCHAR(50) = NULL,
+@DEVIATION        NVARCHAR(50) = NULL,
+@SANDWICH_MODE    NVARCHAR(50) = NULL,
+@AUTO_MANU_VALUE  NVARCHAR(50) = NULL,
+@NEMERA           NVARCHAR(50) = NULL,
+@FACTORY_NUMBER   NVARCHAR(50) = NULL,
+@JobOrderID       INT OUTPUT
 AS
 BEGIN
 
-   DECLARE @JobOrderID       INT,
-           @WorkDefinitionID NVARCHAR(50);
-
    UPDATE [dbo].[JobOrder]
-   SET [WorkType]=N'INIT_LOG'
+   SET [WorkType]=[WorkType]+N'_archive'
    WHERE [WorkRequest]=@WorkRequestID
-     AND [WorkType]=N'INIT';
+     AND [WorkType]=@WorkType;
 
    SET @JobOrderID=NEXT VALUE FOR [dbo].[gen_JobOrder];
    INSERT INTO [dbo].[JobOrder] ([ID], [WorkType], [StartTime], [WorkRequest])
-   VALUES (@JobOrderID,N'INIT',CURRENT_TIMESTAMP,@WorkRequestID);
+   VALUES (@JobOrderID,@WorkType,CURRENT_TIMESTAMP,@WorkRequestID);
 
    DECLARE @EquipmentPropertyValue NVARCHAR(50);
    SET @EquipmentPropertyValue=CAST(@JobOrderID AS NVARCHAR);
@@ -54,8 +53,6 @@ BEGIN
    SELECT eq.[EquipmentClassID],eq.[ID],@JobOrderID
    FROM [dbo].[Equipment] eq 
    WHERE eq.[ID]=@EquipmentID;
-
-   SET @WorkDefinitionID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'WORK_DEFINITION_ID');
 
    DECLARE @tblParams TABLE(ID    NVARCHAR(50),
                             Value NVARCHAR(50));
@@ -85,7 +82,7 @@ BEGIN
    UNION ALL
    SELECT N'NEMERA',@NEMERA WHERE @NEMERA IS NOT NULL
    UNION ALL
-   SELECT N'WORK_DEFINITION_ID',@WorkDefinitionID WHERE @WorkDefinitionID IS NOT NULL;
+   SELECT N'FACTORY_NUMBER',@FACTORY_NUMBER WHERE @FACTORY_NUMBER IS NOT NULL;
 
    INSERT INTO [dbo].[Parameter] ([Value],[JobOrder],[PropertyType])
    SELECT t.value,@JobOrderID,pt.ID
