@@ -18,9 +18,9 @@ WITH MaterialLot AS (SELECT ml.[ID],
                                   ml.[FactoryNumber],
                                   ml.[Status],
                                   ml.[Quantity],
-                                  ROW_NUMBER() OVER (PARTITION BY ml.[FactoryNumber] ORDER BY ml.[CreateTime] DESC) RowNumber
+                                  ROW_NUMBER() OVER (PARTITION BY ml.[FactoryNumber] ORDER BY ml.[CreateTime] DESC, ml.[ID] DESC) RowNumber
                            FROM [dbo].[MaterialLot] ml) ml
-                     WHERE ml.RowNumber=1) 
+                     WHERE ml.RowNumber=1)
 SELECT mlp.[ID],
        ml.[ID] MaterialLotID,
        ml.[FactoryNumber],
@@ -29,7 +29,7 @@ SELECT mlp.[ID],
        mlp.[PropertyType] PropertyID,
        pt.[Value] Property,
        mlp.[Value]
-FROM MaterialLot ml
+FROM [dbo].[MaterialLot] ml
      INNER JOIN [dbo].[MaterialLotProperty] mlp ON (mlp.[MaterialLotID]=ml.[ID])
      INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=mlp.[PropertyType]);
 GO

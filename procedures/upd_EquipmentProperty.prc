@@ -34,8 +34,9 @@ BEGIN
          SELECT @err_message = N'Wrong EquipmentClassProperty Value=['+@EquipmentClassPropertyValue+ N'] for Equipment ID=['+CAST(@EquipmentID AS NVARCHAR)+']';
          THROW 60010, @err_message, 1;
       END;
-   ELSE IF @EquipmentPropertyValue IS NULL
-      THROW 60001, N'EquipmentPropertyValue param required', 1;
+   -- allow NULL to be able to clear values
+   --ELSE IF @EquipmentPropertyValue IS NULL
+   --   THROW 60001, N'EquipmentPropertyValue param required', 1;
 
    MERGE [dbo].[EquipmentProperty] ep
    USING (SELECT dbo.get_EquipmentClassPropertyByValue(@EquipmentClassPropertyValue) EquipmentClassPropertyID) ecp

@@ -28,5 +28,5 @@ SELECT NEWID() AS ID,
        N'FactoryNumber' AS PropertyCode,
        N'№ бирки для штрих-кода' AS Description,
        NULL AS [Value];
-
+	  
 GO
