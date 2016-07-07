@@ -1,14 +1,8 @@
-﻿UPDATE [dbo].[WorkRequest]
-SET [WorkType]=N'Standard'
-WHERE [WorkType] IS NULL;
+﻿SET ANSI_NULLS ON;
+GO
 
-UPDATE [dbo].[WorkDefinition]
-SET [WorkType]=N'Standard'
-WHERE [WorkType] IS NULL;
-
-UPDATE [dbo].[JobOrder]
-SET [WorkType]=N'Standard'
-WHERE [WorkType]=N'INIT';
+SET QUOTED_IDENTIFIER ON;
+GO
 
 IF EXISTS (SELECT NULL
            FROM information_schema.columns
@@ -20,6 +14,18 @@ IF EXISTS (SELECT NULL
                   AND column_name = 'WorkType')
    EXEC sp_RENAME '[dbo].[WorkRequest].[Workype]', 'WorkType', 'COLUMN';
 GO
+
+UPDATE [dbo].[WorkRequest]
+SET [WorkType]=N'Standard'
+WHERE [WorkType] IS NULL;
+
+UPDATE [dbo].[WorkDefinition]
+SET [WorkType]=N'Standard'
+WHERE [WorkType] IS NULL;
+
+UPDATE [dbo].[JobOrder]
+SET [WorkType]=N'Standard'
+WHERE [WorkType]=N'INIT';
 
 --------------------------------------------------------------
 -- Процедура ins_JobOrderInit

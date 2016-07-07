@@ -28,7 +28,7 @@ AS
                  ww.POCKET_LOC,
                  ww.PACK_SANDWICH,
                  CAST(0 AS BIT) AS ALARM,
-                 cast(FLOOR(ww.WEIGHT_CURRENT / bw.[Value]) as int) RodsQuanity,
+                 cast(FLOOR(ww.WEIGHT_CURRENT / bw.[Value]) as int) RodsQuantity,
                  ww.REM_BAR RodsLeft
           FROM
           (

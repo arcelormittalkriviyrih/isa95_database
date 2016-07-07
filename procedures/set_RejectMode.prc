@@ -1,13 +1,13 @@
 ﻿--------------------------------------------------------------
--- Процедура dbo.set_SortMode
-IF OBJECT_ID ('dbo.set_SortMode',N'P') IS NOT NULL
-   DROP PROCEDURE dbo.set_SortMode;
+-- Процедура dbo.set_RejectMode
+IF OBJECT_ID ('dbo.set_RejectMode',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.set_RejectMode;
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[set_SortMode]
+CREATE PROCEDURE [dbo].[set_RejectMode]
 @EquipmentID    INT,
 @FACTORY_NUMBER NVARCHAR(50),
 @COMM_ORDER     NVARCHAR(50),
@@ -36,7 +36,7 @@ CREATE PROCEDURE [dbo].[set_SortMode]
 AS
 BEGIN
 
-   EXEC [dbo].[ins_WorkDefinition] @WorkType       = N'Sort',
+   EXEC [dbo].[ins_WorkDefinition] @WorkType       = N'Reject',
                                    @EquipmentID    = @EquipmentID,
                                    @COMM_ORDER     = @COMM_ORDER,
                                    @PROD_ORDER     = @PROD_ORDER,
@@ -63,7 +63,7 @@ BEGIN
                                    @TEMPLATE       = @TEMPLATE;
 
    DECLARE @WorkRequestID INT;
-   EXEC [dbo].[ins_WorkRequest] @WorkType        = N'Sort',
+   EXEC [dbo].[ins_WorkRequest] @WorkType        = N'Reject',
                                 @EquipmentID     = @EquipmentID,
                                 @COMM_ORDER      = @COMM_ORDER,
                                 @FACTORY_NUMBER  = @FACTORY_NUMBER,

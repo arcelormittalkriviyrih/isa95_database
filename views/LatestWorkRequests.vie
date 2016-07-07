@@ -14,3 +14,4 @@ SELECT newID() ID,
        wr.Value
 FROM dbo.Equipment eq
      CROSS APPLY dbo.get_LatestWorkRequests(eq.[ID]) wr
+GO

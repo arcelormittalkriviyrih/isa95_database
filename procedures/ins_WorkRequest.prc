@@ -24,6 +24,7 @@ CREATE PROCEDURE [dbo].[ins_WorkRequest]
 @AUTO_MANU_VALUE  NVARCHAR(50) = NULL,
 @NEMERA           NVARCHAR(50) = NULL,
 @FACTORY_NUMBER   NVARCHAR(50) = NULL,
+@PACKS_LEFT       NVARCHAR(50) = NULL,
 @WorkRequestID    INT OUTPUT
 
 AS
@@ -64,6 +65,7 @@ BEGIN
                              @AUTO_MANU_VALUE = @AUTO_MANU_VALUE,
                              @NEMERA          = @NEMERA,
                              @FACTORY_NUMBER  = @FACTORY_NUMBER,
+                             @PACKS_LEFT      = @PACKS_LEFT,
                              @JobOrderID      = @JobOrderID OUTPUT;
 
 END;

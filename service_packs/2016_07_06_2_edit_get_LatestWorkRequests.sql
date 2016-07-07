@@ -1,4 +1,52 @@
-﻿IF OBJECT_ID ('dbo.get_LatestWorkRequests', N'TF') IS NOT NULL
+﻿SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+
+-- Обновление структур таблиц
+IF NOT EXISTS (SELECT NULL
+               FROM information_schema.columns
+               WHERE table_name = 'MaterialClass'
+                 AND column_name = 'Code')
+BEGIN
+   ALTER TABLE [dbo].[MaterialClass] ADD [Code] [NVARCHAR](50) NULL;
+END
+GO
+
+UPDATE [dbo].[MaterialClass]
+SET [Code]=N'PROFILE'
+WHERE ID=1;
+
+IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='u1_OpMaterialRequirement' AND object_id = OBJECT_ID('[dbo].[OpMaterialRequirement]'))
+   DROP INDEX u1_OpMaterialRequirement ON [dbo].[OpMaterialRequirement]
+GO
+
+CREATE UNIQUE INDEX u1_OpMaterialRequirement ON [dbo].[OpMaterialRequirement] ([MaterialClassID],[JobOrderID]) WHERE [MaterialClassID] IS NOT NULL AND [JobOrderID] IS NOT NULL
+GO
+
+--------------------------------------------------------------
+-- Процедура вычитки поля ID из таблицы MaterialClass по значению поля Code
+IF OBJECT_ID ('dbo.get_MaterialClassIDByCode', N'FN') IS NOT NULL
+   DROP FUNCTION dbo.get_MaterialClassIDByCode;
+GO
+
+CREATE FUNCTION dbo.get_MaterialClassIDByCode(@Code [nvarchar](50))
+RETURNS INT
+AS
+BEGIN
+
+DECLARE @Id INT;
+
+SELECT @Id=[ID] 
+FROM [dbo].[MaterialClass]
+WHERE [Code]=@Code;
+
+RETURN @Id;
+
+END;
+GO
+
+IF OBJECT_ID ('dbo.get_LatestWorkRequests', N'TF') IS NOT NULL
    DROP FUNCTION dbo.get_LatestWorkRequests;
 GO
 
@@ -59,4 +107,22 @@ BEGIN
 RETURN;
 
 END;
+GO
+
+IF OBJECT_ID ('dbo.v_LatestWorkRequests', N'V') IS NOT NULL
+   DROP VIEW dbo.v_LatestWorkRequests;
+GO
+
+CREATE VIEW [dbo].[v_LatestWorkRequests]
+AS
+SELECT newID() ID,
+       wr.WorkRequestID,
+       wr.JobOrderID,
+       eq.[ID] EquipmentID,
+       wr.ProfileID,
+       wr.WorkType,
+       wr.PropertyType,
+       wr.Value
+FROM dbo.Equipment eq
+     CROSS APPLY dbo.get_LatestWorkRequests(eq.[ID]) wr
 GO
