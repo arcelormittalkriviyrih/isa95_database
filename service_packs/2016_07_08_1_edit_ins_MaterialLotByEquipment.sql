@@ -1,4 +1,49 @@
 ﻿--------------------------------------------------------------
+-- Функция возвращает текущий режим по весам
+IF OBJECT_ID ('dbo.get_CurrentWorkType', N'FN') IS NOT NULL
+   DROP FUNCTION dbo.get_CurrentWorkType;
+GO
+
+CREATE FUNCTION dbo.get_CurrentWorkType(@EquipmentID INT)
+RETURNS [NVARCHAR](50)
+AS
+BEGIN
+
+DECLARE @JobOrderID INT,
+        @WorkType   [NVARCHAR](50);
+
+SET @JobOrderID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'JOB_ORDER_ID');
+SELECT @WorkType=wr.[WorkType]
+FROM [dbo].[JobOrder] jo INNER JOIN [dbo].[WorkRequest] wr ON (wr.[ID]=jo.[WorkRequest])
+WHERE jo.[ID]=@JobOrderID;
+
+RETURN @WorkType;
+
+END;
+GO
+
+--------------------------------------------------------------
+-- Процедура возвращает MaterialLot.Status по режиму работы
+IF OBJECT_ID ('dbo.get_MaterialLotStatusByWorkType', N'FN') IS NOT NULL
+   DROP FUNCTION [dbo].[get_MaterialLotStatusByWorkType];
+GO
+
+CREATE FUNCTION [dbo].[get_MaterialLotStatusByWorkType](@WorkType NVARCHAR(50))
+RETURNS NVARCHAR(50)
+AS
+BEGIN
+   IF @WorkType = N'Sort'
+      RETURN N'2';
+   ELSE IF @WorkType = N'Reject'
+      RETURN N'3';
+   ELSE IF @WorkType = N'Separate'
+      RETURN N'4';
+
+   RETURN N'0';
+END;
+GO
+
+--------------------------------------------------------------
 -- Процедура ins_MaterialLotByEquipment
 IF OBJECT_ID ('dbo.ins_MaterialLotByEquipment',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_MaterialLotByEquipment;
@@ -17,6 +62,7 @@ BEGIN
 
 DECLARE @MaterialLotID    INT,
         @WorkDefinitionID INT,
+        @MEASURE_TIME    [NVARCHAR](50),
         @AUTO_MANU_VALUE [NVARCHAR](50),
         @FactoryNumber   [NVARCHAR](12),
         @PrinterID       [NVARCHAR](50),
@@ -37,18 +83,14 @@ EXEC [dbo].[ins_MaterialLot] @FactoryNumber = @FactoryNumber,
                              @Quantity      = @Quantity,
                              @MaterialLotID = @MaterialLotID OUTPUT;
 
+SET @MEASURE_TIME=CONVERT(NVARCHAR,CURRENT_TIMESTAMP,121);
 SET @WorkDefinitionID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'WORK_DEFINITION_ID');
 IF @WorkDefinitionID IS NOT NULL
    BEGIN
-      DECLARE @MEASURE_TIME NVARCHAR(50),
-              @MILL_ID      NVARCHAR(50);
-      SET @MEASURE_TIME=CONVERT(NVARCHAR,CURRENT_TIMESTAMP,121);
-      SET @MILL_ID=[dbo].[get_EquipmentPropertyValue]([dbo].[get_ParentEquipmentIDByClass](@EquipmentID,N'MILL'),N'MILL_ID');
       EXEC [dbo].[ins_MaterialLotPropertyByWorkDefinition] @WorkDefinitionID = @WorkDefinitionID,
                                                            @MaterialLotID    = @MaterialLotID,
                                                            @MEASURE_TIME     = @MEASURE_TIME,
-                                                           @AUTO_MANU_VALUE  = @AUTO_MANU_VALUE,
-                                                           @MILL_ID          = @MILL_ID;
+                                                           @AUTO_MANU_VALUE  = @AUTO_MANU_VALUE;
 
       SET @PrinterID = [dbo].[get_EquipmentPropertyValue](@EquipmentID,N'USED_PRINTER');
       EXEC [dbo].[ins_JobOrderPrintLabel] @PrinterID     = @PrinterID,
