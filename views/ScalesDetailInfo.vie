@@ -10,7 +10,7 @@ GO
 CREATE VIEW [dbo].[v_ScalesDetailInfo]
 AS
      WITH BarWeight
-          AS (SELECT par.[Value],
+          AS (SELECT cast(par.[Value] as float) Bar_Weight,
                      ep.EquipmentId
               FROM [PropertyTypes] pr,
                    [dbo].[Parameter] par,
@@ -21,14 +21,14 @@ AS
               AND ep.[Value] = par.JobOrder)
           SELECT ww.EquipmentID AS ID,
                  ww.[Description] AS ScalesName,
-                 ww.WEIGHT_CURRENT,
+                 dbo.get_RoundedWeightByEquipment(ww.WEIGHT_CURRENT, ww.EquipmentID) WEIGHT_CURRENT,
                  ww.WEIGHT_STAB,
                  ww.WEIGHT_ZERO,
                  ww.AUTO_MANU,
                  ww.POCKET_LOC,
                  ww.PACK_SANDWICH,
                  CAST(0 AS BIT) AS ALARM,
-                 cast(FLOOR(ww.WEIGHT_CURRENT / bw.[Value]) as int) RodsQuantity,
+                 cast(FLOOR(dbo.get_RoundedWeightByEquipment(ww.WEIGHT_CURRENT, ww.EquipmentID) / bw.[Bar_Weight]) as int) RodsQuantity,
                  ww.REM_BAR RodsLeft
           FROM
           (
@@ -53,4 +53,5 @@ AS
           ) ww
           LEFT OUTER JOIN BarWeight bw ON bw.EquipmentId = ww.EquipmentID
           WHERE ww.RowNumber = 1;
+
 GO

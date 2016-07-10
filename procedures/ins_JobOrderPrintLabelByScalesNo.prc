@@ -24,7 +24,8 @@ BEGIN
               @WorkDefinitionID INT,
               @MaterialLotID    INT,
               @Status           NVARCHAR(250),
-              @err_message      NVARCHAR(255);
+              @err_message      NVARCHAR(255),
+		      @Weight_Rounded	  INT;
 
       SET @EquipmentID=dbo.get_EquipmentIDByScalesNo(@SCALES_NO);
       IF @EquipmentID IS NULL
@@ -39,6 +40,9 @@ BEGIN
       WHERE jo.[WorkType]=N'INIT'
       ORDER BY jo.[StartTime] DESC;
 */
+
+	  SET @Weight_Rounded=dbo.get_RoundedWeightByEquipment(@EquipmentID,@WEIGHT_FIX);
+
       SET @JobOrderID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'JOB_ORDER_ID');
       IF @JobOrderID IS NULL
          BEGIN
@@ -56,7 +60,7 @@ BEGIN
             SET @FactoryNumber=[dbo].[get_GenMaterialLotNumber](@EquipmentID,NEXT VALUE FOR dbo.gen_MaterialLotNumber);
             EXEC [dbo].[ins_MaterialLot] @FactoryNumber = @FactoryNumber,
                                          @Status        = @Status,
-                                         @Quantity      = @WEIGHT_FIX,
+                                         @Quantity      = @Weight_Rounded,
                                          @MaterialLotID = @MaterialLotID OUTPUT;
          END;
       ELSE IF @WorkType IN (N'Sort',N'Reject')
@@ -73,7 +77,7 @@ BEGIN
             SET @FactoryNumber=[dbo].[get_JobOrderPropertyValue](@JobOrderID,N'FACTORY_NUMBER');
             EXEC [dbo].[ins_MaterialLotWithLinks] @FactoryNumber       = @FactoryNumber,
                                                   @Status              = @Status,
-                                                  @Quantity            = @WEIGHT_FIX,
+                                                  @Quantity            = @Weight_Rounded,
                                                   @LinkFactoryNumber   = @LinkFactoryNumber,
                                                   @LinkedMaterialLotID = @MaterialLotID OUTPUT;
          END;

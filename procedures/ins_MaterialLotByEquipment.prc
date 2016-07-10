@@ -29,6 +29,7 @@ IF @Quantity IS NOT NULL
    BEGIN
       SET @Status=[dbo].[get_MaterialLotStatusByWorkType]([dbo].[get_CurrentWorkType](@EquipmentID));
       SET @AUTO_MANU_VALUE=N'1';
+	  SET @Quantity=dbo.get_RoundedWeightByEquipment(@EquipmentID,@Quantity);
    END;
 
 SET @FactoryNumber=[dbo].[get_GenMaterialLotNumber](@EquipmentID,NEXT VALUE FOR dbo.gen_MaterialLotNumber);

@@ -3,10 +3,10 @@ GO
 SET QUOTED_IDENTIFIER ON;
 GO
 
-IF OBJECT_ID(N'dbo.getCurrentPerson', N'FN') IS NOT NULL
-    DROP FUNCTION dbo.getCurrentPerson;
+IF OBJECT_ID(N'dbo.get_CurrentPerson', N'FN') IS NOT NULL
+    DROP FUNCTION dbo.get_CurrentPerson;
 GO
-CREATE FUNCTION dbo.getCurrentPerson
+CREATE FUNCTION dbo.get_CurrentPerson
 (
 )
 RETURNS INT
