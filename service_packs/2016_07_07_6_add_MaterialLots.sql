@@ -40,6 +40,7 @@ AS
             END StatusName,
             CreateTime AS CreatedDateTime
      FROM [dbo].[MaterialLot] mlp;
+GO	 
 	 
 IF OBJECT_ID('dbo.v_OrderProperties', N'V') IS NOT NULL
     DROP VIEW [dbo].[v_OrderProperties];

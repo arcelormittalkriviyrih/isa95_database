@@ -2,17 +2,115 @@
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
-
-
 --fix duplicates data
-update EquipmentProperty set ClassPropertyId=110 where ClassPropertyId=45;
-update EquipmentProperty set ClassPropertyId=111 where ClassPropertyId=46;
-update EquipmentProperty set ClassPropertyId=112 where ClassPropertyId=47;
-update EquipmentProperty set ClassPropertyId=113 where ClassPropertyId=48;
-update EquipmentProperty set ClassPropertyId=118 where ClassPropertyId=53;
-update EquipmentProperty set ClassPropertyId=119 where ClassPropertyId=54;
-update EquipmentProperty set ClassPropertyId=120 where ClassPropertyId=55;
-delete from EquipmentClassProperty where id>43 and id<110;
+
+
+IF EXISTS
+(
+    SELECT NULL
+    FROM EquipmentClassProperty
+    WHERE id = 112
+)
+    BEGIN
+        UPDATE EquipmentProperty
+          SET
+              ClassPropertyId = 112
+        WHERE ClassPropertyId = 47;
+        DELETE FROM EquipmentClassProperty
+        WHERE id = 47;
+    END;
+
+IF EXISTS
+(
+    SELECT NULL
+    FROM EquipmentClassProperty
+    WHERE id = 113
+)
+    BEGIN
+        UPDATE EquipmentProperty
+          SET
+              ClassPropertyId = 113
+        WHERE ClassPropertyId = 48;
+        DELETE FROM EquipmentClassProperty
+        WHERE id = 48;
+    END;
+
+IF EXISTS
+(
+    SELECT NULL
+    FROM EquipmentClassProperty
+    WHERE id = 118
+)
+    BEGIN
+        UPDATE EquipmentProperty
+          SET
+              ClassPropertyId = 118
+        WHERE ClassPropertyId = 53;
+        DELETE FROM EquipmentClassProperty
+        WHERE id = 53;
+    END;
+
+IF EXISTS
+(
+    SELECT NULL
+    FROM EquipmentClassProperty
+    WHERE id = 119
+)
+    BEGIN
+        UPDATE EquipmentProperty
+          SET
+              ClassPropertyId = 119
+        WHERE ClassPropertyId = 54;
+        DELETE FROM EquipmentClassProperty
+        WHERE id = 54;
+    END;
+
+IF EXISTS
+(
+    SELECT NULL
+    FROM EquipmentClassProperty
+    WHERE id = 120
+)
+    BEGIN
+        UPDATE EquipmentProperty
+          SET
+              ClassPropertyId = 120
+        WHERE ClassPropertyId = 55;
+        DELETE FROM EquipmentClassProperty
+        WHERE id = 55;
+    END;
+
+IF EXISTS
+(
+    SELECT NULL
+    FROM EquipmentClassProperty
+    WHERE id = 111
+)
+    BEGIN
+        UPDATE EquipmentProperty
+          SET
+              ClassPropertyId = 111
+        WHERE ClassPropertyId = 46;
+        DELETE FROM EquipmentClassProperty
+        WHERE id = 46;
+    END;
+
+IF EXISTS
+(
+    SELECT NULL
+    FROM EquipmentClassProperty
+    WHERE id = 110
+)
+    BEGIN
+        UPDATE EquipmentProperty
+          SET
+              ClassPropertyId = 110
+        WHERE ClassPropertyId = 45;
+        DELETE FROM EquipmentClassProperty
+        WHERE id = 45;
+    END;
+
+
 
 IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='i1_EquipmentClassProperty_Value' AND object_id = OBJECT_ID('[dbo].[EquipmentClassProperty]'))
    DROP INDEX [i1_EquipmentClassProperty_Value] ON [dbo].[EquipmentClassProperty]
@@ -34,6 +132,27 @@ GO
 IF NOT EXISTS (SELECT NULL FROM [dbo].[EquipmentClassProperty] WHERE [Value]=N'JOB_ORDER_ID')
    INSERT INTO [dbo].[EquipmentClassProperty]([Description],[Value],[EquipmentClassID]) (SELECT N'Текущий JobOrder',N'JOB_ORDER_ID',eqc.[ID] FROM [dbo].[EquipmentClass] eqc WHERE eqc.[Code]=N'SCALES')
 GO
+
+SET NUMERIC_ROUNDABORT OFF;
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
+GO
+
+IF OBJECT_ID ('dbo.v_ParameterSpecification_Order', 'V') IS NOT NULL
+   DROP VIEW [dbo].[v_ParameterSpecification_Order];
+GO
+
+CREATE VIEW [dbo].[v_ParameterSpecification_Order] WITH SCHEMABINDING
+AS
+SELECT sp.ID, sp.[Value], sp.[Description], sp.[WorkDefinitionID], oes.[EquipmentID], sp.PropertyType
+FROM [dbo].[ParameterSpecification] sp
+     INNER JOIN [dbo].[OpEquipmentSpecification] oes ON (oes.[WorkDefinition]=sp.WorkDefinitionID)
+     INNER JOIN[dbo].[PropertyTypes] pt ON (pt.ID=sp.PropertyType AND pt.Value=N'COMM_ORDER')
+GO
+
+CREATE UNIQUE CLUSTERED INDEX [u_ParameterSpecification_Order] ON [dbo].[v_ParameterSpecification_Order] ([Value],[WorkDefinitionID],[EquipmentID])
+GO
+
+
 
 IF OBJECT_ID ('dbo.v_WorkDefinitionPropertiesAll', N'V') IS NOT NULL
    DROP VIEW dbo.v_WorkDefinitionPropertiesAll;
@@ -581,24 +700,5 @@ FROM [dbo].[ParameterSpecification] ps
      INNER JOIN [dbo].[OpEquipmentSpecification] oes ON (oes.[WorkDefinition]=ps.WorkDefinitionID)
      INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=ps.[PropertyType] AND pt.[Value] IN (N'COMM_ORDER',N'BRIGADE_NO',N'PROD_DATE'))
 WHERE ps.[WorkDefinitionID]=dbo.get_EquipmentPropertyValue(oes.[EquipmentID],N'WORK_DEFINITION_ID')
-GO
-
-SET NUMERIC_ROUNDABORT OFF;
-SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
-GO
-
-IF OBJECT_ID ('dbo.v_ParameterSpecification_Order', 'V') IS NOT NULL
-   DROP VIEW [dbo].[v_ParameterSpecification_Order];
-GO
-
-CREATE VIEW [dbo].[v_ParameterSpecification_Order] WITH SCHEMABINDING
-AS
-SELECT sp.ID, sp.[Value], sp.[Description], sp.[WorkDefinitionID], oes.[EquipmentID], sp.PropertyType
-FROM [dbo].[ParameterSpecification] sp
-     INNER JOIN [dbo].[OpEquipmentSpecification] oes ON (oes.[WorkDefinition]=sp.WorkDefinitionID)
-     INNER JOIN[dbo].[PropertyTypes] pt ON (pt.ID=sp.PropertyType AND pt.Value=N'COMM_ORDER')
-GO
-
-CREATE UNIQUE CLUSTERED INDEX [u_ParameterSpecification_Order] ON [dbo].[v_ParameterSpecification_Order] ([Value],[WorkDefinitionID],[EquipmentID])
 GO
 
