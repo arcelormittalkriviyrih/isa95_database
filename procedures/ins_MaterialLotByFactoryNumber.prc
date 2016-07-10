@@ -50,6 +50,9 @@ BEGIN
                                          @Status        = N'1',
                                          @MaterialLotID = @MaterialLotID OUTPUT;
 
+   DECLARE @MILL_ID NVARCHAR(50);
+   SET @MILL_ID=[dbo].[get_EquipmentPropertyValue]([dbo].[get_ParentEquipmentIDByClass](@EquipmentID,N'MILL'),N'MILL_ID');
+
    DECLARE @tblParams TABLE(ID    NVARCHAR(50),
                             Value NVARCHAR(50));
 
@@ -100,7 +103,9 @@ BEGIN
    UNION ALL
    SELECT N'CHEM_ANALYSIS',@CHEM_ANALYSIS WHERE @CHEM_ANALYSIS IS NOT NULL
    UNION ALL
-   SELECT N'TEMPLATE',@TEMPLATE WHERE @TEMPLATE IS NOT NULL;
+   SELECT N'TEMPLATE',@TEMPLATE WHERE @TEMPLATE IS NOT NULL
+   UNION ALL
+   SELECT N'MILL_ID',@MILL_ID WHERE @MILL_ID IS NOT NULL;
 
    INSERT INTO [dbo].[MaterialLotProperty] ([Value],[MaterialLotID],[PropertyType])
    SELECT t.value,@MaterialLotID,pt.ID
