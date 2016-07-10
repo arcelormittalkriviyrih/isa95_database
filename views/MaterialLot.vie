@@ -1,0 +1,25 @@
+﻿SET ANSI_NULLS ON;
+GO
+
+SET QUOTED_IDENTIFIER ON;
+GO
+
+
+CREATE VIEW [dbo].[v_MaterialLot]
+AS
+     SELECT *,
+            CASE [Status]
+                WHEN '0'
+                THEN N'Печать'
+                WHEN '1'
+                THEN N'Перемаркировка'
+                WHEN '2'
+                THEN N'Сортировка'
+                WHEN '3'
+                THEN N'Отбраковка'
+                WHEN '4'
+                THEN N'Разделение пачки'
+            END StatusName,
+            CreateTime AS CreatedDateTime
+     FROM [dbo].[MaterialLot] mlp;
+GO
