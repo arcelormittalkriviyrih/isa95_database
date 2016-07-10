@@ -18,7 +18,7 @@ FROM (SELECT eq.ID EquipmentID,
              kl.[COUNT_BAR]
       FROM dbo.Equipment eq
            INNER JOIN dbo.EquipmentProperty eqp ON (eqp.EquipmentID=eq.ID)
-           INNER JOIN dbo.EquipmentClassProperty ecp ON (ecp.ID=eqp.ClassPropertyID AND ecp.value=N'CONTROLLER_NO')
+           INNER JOIN dbo.EquipmentClassProperty ecp ON (ecp.ID=eqp.ClassPropertyID AND ecp.value=N'SCALES_NO')
            INNER JOIN dbo.KEP_logger kl ON (ISNUMERIC(eqp.value)=1 AND kl.[NUMBER_POCKET]=CAST(eqp.value AS INT) AND kl.[TIMESTAMP]>=DATEADD(hour,-1,GETDATE()))
      ) ww
 WHERE ww.RowNumber=1;

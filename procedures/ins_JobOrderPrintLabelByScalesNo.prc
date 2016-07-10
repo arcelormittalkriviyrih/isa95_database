@@ -1,14 +1,14 @@
 ﻿--------------------------------------------------------------
--- Процедура ins_JobOrderPrintLabelByControllerNo
-IF OBJECT_ID ('dbo.ins_JobOrderPrintLabelByControllerNo',N'P') IS NOT NULL
-   DROP PROCEDURE dbo.ins_JobOrderPrintLabelByControllerNo;
+-- Процедура ins_JobOrderPrintLabelByScalesNo
+IF OBJECT_ID ('dbo.ins_JobOrderPrintLabelByScalesNo',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_JobOrderPrintLabelByScalesNo;
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[ins_JobOrderPrintLabelByControllerNo]
-@CONTROLLER_NO   NVARCHAR(50),
+CREATE PROCEDURE [dbo].[ins_JobOrderPrintLabelByScalesNo]
+@SCALES_NO   NVARCHAR(50),
 @TIMESTAMP       DATETIME,
 @WEIGHT_FIX      INT,
 @AUTO_MANU       BIT
@@ -19,17 +19,17 @@ BEGIN
       DECLARE @EquipmentID      INT,
               @FactoryNumber    [NVARCHAR](12),
               @PrinterID        [NVARCHAR](50),
-              @MEASURE_TIME     [NVARCHAR](50),
               @JobOrderID       INT,
               @WorkType         [NVARCHAR](50),
               @WorkDefinitionID INT,
               @MaterialLotID    INT,
+              @Status           NVARCHAR(250),
               @err_message      NVARCHAR(255);
 
-      SET @EquipmentID=dbo.get_EquipmentIDByControllerNo(@CONTROLLER_NO);
+      SET @EquipmentID=dbo.get_EquipmentIDByScalesNo(@SCALES_NO);
       IF @EquipmentID IS NULL
          BEGIN
-            SET @err_message = N'By CONTROLLER_NO=[' + @CONTROLLER_NO + N'] EquipmentID not found';
+            SET @err_message = N'By SCALES_NO=[' + @SCALES_NO + N'] EquipmentID not found';
             THROW 60010, @err_message, 1;
          END;
 /*
@@ -50,11 +50,12 @@ BEGIN
       FROM [dbo].[JobOrder] jo INNER JOIN [dbo].[WorkRequest] wr ON (wr.[ID]=jo.[WorkRequest])
       WHERE jo.[ID]=@JobOrderID;
 
+      SET @Status=[dbo].[get_MaterialLotStatusByWorkType](@WorkType);
       IF @WorkType IN (N'Standard')
          BEGIN
             SET @FactoryNumber=[dbo].[get_GenMaterialLotNumber](@EquipmentID,NEXT VALUE FOR dbo.gen_MaterialLotNumber);
             EXEC [dbo].[ins_MaterialLot] @FactoryNumber = @FactoryNumber,
-                                         @Status        = N'0',
+                                         @Status        = @Status,
                                          @Quantity      = @WEIGHT_FIX,
                                          @MaterialLotID = @MaterialLotID OUTPUT;
          END;
@@ -62,7 +63,7 @@ BEGIN
          BEGIN
             SET @FactoryNumber=[dbo].[get_JobOrderPropertyValue](@JobOrderID,N'FACTORY_NUMBER');
             EXEC [dbo].[ins_MaterialLotWithLinks] @FactoryNumber       = @FactoryNumber,
-                                                  @Status              = N'1',
+                                                  @Status              = @Status,
                                                   @LinkedMaterialLotID = @MaterialLotID OUTPUT;
          END;
       ELSE IF @WorkType IN (N'Separate')
@@ -71,18 +72,22 @@ BEGIN
             SET @LinkFactoryNumber=[dbo].[get_GenMaterialLotNumber](@EquipmentID,NEXT VALUE FOR dbo.gen_MaterialLotNumber);
             SET @FactoryNumber=[dbo].[get_JobOrderPropertyValue](@JobOrderID,N'FACTORY_NUMBER');
             EXEC [dbo].[ins_MaterialLotWithLinks] @FactoryNumber       = @FactoryNumber,
-                                                  @Status              = N'1',
+                                                  @Status              = @Status,
                                                   @Quantity            = @WEIGHT_FIX,
                                                   @LinkFactoryNumber   = @LinkFactoryNumber,
                                                   @LinkedMaterialLotID = @MaterialLotID OUTPUT;
          END;
 
+      DECLARE @MEASURE_TIME [NVARCHAR](50),
+              @MILL_ID      NVARCHAR(50);
       SET @MEASURE_TIME=CONVERT(NVARCHAR,@TIMESTAMP,121);
+      SET @MILL_ID=[dbo].[get_EquipmentPropertyValue]([dbo].[get_ParentEquipmentIDByClass](@EquipmentID,N'MILL'),N'MILL_ID');
       SET @WorkDefinitionID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'WORK_DEFINITION_ID');
       EXEC [dbo].[ins_MaterialLotPropertyByWorkDefinition] @WorkDefinitionID = @WorkDefinitionID,
                                                            @MaterialLotID    = @MaterialLotID,
                                                            @MEASURE_TIME     = @MEASURE_TIME,
-                                                           @AUTO_MANU_VALUE  = @AUTO_MANU;
+                                                           @AUTO_MANU_VALUE  = @AUTO_MANU,
+                                                           @MILL_ID          = @MILL_ID;
 /*
       EXEC [dbo].[ins_MaterialLotPropertyByJobOrder] @MaterialLotID   = @MaterialLotID,
                                                      @JobOrderID      = @JobOrderID,
