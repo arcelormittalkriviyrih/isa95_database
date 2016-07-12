@@ -29,6 +29,8 @@ BEGIN
                                                  @PropertyType  = N'PACKS_LEFT',
                                                  @PropertyValue = @PropertyValue;
             END;
+		IF @PACKS_LEFT='1' 
+		  EXEC dbo.set_StandardMode @EquipmentID=@EquipmentID;
       END;
 END;
 GO

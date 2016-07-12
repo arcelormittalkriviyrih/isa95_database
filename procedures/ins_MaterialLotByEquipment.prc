@@ -20,16 +20,18 @@ DECLARE @MaterialLotID    INT,
         @AUTO_MANU_VALUE [NVARCHAR](50),
         @FactoryNumber   [NVARCHAR](12),
         @PrinterID       [NVARCHAR](50),
-        @Status          [NVARCHAR](250);
+        @Status          [NVARCHAR](250),
+	    @WorkType	     [NVARCHAR](50);
 
 SET @Status=N'0';
 SET @AUTO_MANU_VALUE=N'0';
+SET @WorkType = [dbo].[get_CurrentWorkType](@EquipmentID);
 
 IF @Quantity IS NOT NULL
    BEGIN
-      SET @Status=[dbo].[get_MaterialLotStatusByWorkType]([dbo].[get_CurrentWorkType](@EquipmentID));
+      SET @Status=[dbo].[get_MaterialLotStatusByWorkType](@WorkType);
       SET @AUTO_MANU_VALUE=N'1';
-	  SET @Quantity=dbo.get_RoundedWeightByEquipment(@EquipmentID,@Quantity);
+	  SET @Quantity=dbo.get_RoundedWeightByEquipment(@Quantity,@EquipmentID);
    END;
 
 SET @FactoryNumber=[dbo].[get_GenMaterialLotNumber](@EquipmentID,NEXT VALUE FOR dbo.gen_MaterialLotNumber);
@@ -56,5 +58,10 @@ IF @WorkDefinitionID IS NOT NULL
                                           @MaterialLotID = @MaterialLotID,
                                           @Command       = N'Print';
    END;
+
+   IF @WorkType = N'Separate'
+    EXEC [dbo].[set_DecreasePacksLeft] @EquipmentID=@EquipmentID;
+   IF @WorkType IN (N'Sort',N'Reject')
+		  EXEC dbo.set_StandardMode @EquipmentID=@EquipmentID; 
 END;
 GO

@@ -10,7 +10,7 @@ GO
 
 CREATE VIEW [dbo].[v_MaterialLotProperty]
 AS
-WITH MaterialLot AS (SELECT ml.[ID],
+WITH MaterialLotFilt AS (SELECT ml.[ID],
                             ml.[FactoryNumber],
                             ml.[Status],
                             ml.[Quantity]
@@ -29,7 +29,7 @@ SELECT mlp.[ID],
        mlp.[PropertyType] PropertyID,
        pt.[Value] Property,
        mlp.[Value]
-FROM [dbo].[MaterialLot] ml
+FROM MaterialLotFilt ml
      INNER JOIN [dbo].[MaterialLotProperty] mlp ON (mlp.[MaterialLotID]=ml.[ID])
      INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=mlp.[PropertyType]);
 GO

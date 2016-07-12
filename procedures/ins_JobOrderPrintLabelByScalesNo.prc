@@ -41,7 +41,7 @@ BEGIN
       ORDER BY jo.[StartTime] DESC;
 */
 
-	  SET @Weight_Rounded=dbo.get_RoundedWeightByEquipment(@EquipmentID,@WEIGHT_FIX);
+	  SET @Weight_Rounded=dbo.get_RoundedWeightByEquipment(@WEIGHT_FIX,@EquipmentID);
 
       SET @JobOrderID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'JOB_ORDER_ID');
       IF @JobOrderID IS NULL
@@ -68,7 +68,10 @@ BEGIN
             SET @FactoryNumber=[dbo].[get_JobOrderPropertyValue](@JobOrderID,N'FACTORY_NUMBER');
             EXEC [dbo].[ins_MaterialLotWithLinks] @FactoryNumber       = @FactoryNumber,
                                                   @Status              = @Status,
-                                                  @LinkedMaterialLotID = @MaterialLotID OUTPUT;
+												  @Quantity            = @Weight_Rounded,
+                                                  @MaterialLotID	   = @MaterialLotID OUTPUT;
+
+			EXEC dbo.set_StandardMode @EquipmentID=@EquipmentID;
          END;
       ELSE IF @WorkType IN (N'Separate')
          BEGIN
@@ -79,7 +82,9 @@ BEGIN
                                                   @Status              = @Status,
                                                   @Quantity            = @Weight_Rounded,
                                                   @LinkFactoryNumber   = @LinkFactoryNumber,
-                                                  @LinkedMaterialLotID = @MaterialLotID OUTPUT;
+                                                  @MaterialLotID	   = @MaterialLotID OUTPUT;
+
+			EXEC [dbo].[set_DecreasePacksLeft] @EquipmentID=@EquipmentID;
          END;
 
       DECLARE @MEASURE_TIME [NVARCHAR](50),

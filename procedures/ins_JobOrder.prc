@@ -50,10 +50,11 @@ BEGIN
                                          @EquipmentClassPropertyValue = N'STANDARD_JOB_ORDER_ID',
                                          @EquipmentPropertyValue = @EquipmentPropertyValue;
 
-   INSERT INTO [dbo].[OpMaterialRequirement] ([MaterialClassID],[MaterialDefinitionID],[JobOrderID])
-   SELECT md.[MaterialClassID],md.[ID],@JobOrderID
-   FROM [dbo].[MaterialDefinition] md
-   WHERE md.[ID]=@ProfileID;
+   if @ProfileID is not null	
+	   INSERT INTO [dbo].[OpMaterialRequirement] ([MaterialClassID],[MaterialDefinitionID],[JobOrderID])
+	   SELECT md.[MaterialClassID],md.[ID],@JobOrderID
+	   FROM [dbo].[MaterialDefinition] md
+	   WHERE md.[ID]=@ProfileID;
 
    INSERT INTO [dbo].[OpEquipmentRequirement] ([EquipmentClassID],[EquipmentID],[JobOrderID])
    SELECT eq.[EquipmentClassID],eq.[ID],@JobOrderID
