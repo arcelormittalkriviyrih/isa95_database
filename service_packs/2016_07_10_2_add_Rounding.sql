@@ -149,7 +149,7 @@ BEGIN
       ORDER BY jo.[StartTime] DESC;
 */
 
-	  SET @Weight_Rounded=dbo.get_RoundedWeightByEquipment(@EquipmentID,@WEIGHT_FIX);
+	  SET @Weight_Rounded=dbo.get_RoundedWeightByEquipment(@WEIGHT_FIX,@EquipmentID);
 
       SET @JobOrderID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'JOB_ORDER_ID');
       IF @JobOrderID IS NULL
@@ -248,7 +248,7 @@ IF @Quantity IS NOT NULL
    BEGIN
       SET @Status=[dbo].[get_MaterialLotStatusByWorkType]([dbo].[get_CurrentWorkType](@EquipmentID));
       SET @AUTO_MANU_VALUE=N'1';
-	  SET @Quantity=dbo.get_RoundedWeightByEquipment(@EquipmentID,@Quantity);
+	  SET @Quantity=dbo.get_RoundedWeightByEquipment(@Quantity,@EquipmentID);
    END;
 
 SET @FactoryNumber=[dbo].[get_GenMaterialLotNumber](@EquipmentID,NEXT VALUE FOR dbo.gen_MaterialLotNumber);
