@@ -12,3 +12,4 @@ BEGIN
    ALTER TABLE [dbo].[Files] ADD [PreviewID] int NULL;   
    ALTER TABLE [dbo].[Files] WITH CHECK ADD  CONSTRAINT [FK_Files_PreviewID] FOREIGN KEY([PreviewID]) REFERENCES [dbo].[Files] ([ID]);   
 END
+GO
