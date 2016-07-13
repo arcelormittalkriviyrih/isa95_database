@@ -1,6 +1,37 @@
-﻿SET NUMERIC_ROUNDABORT OFF;
+﻿SET ANSI_NULLS ON;
 GO
-SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER ON;
+GO
+
+DECLARE @EquipmentClassID int;
+
+SELECT @EquipmentClassID = ID
+FROM dbo.EquipmentClass
+WHERE Code = N'SCALES';
+
+IF NOT EXISTS
+(
+	SELECT NULL
+	FROM dbo.EquipmentClassProperty
+	WHERE [Value] = N'MAX_WEIGHT'
+)
+BEGIN
+	INSERT INTO dbo.EquipmentClassProperty( Description, [Value], EquipmentClassID )
+	VALUES( N'Максимальный допустимый вес', N'MAX_WEIGHT', @EquipmentClassID );
+END;
+
+
+INSERT INTO dbo.EquipmentProperty( [Value], EquipmentID, ClassPropertyID )
+	   SELECT N'8000', ID, dbo.get_EquipmentClassPropertyByValue( N'MAX_WEIGHT' )
+	   FROM Equipment
+	   WHERE EquipmentClassID = @EquipmentClassID AND 
+			 ID NOT IN
+	   (
+		   SELECT EquipmentID
+		   FROM EquipmentProperty
+		   WHERE ClassPropertyID = dbo.get_EquipmentClassPropertyByValue( N'MAX_WEIGHT' )
+	   );
 GO
 
 IF OBJECT_ID ('dbo.v_ScalesDetailInfo',N'V') IS NOT NULL
@@ -58,4 +89,4 @@ AS
 		  LEFT OUTER JOIN BarWeight bminW ON bminW.EquipmentId = ww.EquipmentID and bminW.PropertyType=N'MIN_WEIGHT'
 		  LEFT OUTER JOIN BarWeight bmaxW ON bmaxW.EquipmentId = ww.EquipmentID and bmaxW.PropertyType=N'MAX_WEIGHT'
           WHERE ww.RowNumber = 1;
-GO
+GO		  

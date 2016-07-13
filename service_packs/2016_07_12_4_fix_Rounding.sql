@@ -1,4 +1,8 @@
-﻿--------------------------------------------------------------
+﻿SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+--------------------------------------------------------------
 -- Функция округляет вес
 IF OBJECT_ID('dbo.get_RoundedWeight', N'FN') IS NOT NULL
     DROP FUNCTION dbo.get_RoundedWeight;
