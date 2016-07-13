@@ -1,10 +1,11 @@
-﻿--------------------------------------------------------------
+﻿SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+--------------------------------------------------------------
 -- Процедура ins_MaterialLotByEquipment
 IF OBJECT_ID ('dbo.ins_MaterialLotByEquipment',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_MaterialLotByEquipment;
-GO
-
-SET QUOTED_IDENTIFIER ON
 GO
 
 --------------------------------------------------------------
