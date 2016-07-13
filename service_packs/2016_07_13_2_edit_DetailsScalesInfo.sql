@@ -1,6 +1,7 @@
-﻿SET NUMERIC_ROUNDABORT OFF;
+﻿SET ANSI_NULLS ON;
 GO
-SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER ON;
 GO
 
 IF OBJECT_ID ('dbo.v_ScalesDetailInfo',N'V') IS NOT NULL
@@ -9,7 +10,7 @@ GO
 
 CREATE VIEW [dbo].[v_ScalesDetailInfo]
 AS
-	WITH BarWeight
+WITH BarWeight
           AS (SELECT cast(par.[Value] as float) PropertyValue,pr.[Value] PropertyType,
                      ep.EquipmentId
               FROM [PropertyTypes] pr,
@@ -59,4 +60,5 @@ AS
 		  LEFT OUTER JOIN BarWeight bminW ON bminW.EquipmentId = ww.EquipmentID and bminW.PropertyType=N'MIN_WEIGHT'
 		  LEFT OUTER JOIN BarWeight bmaxW ON bmaxW.EquipmentId = ww.EquipmentID and bmaxW.PropertyType=N'MAX_WEIGHT'
           WHERE ww.RowNumber = 1;
-GO
+
+GO	
