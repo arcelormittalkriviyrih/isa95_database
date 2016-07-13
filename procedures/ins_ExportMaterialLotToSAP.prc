@@ -14,52 +14,64 @@ BEGIN
 
    SET NOCOUNT ON;
 
-   IF @MaterialLotID IS NULL
-      RETURN;
+   --BEGIN TRY
 
-   DECLARE @FactoryNumber NVARCHAR(250),
-           @Quantity      INT,
-           @Status        NVARCHAR(250);
+      IF @MaterialLotID IS NULL
+         RETURN;
 
-   DECLARE @tblProperty   TABLE(ID          INT,
-                                Description NVARCHAR(50),
-                                Value       NVARCHAR(50));
+      DECLARE @FactoryNumber NVARCHAR(250),
+              @Quantity      INT,
+              @Status        NVARCHAR(250);
 
-   SELECT @FactoryNumber=[FactoryNumber],
-          @Quantity=[Quantity],
-          @Status=[Status]
-   FROM [dbo].[MaterialLot]
-   WHERE [ID]=@MaterialLotID;
+      DECLARE @tblProperty   TABLE(ID          INT,
+                                   Description NVARCHAR(50),
+                                   Value       NVARCHAR(50));
 
-   IF ISNULL(@Quantity,0)=0
-      RETURN;
+      SELECT @FactoryNumber=[FactoryNumber],
+             @Quantity=[Quantity],
+             @Status=[Status]
+      FROM [dbo].[MaterialLot]
+      WHERE [ID]=@MaterialLotID;
 
-   INSERT @tblProperty
-   SELECT mlp.PropertyType,pt.[Value],mlp.[Value]
-   FROM [dbo].[MaterialLotProperty] mlp INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID = mlp.PropertyType)
-   WHERE MaterialLotID=@MaterialLotID;
+      IF ISNULL(@Quantity,0)=0
+         RETURN;
 
-   INSERT OPENQUERY ([KRR-SQL23-ZPP],'SELECT AUFNR,MATNR,DATE_P,N_BIR,NSMEN,NBRIG,PARTY,BUNT,MAS,PLAVK,OLD_BIR,AUART,EO,N_ORDER,DT,EO_OLD,REZIM FROM ZPP.ZPP_WEIGHT_PROKAT')
-   VALUES ((SELECT t.[Value] FROM @tblProperty t WHERE t.[Description]=N'COMM_ORDER'), --AUFNR
-           (SELECT t.[Value] FROM @tblProperty t WHERE t.[Description]=N'MATERIAL_NO'), --MATNR
-           (SELECT CONVERT(DATE,t.[Value],104) FROM @tblProperty t WHERE t.[Description]=N'PROD_DATE' AND ISDATE(t.[Value])=1), --DATE_P
-            CAST(SUBSTRING(@FactoryNumber,9,12) AS NUMERIC(10,0)), --N_BIR
-           (SELECT CAST(t.[Value] AS NUMERIC(10,0)) FROM @tblProperty t WHERE t.[Description]=N'CHANGE_NO' AND ISNUMERIC(t.[Value])=1), --NSMEN
-           (SELECT CAST(t.[Value] AS NUMERIC(10,0)) FROM @tblProperty t WHERE t.[Description]=N'BRIGADE_NO' AND ISNUMERIC(t.[Value])=1), --NBRIG
-           (SELECT t.[Value] FROM @tblProperty t WHERE [Description]=N'PART_NO'), --PARTY
-           (SELECT CAST(t.[Value] AS NUMERIC(10,0)) FROM @tblProperty t WHERE t.[Description]=N'BUNT_NO' AND ISNUMERIC(t.[Value])=1), --BUNT
-            @Quantity, --MAS
-           (SELECT t.[Value] FROM @tblProperty t WHERE t.[Description]=N'MELT_NO'), --PLAVK
-            @Status, --OLD_BIR
-           (SELECT t.[Value] FROM @tblProperty t WHERE t.[Description]=N'MILL_ID'), --AUART
-            @FactoryNumber, --EO
-           (SELECT CAST(t.[Value] AS NUMERIC(9,0)) FROM @tblProperty t WHERE t.[Description]=N'LEAVE_NO' AND ISNUMERIC(t.[Value])=1), --N_ORDER,
-           (SELECT CONVERT(DATETIME,t.[Value],121) FROM @tblProperty t WHERE t.[Description]=N'MEASURE_TIME' AND ISDATE(t.[Value])=1), --DT,
-           (SELECT TOP 1 mm.[FactoryNumber]
-            FROM [dbo].[MaterialLotLinks] ml INNER JOIN [dbo].[MaterialLot] mm ON (mm.[ID]=ml.[MaterialLot1])
-            WHERE (ml.[MaterialLot2]=@MaterialLotID)), --EO_OLD,
-           (SELECT CAST(t.[Value] AS NUMERIC) FROM @tblProperty t WHERE t.[Description]=N'AUTO_MANU_VALUE' AND ISNUMERIC(t.[Value])=1) --REZIM
-          );
+      INSERT @tblProperty
+      SELECT mlp.PropertyType,pt.[Value],mlp.[Value]
+      FROM [dbo].[MaterialLotProperty] mlp INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID = mlp.PropertyType)
+      WHERE MaterialLotID=@MaterialLotID;
+
+      SET XACT_ABORT ON;
+
+      INSERT OPENQUERY ([KRR-SQL23-ZPP],'SELECT AUFNR,MATNR,DATE_P,N_BIR,NSMEN,NBRIG,PARTY,BUNT,MAS,PLAVK,OLD_BIR,AUART,EO,N_ORDER,DT,EO_OLD,REZIM FROM ZPP.ZPP_WEIGHT_PROKAT')
+      VALUES ((SELECT t.[Value] FROM @tblProperty t WHERE t.[Description]=N'COMM_ORDER'), --AUFNR
+              (SELECT t.[Value] FROM @tblProperty t WHERE t.[Description]=N'MATERIAL_NO' AND EXISTS (SELECT NULL FROM @tblProperty tt WHERE tt.[Description]=N'NEMERA' AND UPPER(tt.[Value])=N'TRUE')), --MATNR
+              (SELECT CONVERT(DATE,t.[Value],104) FROM @tblProperty t WHERE t.[Description]=N'PROD_DATE' AND ISDATE(t.[Value])=1), --DATE_P
+               CAST(SUBSTRING(@FactoryNumber,9,12) AS NUMERIC(10,0)), --N_BIR
+              (SELECT CAST(t.[Value] AS NUMERIC(10,0)) FROM @tblProperty t WHERE t.[Description]=N'CHANGE_NO' AND ISNUMERIC(t.[Value])=1), --NSMEN
+              (SELECT CAST(t.[Value] AS NUMERIC(10,0)) FROM @tblProperty t WHERE t.[Description]=N'BRIGADE_NO' AND ISNUMERIC(t.[Value])=1), --NBRIG
+              (SELECT t.[Value] FROM @tblProperty t WHERE [Description]=N'PART_NO'), --PARTY
+              (SELECT CAST(t.[Value] AS NUMERIC(10,0)) FROM @tblProperty t WHERE t.[Description]=N'BUNT_NO' AND ISNUMERIC(t.[Value])=1), --BUNT
+               @Quantity, --MAS
+              (SELECT t.[Value] FROM @tblProperty t WHERE t.[Description]=N'MELT_NO'), --PLAVK
+               @Status, --OLD_BIR
+              (SELECT t.[Value] FROM @tblProperty t WHERE t.[Description]=N'MILL_ID'), --AUART
+               @FactoryNumber, --EO
+              (SELECT CAST(t.[Value] AS NUMERIC(9,0)) FROM @tblProperty t WHERE t.[Description]=N'LEAVE_NO' AND ISNUMERIC(t.[Value])=1), --N_ORDER,
+              (SELECT CONVERT(DATETIME,t.[Value],121) FROM @tblProperty t WHERE t.[Description]=N'MEASURE_TIME' AND ISDATE(t.[Value])=1), --DT,
+              (SELECT TOP 1 mm.[FactoryNumber]
+               FROM [dbo].[MaterialLotLinks] ml INNER JOIN [dbo].[MaterialLot] mm ON (mm.[ID]=ml.[MaterialLot1])
+               WHERE (ml.[MaterialLot2]=@MaterialLotID)), --EO_OLD,
+              (SELECT CAST(t.[Value] AS NUMERIC) FROM @tblProperty t WHERE t.[Description]=N'AUTO_MANU_VALUE' AND ISNUMERIC(t.[Value])=1) --REZIM
+             );
+
+   --END TRY
+
+   --BEGIN CATCH
+
+   --  EXEC [dbo].[ins_ErrorLog];
+
+   --END CATCH
 
 END;
 GO

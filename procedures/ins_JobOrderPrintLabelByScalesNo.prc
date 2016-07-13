@@ -68,10 +68,10 @@ BEGIN
             SET @FactoryNumber=[dbo].[get_JobOrderPropertyValue](@JobOrderID,N'FACTORY_NUMBER');
             EXEC [dbo].[ins_MaterialLotWithLinks] @FactoryNumber       = @FactoryNumber,
                                                   @Status              = @Status,
-												  @Quantity            = @Weight_Rounded,
-                                                  @MaterialLotID	   = @MaterialLotID OUTPUT;
+                                                  @Quantity            = @Weight_Rounded,
+                                                  @MaterialLotID	     = @MaterialLotID OUTPUT;
 
-			EXEC dbo.set_StandardMode @EquipmentID=@EquipmentID;
+            EXEC dbo.set_StandardMode @EquipmentID=@EquipmentID;
          END;
       ELSE IF @WorkType IN (N'Separate')
          BEGIN
@@ -82,21 +82,24 @@ BEGIN
                                                   @Status              = @Status,
                                                   @Quantity            = @Weight_Rounded,
                                                   @LinkFactoryNumber   = @LinkFactoryNumber,
-                                                  @MaterialLotID	   = @MaterialLotID OUTPUT;
+                                                  @MaterialLotID	     = @MaterialLotID OUTPUT;
 
-			EXEC [dbo].[set_DecreasePacksLeft] @EquipmentID=@EquipmentID;
+            EXEC [dbo].[set_DecreasePacksLeft] @EquipmentID=@EquipmentID;
          END;
 
-      DECLARE @MEASURE_TIME [NVARCHAR](50),
-              @MILL_ID      NVARCHAR(50);
+      DECLARE @MEASURE_TIME NVARCHAR(50),
+              @MILL_ID      NVARCHAR(50),
+              @NEMERA       NVARCHAR(50);
       SET @MEASURE_TIME=CONVERT(NVARCHAR,@TIMESTAMP,121);
       SET @MILL_ID=[dbo].[get_EquipmentPropertyValue]([dbo].[get_ParentEquipmentIDByClass](@EquipmentID,N'MILL'),N'MILL_ID');
       SET @WorkDefinitionID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'WORK_DEFINITION_ID');
+      SET @NEMERA=[dbo].[get_JobOrderPropertyValue](@JobOrderID,N'NEMERA');
       EXEC [dbo].[ins_MaterialLotPropertyByWorkDefinition] @WorkDefinitionID = @WorkDefinitionID,
                                                            @MaterialLotID    = @MaterialLotID,
                                                            @MEASURE_TIME     = @MEASURE_TIME,
                                                            @AUTO_MANU_VALUE  = @AUTO_MANU,
-                                                           @MILL_ID          = @MILL_ID;
+                                                           @MILL_ID          = @MILL_ID,
+                                                           @NEMERA           = @NEMERA;
 /*
       EXEC [dbo].[ins_MaterialLotPropertyByJobOrder] @MaterialLotID   = @MaterialLotID,
                                                      @JobOrderID      = @JobOrderID,
