@@ -1,0 +1,124 @@
+﻿--------------------------------------------------------------
+-- Процедура для тестовой печати бирки ins_MaterialLotForTestPrint
+IF OBJECT_ID ('dbo.ins_MaterialLotForTestPrint',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_MaterialLotForTestPrint;
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[ins_MaterialLotForTestPrint]
+@COMM_ORDER      NVARCHAR(50) = NULL,
+@PROD_ORDER      NVARCHAR(50) = NULL,
+@CONTRACT_NO     NVARCHAR(50) = NULL,
+@DIRECTION       NVARCHAR(50) = NULL,
+@SIZE            NVARCHAR(50) = NULL,
+@LENGTH          NVARCHAR(50) = NULL,
+@TOLERANCE       NVARCHAR(50) = NULL,
+@CLASS           NVARCHAR(50) = NULL,
+@STEEL_CLASS     NVARCHAR(50) = NULL,
+@MELT_NO         NVARCHAR(50) = NULL,
+@PART_NO         NVARCHAR(50) = NULL,
+@MIN_ROD         NVARCHAR(50) = NULL,
+@BUYER_ORDER_NO  NVARCHAR(50) = NULL,
+@BRIGADE_NO      NVARCHAR(50) = NULL,
+@PROD_DATE       NVARCHAR(50) = NULL,
+@UTVK            NVARCHAR(50) = NULL,
+@LEAVE_NO        NVARCHAR(50) = NULL,
+@MATERIAL_NO     NVARCHAR(50) = NULL,
+@BUNT_DIA        NVARCHAR(50) = NULL,
+@BUNT_NO         NVARCHAR(50) = NULL,
+@PRODUCT         NVARCHAR(50) = NULL,
+@STANDARD        NVARCHAR(50) = NULL,
+@CHEM_ANALYSIS   NVARCHAR(50) = NULL,
+@TEMPLATE        NVARCHAR(50) = NULL
+AS
+BEGIN
+
+DECLARE @MaterialLotID INT;
+
+EXEC [dbo].[ins_MaterialLot] @FactoryNumber = N'0',
+                             @Status        = N'0',
+                             @Quantity      = NULL,
+                             @MaterialLotID = @MaterialLotID OUTPUT;
+
+   DECLARE @tblParams TABLE(ID    NVARCHAR(50),
+                            Value NVARCHAR(50));
+
+   INSERT @tblParams
+   SELECT N'COMM_ORDER',@COMM_ORDER WHERE @COMM_ORDER IS NOT NULL
+   UNION ALL
+   SELECT N'PROD_ORDER',@PROD_ORDER WHERE @PROD_ORDER IS NOT NULL
+   UNION ALL
+   SELECT N'CONTRACT_NO',@CONTRACT_NO WHERE @CONTRACT_NO IS NOT NULL
+   UNION ALL
+   SELECT N'DIRECTION',@DIRECTION WHERE @DIRECTION IS NOT NULL
+   UNION ALL
+   SELECT N'SIZE',@SIZE WHERE @SIZE IS NOT NULL
+   UNION ALL
+   SELECT N'LENGTH',@LENGTH WHERE @LENGTH IS NOT NULL
+   UNION ALL
+   SELECT N'TOLERANCE',@TOLERANCE WHERE @TOLERANCE IS NOT NULL
+   UNION ALL
+   SELECT N'CLASS',@CLASS WHERE @CLASS IS NOT NULL
+   UNION ALL
+   SELECT N'STEEL_CLASS',@STEEL_CLASS WHERE @STEEL_CLASS IS NOT NULL
+   UNION ALL
+   SELECT N'MELT_NO',@MELT_NO WHERE @MELT_NO IS NOT NULL
+   UNION ALL
+   SELECT N'PART_NO',@PART_NO WHERE @PART_NO IS NOT NULL
+   UNION ALL
+   SELECT N'MIN_ROD',@MIN_ROD WHERE @MIN_ROD IS NOT NULL
+   UNION ALL
+   SELECT N'BUYER_ORDER_NO',@BUYER_ORDER_NO WHERE @BUYER_ORDER_NO IS NOT NULL
+   UNION ALL
+   SELECT N'BRIGADE_NO',@BRIGADE_NO WHERE @BRIGADE_NO IS NOT NULL
+   UNION ALL
+   SELECT N'PROD_DATE',@PROD_DATE WHERE @PROD_DATE IS NOT NULL
+   UNION ALL
+   SELECT N'UTVK',@UTVK WHERE @UTVK IS NOT NULL
+   UNION ALL
+   SELECT N'LEAVE_NO',@LEAVE_NO WHERE @LEAVE_NO IS NOT NULL
+   UNION ALL
+   SELECT N'MATERIAL_NO',@MATERIAL_NO WHERE @MATERIAL_NO IS NOT NULL
+   UNION ALL
+   SELECT N'BUNT_DIA',@BUNT_DIA WHERE @BUNT_DIA IS NOT NULL
+   UNION ALL
+   SELECT N'BUNT_NO',@BUNT_NO WHERE @BUNT_NO IS NOT NULL
+   UNION ALL
+   SELECT N'PRODUCT',@PRODUCT WHERE @PRODUCT IS NOT NULL
+   UNION ALL
+   SELECT N'STANDARD',@STANDARD WHERE @STANDARD IS NOT NULL
+   UNION ALL
+   SELECT N'CHEM_ANALYSIS',@CHEM_ANALYSIS WHERE @CHEM_ANALYSIS IS NOT NULL
+   UNION ALL
+   SELECT N'TEMPLATE',@TEMPLATE WHERE @TEMPLATE IS NOT NULL;
+
+   INSERT INTO [dbo].[MaterialLotProperty] ([Value],[MaterialLotID],[PropertyType])
+   SELECT t.value,@MaterialLotID,pt.ID
+   FROM @tblParams t INNER JOIN [dbo].[PropertyTypes] pt ON (pt.value=t.ID);
+
+   DECLARE @PrinterID NVARCHAR(50);
+
+   DECLARE selPrinters CURSOR FOR SELECT pp.[Value]
+                                  FROM [dbo].[PersonProperty] pp
+                                       INNER JOIN [dbo].[PersonnelClassProperty] pcp ON (pcp.[ID]=pp.[ClassPropertyID] AND pcp.[Value]=N'TEST_PRINTER')
+                                  WHERE pp.[PersonID]=[dbo].[get_CurrentPerson]();
+
+   OPEN selPrinters
+
+   FETCH NEXT FROM selPrinters INTO @PrinterID
+   WHILE @@FETCH_STATUS = 0
+   BEGIN
+
+      EXEC [dbo].[ins_JobOrderPrintLabel] @PrinterID     = @PrinterID,
+                                          @MaterialLotID = @MaterialLotID,
+                                          @Command       = N'Print';
+
+      FETCH NEXT FROM selPrinters INTO @PrinterID
+   END
+   CLOSE selPrinters;
+   DEALLOCATE selPrinters;
+
+END;
+GO
