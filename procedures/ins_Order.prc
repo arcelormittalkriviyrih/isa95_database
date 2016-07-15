@@ -24,7 +24,7 @@ CREATE PROCEDURE [dbo].[ins_Order]
 @BRIGADE_NO     NVARCHAR(50) = NULL,
 @PROD_DATE      NVARCHAR(50) = NULL,
 @UTVK           NVARCHAR(50) = NULL,
-@LEAVE_NO       NVARCHAR(50) = NULL,
+@CHANGE_NO      NVARCHAR(50) = NULL,
 @MATERIAL_NO    NVARCHAR(50) = NULL,
 @BUNT_DIA       NVARCHAR(50) = NULL,
 @BUNT_NO        NVARCHAR(50) = NULL,
@@ -60,6 +60,13 @@ BEGIN
     THROW 60001, N'Параметр "Шаблон бирки" обязательный', 1;
    ELSE IF @TEMPLATE IS NOT NULL AND NOT EXISTS (SELECT NULL FROM [dbo].[Files] WHERE [FileType]=N'Excel label' AND [ID]=@TEMPLATE)
       THROW 60010, N'Указанный Excel шаблон не существует в таблице Files', 1;
+	
+	BEGIN TRY
+		SELECT CAST(@COMM_ORDER AS NUMERIC(11,0))
+	END TRY
+	BEGIN CATCH
+		 THROW 60001, N'Параметр "Коммерческий заказ" должен быть числом', 1;
+	END CATCH;
 
    SET @OperationsRequestID=NEXT VALUE FOR [dbo].[gen_OperationsRequest];
    INSERT INTO [dbo].[OperationsRequest] ([ID]) VALUES (@OperationsRequestID);
@@ -100,7 +107,7 @@ BEGIN
    UNION ALL
    SELECT N'UTVK',@UTVK WHERE @UTVK IS NOT NULL
    UNION ALL
-   SELECT N'LEAVE_NO',@LEAVE_NO WHERE @LEAVE_NO IS NOT NULL
+   SELECT N'CHANGE_NO',@CHANGE_NO WHERE @CHANGE_NO IS NOT NULL
    UNION ALL
    SELECT N'MATERIAL_NO',@MATERIAL_NO WHERE @MATERIAL_NO IS NOT NULL
    UNION ALL

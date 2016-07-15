@@ -25,8 +25,9 @@ CREATE PROCEDURE [dbo].[ins_WorkRequest]
 @NEMERA           NVARCHAR(50) = NULL,
 @FACTORY_NUMBER   NVARCHAR(50) = NULL,
 @PACKS_LEFT       NVARCHAR(50) = NULL,
+@BINDING_DIA      NVARCHAR(50) = NULL,
+@BINDING_QTY      NVARCHAR(50) = NULL,
 @WorkRequestID    INT OUTPUT
-
 AS
 BEGIN
 
@@ -66,6 +67,8 @@ BEGIN
                              @NEMERA          = @NEMERA,
                              @FACTORY_NUMBER  = @FACTORY_NUMBER,
                              @PACKS_LEFT      = @PACKS_LEFT,
+                             @BINDING_DIA     = @BINDING_DIA,
+                             @BINDING_QTY     = @BINDING_QTY,
                              @JobOrderID      = @JobOrderID OUTPUT;
 
 END;

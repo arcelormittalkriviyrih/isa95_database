@@ -42,6 +42,13 @@ BEGIN
    ELSE IF @COMM_ORDER IS NULL
       THROW 60001, N'Параметр "Коммерческий заказ" обязательный', 1;
 
+	 BEGIN TRY
+		SELECT CAST(@COMM_ORDER AS NUMERIC(11,0))
+	END TRY
+	BEGIN CATCH
+		 THROW 60001, N'Параметр "Коммерческий заказ" должен быть числом', 1;
+	END CATCH;
+
    DECLARE @MaterialLotID       INT,
            @PrinterID           NVARCHAR(50),
            @err_message         NVARCHAR(255);
@@ -58,6 +65,8 @@ BEGIN
 
    INSERT @tblParams
    SELECT N'COMM_ORDER',@COMM_ORDER WHERE @COMM_ORDER IS NOT NULL
+   UNION ALL
+   SELECT N'LEAVE_NO',CAST(CAST(@COMM_ORDER AS NUMERIC(11,0))-5000000000 as nvarchar(50)) WHERE @COMM_ORDER IS NOT NULL
    UNION ALL
    SELECT N'PROD_ORDER',@PROD_ORDER WHERE @PROD_ORDER IS NOT NULL
    UNION ALL

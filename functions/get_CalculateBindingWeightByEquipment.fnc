@@ -24,7 +24,7 @@ AS
                          SET @BINDING_DIA = dbo.get_JobOrderPropertyValue(@JobOrderID, N'BINDING_DIA');
                          SET @BINDING_WEIGHT_COEF =
                          (
-                             SELECT mdpCoef.[Value]
+                             SELECT cast(REPLACE(mdpCoef.[Value],',','.') as float)
                              FROM MaterialDefinitionProperty mdpQty
                                   INNER JOIN MaterialClassProperty mcpQty ON mcpQty.ID = mdpQty.ClassPropertyID
                                                                              AND mcpQty.[Value] = N'BINDING_QTY'

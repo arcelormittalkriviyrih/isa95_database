@@ -21,7 +21,9 @@ CREATE PROCEDURE [dbo].[ins_WorkRequestStandart]
 @DEVIATION        NVARCHAR(50),
 @SANDWICH_MODE    NVARCHAR(50),
 @AUTO_MANU_VALUE  NVARCHAR(50),
-@NEMERA           NVARCHAR(50)
+@NEMERA           NVARCHAR(50),
+@BINDING_DIA      NVARCHAR(50),
+@BINDING_QTY      NVARCHAR(50)
 AS
 BEGIN
 
@@ -42,6 +44,8 @@ BEGIN
                                 @SANDWICH_MODE   = @SANDWICH_MODE,
                                 @AUTO_MANU_VALUE = @AUTO_MANU_VALUE,
                                 @NEMERA          = @NEMERA,
+                                @BINDING_DIA     = @BINDING_DIA,
+                                @BINDING_QTY     = @BINDING_QTY,
                                 @WorkRequestID   = @WorkRequestID OUTPUT;
 
    EXEC [dbo].[ins_JobOrderOPCCommandMaxWeight] @WorkRequestID = @WorkRequestID,

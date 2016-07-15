@@ -21,7 +21,7 @@ DECLARE @MaterialLotID    INT,
         @FactoryNumber   [NVARCHAR](12),
         @PrinterID       [NVARCHAR](50),
         @Status          [NVARCHAR](250),
-	   @JobOrderID      INT,
+	    @JobOrderID      INT,
         @WorkType	     [NVARCHAR](50);
 
 SET @Status=N'0';

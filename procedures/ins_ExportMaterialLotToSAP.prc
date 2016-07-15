@@ -57,7 +57,7 @@ BEGIN
                @Status, --OLD_BIR
               (SELECT t.[Value] FROM @tblProperty t WHERE t.[Description]=N'MILL_ID'), --AUART
                @FactoryNumber, --EO
-              (SELECT tt.COMM_ORDER FROM (SELECT CAST(t.[Value] AS NUMERIC(9,0))-5000000000 COMM_ORDER FROM @tblProperty t WHERE t.[Description]=N'COMM_ORDER' AND ISNUMERIC(t.[Value])=1) tt WHERE SIGN(tt.COMM_ORDER)>=0), --N_ORDER,
+              (SELECT CAST(t.[Value] AS NUMERIC(10,0)) FROM @tblProperty t WHERE t.[Description]=N'LEAVE_NO' AND ISNUMERIC(t.[Value])=1), --N_ORDER,
               (SELECT CONVERT(DATETIME,t.[Value],121) FROM @tblProperty t WHERE t.[Description]=N'MEASURE_TIME' AND ISDATE(t.[Value])=1), --DT,
               (SELECT TOP 1 mm.[FactoryNumber]
                FROM [dbo].[MaterialLotLinks] ml INNER JOIN [dbo].[MaterialLot] mm ON (mm.[ID]=ml.[MaterialLot1])
