@@ -14,6 +14,7 @@ AS
          DECLARE @RoundPrecision INT, @RoundRule [NVARCHAR](50);
          SET @RoundRule = dbo.get_EquipmentPropertyValue(@EquipmentID, N'ROUND_RULE');
          SET @RoundPrecision = dbo.get_EquipmentPropertyValue(@EquipmentID, N'ROUND_PRECISION');
+	    SET @WeightValue = dbo.get_CalculateBindingWeightByEquipment(@EquipmentID,@WeightValue);
          RETURN dbo.[get_RoundedWeight](@WeightValue, @RoundRule, @RoundPrecision);
      END;
 GO
