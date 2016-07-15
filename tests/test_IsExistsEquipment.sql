@@ -13,7 +13,7 @@ BEGIN
 
    SET NOCOUNT ON;
 
-   IF EXISTS (SELECT NULL FROM [dbo].[Equipment])
+   IF NOT EXISTS (SELECT NULL FROM [dbo].[Equipment])
       THROW 60010, '[dbo].[Equipment] table is empty', 1;
 
 END;

@@ -1,0 +1,1 @@
+sqlcmd -S krr-tst-pahwl02 -d KRR-PA-ISA95_PRODUCTION -i "%WORKSPACE%\tests\exec_test_procedures.prc"
