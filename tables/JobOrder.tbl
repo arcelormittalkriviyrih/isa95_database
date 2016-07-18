@@ -1,0 +1,6 @@
+IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='i1_JobOrder_StartTime_WorkType' AND object_id = OBJECT_ID('[dbo].[JobOrder]'))
+   DROP INDEX [i1_JobOrder_StartTime_WorkType] ON [dbo].[JobOrder]
+GO
+
+CREATE INDEX i1_JobOrder_StartTime_WorkType ON [dbo].[JobOrder] ([StartTime] ASC, [WorkType] ASC)
+GO
