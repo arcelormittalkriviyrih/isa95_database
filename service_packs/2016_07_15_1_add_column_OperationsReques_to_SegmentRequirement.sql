@@ -1,5 +1,5 @@
 Alter table SegmentRequirement
-add OperationsRequest int not null
+add OperationsRequest int null
 go
 
 Alter table SegmentRequirement
