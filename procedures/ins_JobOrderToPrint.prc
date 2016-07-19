@@ -42,6 +42,9 @@ BEGIN
    FROM [dbo].[PropertyTypes] pt
    WHERE pt.[Value]=N'MaterialLotID';
 
+   IF @Command=N'Print'
+      EXEC DBO.[ins_ExportMaterialLotToSAP] @MaterialLotID=@MaterialLotID;
+
 END;
 GO
 

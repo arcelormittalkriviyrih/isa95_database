@@ -41,7 +41,19 @@ IF @WorkType IN (N'Sort',N'Reject')
 ELSE 
     SET @FactoryNumber=[dbo].[get_GenMaterialLotNumber](@EquipmentID,NEXT VALUE FOR dbo.gen_MaterialLotNumber);
 
-EXEC [dbo].[ins_MaterialLot] @FactoryNumber = @FactoryNumber,
+if @WorkType IN (N'Separate')
+	begin
+		DECLARE @LinkFactoryNumber   [NVARCHAR](12);
+        SET @LinkFactoryNumber=[dbo].[get_GenMaterialLotNumber](@EquipmentID,NEXT VALUE FOR dbo.gen_MaterialLotNumber);
+        SET @FactoryNumber=[dbo].[get_JobOrderPropertyValue](@JobOrderID,N'FACTORY_NUMBER');
+        EXEC [dbo].[ins_MaterialLotWithLinks] @FactoryNumber       = @FactoryNumber,
+                                                  @Status              = @Status,
+                                                  @Quantity            = @Quantity,
+                                                  @LinkFactoryNumber   = @LinkFactoryNumber,
+                                                  @MaterialLotID	     = @MaterialLotID OUTPUT;
+	end
+else
+	EXEC [dbo].[ins_MaterialLot] @FactoryNumber = @FactoryNumber,
                              @Status        = @Status,
                              @Quantity      = @Quantity,
                              @MaterialLotID = @MaterialLotID OUTPUT;

@@ -59,9 +59,12 @@ BEGIN
                @FactoryNumber, --EO
               (SELECT CAST(t.[Value] AS NUMERIC(10,0)) FROM @tblProperty t WHERE t.[Description]=N'LEAVE_NO' AND ISNUMERIC(t.[Value])=1), --N_ORDER,
               (SELECT CONVERT(DATETIME,t.[Value],121) FROM @tblProperty t WHERE t.[Description]=N'MEASURE_TIME' AND ISDATE(t.[Value])=1), --DT,
-              (SELECT TOP 1 mm.[FactoryNumber]
-               FROM [dbo].[MaterialLotLinks] ml INNER JOIN [dbo].[MaterialLot] mm ON (mm.[ID]=ml.[MaterialLot1])
-               WHERE (ml.[MaterialLot2]=@MaterialLotID)), --EO_OLD,
+              (CASE @Status
+				WHEN '1' THEN NULL
+				ELSE (SELECT TOP 1 mm.[FactoryNumber]
+					   FROM [dbo].[MaterialLotLinks] ml INNER JOIN [dbo].[MaterialLot] mm ON (mm.[ID]=ml.[MaterialLot1])
+					   WHERE (ml.[MaterialLot2]=@MaterialLotID))
+			    END), --EO_OLD,
               (SELECT ABS(CAST(t.[Value] AS NUMERIC)-1) FROM @tblProperty t WHERE t.[Description]=N'AUTO_MANU_VALUE' AND ISNUMERIC(t.[Value])=1) --REZIM
              );
 
