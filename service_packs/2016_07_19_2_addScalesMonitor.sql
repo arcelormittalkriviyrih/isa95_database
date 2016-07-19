@@ -1,4 +1,58 @@
-﻿SET NUMERIC_ROUNDABORT OFF;
+SET NUMERIC_ROUNDABORT OFF;
+GO
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
+GO
+
+IF OBJECT_ID ('dbo.v_ScalesMonitorInfo',N'V') IS NOT NULL
+   DROP VIEW dbo.[v_ScalesMonitorInfo];
+GO
+
+CREATE VIEW [dbo].[v_ScalesMonitorInfo]
+AS
+     WITH BarWeight
+          AS (SELECT CAST(par.[Value] AS FLOAT) PropertyValue,
+                     pr.[Value] PropertyType,
+                     ep.EquipmentId
+              FROM [PropertyTypes] pr,
+                   [dbo].[Parameter] par,
+                   dbo.[EquipmentProperty] ep
+              WHERE pr.[Value] IN(N'BAR_WEIGHT', N'BAR_QUANTITY')
+              AND pr.ID = par.PropertyType
+              AND ep.[ClassPropertyID] = dbo.get_EquipmentClassPropertyByValue(N'JOB_ORDER_ID')
+          AND ep.[Value] = par.JobOrder),
+          Kep_Data
+          AS (SELECT *
+              FROM
+              (
+                  SELECT ROW_NUMBER() OVER(PARTITION BY kl.[NUMBER_POCKET] ORDER BY kl.[TIMESTAMP] DESC) RowNumber,
+                         kl.[WEIGHT_CURRENT],
+                         kl.[AUTO_MANU],
+                         kl.[POCKET_LOC],
+                         kl.[NUMBER_POCKET]
+                  FROM dbo.KEP_logger kl
+                  WHERE kl.[TIMESTAMP] >= DATEADD(hour, -1, GETDATE())
+              ) ww
+              WHERE ww.RowNumber = 1)
+          SELECT eq.ID AS ID,
+                 eq.[Description] AS ScalesName,
+                 dbo.get_RoundedWeightByEquipment(kd.WEIGHT_CURRENT, eq.ID) WEIGHT_CURRENT,
+                 kd.AUTO_MANU,
+                 kd.POCKET_LOC,
+                 CAST(FLOOR(dbo.get_RoundedWeightByEquipment(kd.WEIGHT_CURRENT, eq.ID) / bw.PropertyValue) AS   INT) RodsQuantity,
+                 CAST(bQty.PropertyValue AS INT)		BAR_QUANTITY
+          FROM dbo.Equipment eq
+               INNER JOIN dbo.EquipmentProperty eqp ON(eqp.EquipmentID = eq.ID)
+               INNER JOIN dbo.EquipmentClassProperty ecp ON(ecp.ID = eqp.ClassPropertyID
+                                                            AND ecp.value = N'SCALES_NO')
+               LEFT OUTER JOIN Kep_Data kd ON(ISNUMERIC(eqp.value) = 1
+                                              AND kd.[NUMBER_POCKET] = CAST(eqp.value AS INT))
+               LEFT OUTER JOIN BarWeight bw ON bw.EquipmentId = eq.ID
+                                               AND bw.PropertyType = N'BAR_WEIGHT'
+               LEFT OUTER JOIN BarWeight bQty ON bQty.EquipmentId = eq.ID
+                                                  AND bQty.PropertyType = N'BAR_QUANTITY';
+GO
+
+SET NUMERIC_ROUNDABORT OFF;
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
