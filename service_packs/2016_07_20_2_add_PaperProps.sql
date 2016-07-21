@@ -1,4 +1,4 @@
-SET ANSI_NULLS ON;
+п»їSET ANSI_NULLS ON;
 GO
 
 SET QUOTED_IDENTIFIER ON;
@@ -18,7 +18,7 @@ IF NOT EXISTS
 )
 BEGIN
 	INSERT INTO dbo.EquipmentClassProperty( Description, [Value], EquipmentClassID )
-	VALUES( N'Ширина бумаги в px', N'PAPER_WIDTH', @EquipmentClassID );
+	VALUES( N'РЁРёСЂРёРЅР° Р±СѓРјР°РіРё РІ px', N'PAPER_WIDTH', @EquipmentClassID );
 END;
 
 INSERT INTO dbo.EquipmentProperty( [Value], EquipmentID, ClassPropertyID )
@@ -40,7 +40,7 @@ IF NOT EXISTS
 )
 BEGIN
 	INSERT INTO dbo.EquipmentClassProperty( Description, [Value], EquipmentClassID )
-	VALUES( N'Высота бумаги в px', N'PAPER_HEIGHT', @EquipmentClassID );
+	VALUES( N'Р’С‹СЃРѕС‚Р° Р±СѓРјР°РіРё РІ px', N'PAPER_HEIGHT', @EquipmentClassID );
 END;
 
 
