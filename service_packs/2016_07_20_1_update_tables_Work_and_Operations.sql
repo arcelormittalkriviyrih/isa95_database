@@ -1,8 +1,4 @@
 alter table WorkClass
-alter column OperationsClassID int null
-go
-
-alter table WorkClass
 alter column Description nvarchar(50) null
 go
 
