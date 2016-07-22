@@ -1,0 +1,23 @@
+﻿SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE VIEW [dbo].[v_SAPOrderRequest]
+WITH ENCRYPTION
+AS
+SELECT p.ID,
+	   pt.[Value] PropertyType,
+       case pt.[Value]
+	   when N'SAP_SERVICE_LOGIN' then DecryptByPassPhrase (N'arcelor',p.[Value])
+	   when N'SAP_SERVICE_PASS' then DecryptByPassPhrase (N'arcelor',p.[Value])
+	   ELSE p.[Value]
+	   end [Value]
+FROM JobOrder o,
+     [Parameter] p,
+     dbo.PropertyTypes pt
+WHERE WorkType = 'SAPOrderRequest'
+      AND p.JobOrder = o.ID
+      AND pt.ID = p.PropertyType;
+GO
