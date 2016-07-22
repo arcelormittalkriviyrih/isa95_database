@@ -4,8 +4,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-drop view [dbo].[v_SAPOrderRequest]
-GO 
+IF OBJECT_ID('dbo.v_SAPOrderRequest', N'V') IS NOT NULL
+    DROP VIEW dbo.[v_SAPOrderRequest];
+GO
 
 CREATE VIEW [dbo].[v_SAPOrderRequest]
 WITH ENCRYPTION
