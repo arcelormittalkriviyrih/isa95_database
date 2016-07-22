@@ -33,6 +33,7 @@ BEGIN
    WHERE pt.[Value]=N'MaterialLotID';
 
 END;
+GO
 
 --------------------------------------------------------------
 -- Процедура ins_JobOrderToPrint
