@@ -42,8 +42,10 @@ BEGIN
    FROM [dbo].[PropertyTypes] pt
    WHERE pt.[Value]=N'MaterialLotID';
 
-   IF @Command=N'Print'
-      EXEC DBO.[ins_ExportMaterialLotToSAP] @MaterialLotID=@MaterialLotID;
+   IF @Command = N'Print'
+    EXEC dbo.[ins_JobOrderSAPExport]
+         @MaterialLotID = @MaterialLotID,
+         @WorkRequestID = @WorkRequestID;
 
 END;
 GO

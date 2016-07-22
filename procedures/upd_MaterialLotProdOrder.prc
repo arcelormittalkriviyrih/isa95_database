@@ -55,7 +55,7 @@ BEGIN
       INSERT ([Value],[MaterialLotID],[PropertyType])
       VALUES (@PROD_ORDER,@LinkMaterialLotID,pt.[ID]);
 
-   EXEC [dbo].[ins_ExportMaterialLotToSAP] @MaterialLotID=@LinkMaterialLotID;
+   EXEC DBO.[ins_JobOrderSAPExport] @MaterialLotID=@LinkMaterialLotID;
 
    FETCH NEXT FROM selMaterialLots INTO @MaterialLotID;
 END
