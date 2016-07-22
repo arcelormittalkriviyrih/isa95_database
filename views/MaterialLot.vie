@@ -15,7 +15,8 @@ WITH PrintStatus
               JobOrder jo
          WHERE pt.ID = p.PropertyType
                AND pt.[Value] = N'MaterialLotID'
-               AND jo.ID = p.JobOrder
+               AND jo.ID = p.JobOrder			   	
+			   AND jo.WorkType=N'Print'	
          GROUP BY p.[Value])
      SELECT *,
             CASE [Status]
@@ -38,5 +39,5 @@ WITH PrintStatus
                  ELSE NULL
              END) isPrinted
      FROM [dbo].[MaterialLot] mlp
-          LEFT OUTER JOIN PrintStatus ps ON ps.MaterialLotID = mlp.ID;
+          LEFT OUTER JOIN PrintStatus ps ON ps.MaterialLotID = cast(mlp.ID as nvarchar);
 GO

@@ -3,7 +3,8 @@ GO
 
 SET QUOTED_IDENTIFIER ON;
 GO
-
+drop view [dbo].[v_MaterialLot]
+GO
 
 CREATE VIEW [dbo].[v_MaterialLot]
 AS
