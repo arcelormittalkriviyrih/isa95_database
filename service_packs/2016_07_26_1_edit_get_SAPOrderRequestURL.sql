@@ -1,6 +1,10 @@
 ﻿SET QUOTED_IDENTIFIER ON
 GO
 
+IF OBJECT_ID('dbo.v_SAPOrderRequest', N'V') IS NOT NULL
+    DROP VIEW dbo.[v_SAPOrderRequest];
+GO
+
 IF OBJECT_ID ('dbo.get_SAPOrderRequestURL',N'P') IS NOT NULL
    DROP PROCEDURE dbo.get_SAPOrderRequestURL;
 GO
