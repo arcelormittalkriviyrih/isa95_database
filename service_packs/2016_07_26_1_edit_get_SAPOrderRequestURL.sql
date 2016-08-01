@@ -50,3 +50,4 @@ BEGIN
 	SET @URL = @SAP_SERVICE_URL+N'&SLS_ORDR='+@COMM_ORDER+N'&OutputParameter=RSLT&XacuteLoginName='+@SAP_SERVICE_LOGIN+N'&XacuteLoginPassword='+@SAP_SERVICE_PASS+N'&Content-Type=text/xml';
 
 END;
+GO
