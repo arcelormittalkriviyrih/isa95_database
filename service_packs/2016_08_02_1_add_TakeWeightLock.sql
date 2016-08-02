@@ -1,4 +1,80 @@
-﻿SET NUMERIC_ROUNDABORT OFF;
+﻿SET ANSI_NULLS ON;
+GO
+
+SET QUOTED_IDENTIFIER ON;
+GO
+
+DECLARE @EquipmentClassID int;
+
+SELECT @EquipmentClassID = ID
+FROM dbo.EquipmentClass
+WHERE Code = N'SCALES';
+
+IF NOT EXISTS
+(
+	SELECT NULL
+	FROM dbo.EquipmentClassProperty
+	WHERE [Value] = N'TAKE_WEIGHT_LOCKED'
+)
+BEGIN
+	INSERT INTO dbo.EquipmentClassProperty( Description, [Value], EquipmentClassID )
+	VALUES( N'Кнопка Взять Вес заблокированна', N'TAKE_WEIGHT_LOCKED', @EquipmentClassID );
+END;
+
+INSERT INTO dbo.EquipmentProperty( [Value], EquipmentID, ClassPropertyID )
+	   SELECT N'0', ID, dbo.get_EquipmentClassPropertyByValue( N'TAKE_WEIGHT_LOCKED' )
+	   FROM Equipment
+	   WHERE EquipmentClassID = @EquipmentClassID AND 
+			 ID NOT IN
+	   (
+		   SELECT EquipmentID
+		   FROM EquipmentProperty
+		   WHERE ClassPropertyID = dbo.get_EquipmentClassPropertyByValue( N'TAKE_WEIGHT_LOCKED' )
+	   );
+
+GO
+
+--------------------------------------------------------------
+-- Процедура ins_JobOrderOPCCommandTakeWeight
+IF OBJECT_ID ('dbo.ins_JobOrderOPCCommandTakeWeight',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_JobOrderOPCCommandTakeWeight;
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[ins_JobOrderOPCCommandTakeWeight]
+@EquipmentID     INT
+AS
+BEGIN
+
+DECLARE @JobOrderID    INT,
+        @WorkRequestID INT,
+	   @TakeWeightLocked [NVARCHAR](50);
+
+SET @JobOrderID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'JOB_ORDER_ID');
+
+SELECT @WorkRequestID=jo.[WorkRequest]
+FROM [dbo].[JobOrder] jo
+WHERE jo.[ID]=@JobOrderID;
+
+SET @TakeWeightLocked=dbo.get_EquipmentPropertyValue(@EquipmentID,N'TAKE_WEIGHT_LOCKED');
+
+IF @TakeWeightLocked NOT IN (N'1')
+    EXEC [dbo].[upd_EquipmentProperty] @EquipmentID = @EquipmentID,
+								@EquipmentClassPropertyValue = N'TAKE_WEIGHT_LOCKED',
+								@EquipmentPropertyValue = N'1';
+
+EXEC [dbo].[ins_JobOrderOPCCommand] @WorkRequestID = @WorkRequestID,
+                                    @EquipmentID   = @EquipmentID,
+                                    @Tag           = N'CMD_TAKE_WEIGHT',
+                                    @TagType       = N'Boolean',
+                                    @TagValue      = N'true';
+
+END;
+GO
+
+SET NUMERIC_ROUNDABORT OFF;
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
