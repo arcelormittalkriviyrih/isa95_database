@@ -59,8 +59,6 @@ GO
 
 --------------------------------------------------------------
 -- Процедура ins_JobOrderPrintLabelByScalesNo
-
-
 IF OBJECT_ID('dbo.ins_JobOrderPrintLabelByScalesNo', N'P') IS NOT NULL
     BEGIN
         DROP PROCEDURE dbo.ins_JobOrderPrintLabelByScalesNo;
@@ -86,7 +84,7 @@ AS
                       PropertyTypes AS pt
                  WHERE pt.ID = mlp.PropertyType
                        AND pt.[Value] = N'MATERIAL_LOT_IDENT'
-                       AND mlp.[Value] = @IDENT
+                       AND mlp.[Value] = cast(@IDENT as nvarchar)
              )
                  BEGIN
                      SET @EquipmentID = dbo.get_EquipmentIDByScalesNo(@SCALES_NO);

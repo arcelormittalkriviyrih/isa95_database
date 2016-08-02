@@ -27,7 +27,7 @@ AS
                       PropertyTypes AS pt
                  WHERE pt.ID = mlp.PropertyType
                        AND pt.[Value] = N'MATERIAL_LOT_IDENT'
-                       AND mlp.[Value] = @IDENT
+                       AND mlp.[Value] = cast(@IDENT as nvarchar)
              )
                  BEGIN
                      SET @EquipmentID = dbo.get_EquipmentIDByScalesNo(@SCALES_NO);
