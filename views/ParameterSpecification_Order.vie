@@ -5,7 +5,10 @@ GO
 IF OBJECT_ID ('dbo.v_ParameterSpecification_Order', 'V') IS NOT NULL
    DROP VIEW [dbo].[v_ParameterSpecification_Order];
 GO
-
+/*
+   View: v_ParameterSpecification_Order
+    Возвращает список свойств WorkDefinition.
+*/
 CREATE VIEW [dbo].[v_ParameterSpecification_Order] WITH SCHEMABINDING
 AS
 SELECT sp.ID, sp.[Value], sp.[Description], sp.[WorkDefinitionID], oes.[EquipmentID], sp.PropertyType

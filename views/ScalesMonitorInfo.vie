@@ -6,7 +6,11 @@ GO
 IF OBJECT_ID ('dbo.v_ScalesMonitorInfo',N'V') IS NOT NULL
    DROP VIEW dbo.[v_ScalesMonitorInfo];
 GO
-
+/*
+   View: v_ScalesMonitorInfo
+    Возвращает данные из контроллера а также расчитывает количество прудков для весов.
+	Используется на экране маркиорвщицы для показа данных на доп. мониторе.
+*/
 CREATE VIEW [dbo].[v_ScalesMonitorInfo]
 AS
      WITH BarWeight

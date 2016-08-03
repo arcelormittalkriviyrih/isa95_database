@@ -1,7 +1,10 @@
 ﻿IF OBJECT_ID ('dbo.v_Roles', N'V') IS NOT NULL
    DROP VIEW dbo.v_Roles;
 GO
-
+/*
+   View: v_Roles
+    Возвращает список доступных ролей.
+*/
 CREATE VIEW dbo.v_Roles
 AS
 SELECT kppr.ID,

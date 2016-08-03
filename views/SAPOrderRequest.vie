@@ -7,7 +7,7 @@ GO
 IF OBJECT_ID ('dbo.v_SAPOrderRequest', 'V') IS NOT NULL
 	DROP VIEW dbo.[v_SAPOrderRequest];
 GO
-
+ 
 CREATE VIEW [dbo].[v_SAPOrderRequest]
 AS
 SELECT p.ID,

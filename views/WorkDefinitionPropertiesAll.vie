@@ -1,7 +1,10 @@
 ﻿IF OBJECT_ID ('dbo.v_WorkDefinitionPropertiesAll', N'V') IS NOT NULL
    DROP VIEW dbo.v_WorkDefinitionPropertiesAll;
 GO
-
+/*
+   View: v_WorkDefinitionPropertiesAll
+    Возвращает свойства WorkDefinition.
+*/
 CREATE VIEW [dbo].[v_WorkDefinitionPropertiesAll]
 AS
 SELECT ps.[ID],

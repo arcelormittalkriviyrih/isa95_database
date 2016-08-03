@@ -5,7 +5,10 @@ GO
 IF OBJECT_ID ('dbo.v_SegmentParameter_Order', 'V') IS NOT NULL
    DROP VIEW [dbo].[v_SegmentParameter_Order];
 GO
-
+/*
+   View: v_SegmentParameter_Order
+    Возвращает свойства заказа.
+*/
 CREATE VIEW [dbo].[v_SegmentParameter_Order] WITH SCHEMABINDING
 AS
 SELECT sp.ID, sp.[Value], sp.[Description], sp.OperationsSegment, sp.Parameter, sp.OpSegmentRequirement, sp.PropertyType

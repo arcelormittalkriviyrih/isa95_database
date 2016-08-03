@@ -6,6 +6,10 @@ GO
 IF OBJECT_ID('dbo.v_PrintProperties', N'V') IS NOT NULL
     DROP VIEW [dbo].[v_PrintProperties];
 GO
+/*
+   View: v_PrintProperties
+    Возвращает свойства MaterialLot.
+*/
 
 CREATE VIEW [dbo].[v_PrintProperties]
 AS

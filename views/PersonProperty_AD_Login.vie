@@ -5,7 +5,10 @@ GO
 IF OBJECT_ID ('dbo.v_PersonProperty_AD_Login', 'V') IS NOT NULL
    DROP VIEW [dbo].[v_PersonProperty_AD_Login];
 GO
-
+/*
+   View: v_PersonProperty_AD_Login
+    Обеспечивает уникальность AD_Login.
+*/
 CREATE VIEW [dbo].[v_PersonProperty_AD_Login] WITH SCHEMABINDING
 AS
 SELECT pp.[ID], pp.[Value], pp.[Description], pp.[PersonID], pp.[ClassPropertyID]

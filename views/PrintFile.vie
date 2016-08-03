@@ -6,7 +6,10 @@ GO
 IF OBJECT_ID('dbo.v_PrintFile', N'V') IS NOT NULL
     DROP VIEW [dbo].[v_PrintFile];
 GO
-
+/*
+   View: v_PrintFile
+    Возвращает файл для печати MaterialLot .
+*/
 CREATE VIEW [dbo].[v_PrintFile]
 AS
      SELECT mlp.ID,
