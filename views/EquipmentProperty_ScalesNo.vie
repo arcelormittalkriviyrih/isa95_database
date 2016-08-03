@@ -5,7 +5,10 @@ GO
 IF OBJECT_ID ('dbo.v_EquipmentProperty_ScalesNo', 'V') IS NOT NULL
    DROP VIEW [dbo].[v_EquipmentProperty_ScalesNo];
 GO
-
+/*
+   View: v_EquipmentProperty_ScalesNo
+    Создана для обеспечения уникальности SCALES_NO.
+*/
 CREATE VIEW [dbo].[v_EquipmentProperty_ScalesNo] WITH SCHEMABINDING
 AS
 SELECT ep.ID, ep.[Value], ep.[Description], ep.EquipmentID, ep.ClassPropertyID

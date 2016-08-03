@@ -1,7 +1,11 @@
 ﻿IF OBJECT_ID ('dbo.v_OrderPropertiesAll', N'V') IS NOT NULL
    DROP VIEW dbo.v_OrderPropertiesAll;
 GO
-
+/*
+   View: v_OrderPropertiesAll
+    Возвращает список свойств заказа.
+	Используется на форме создания/редактирования заказа.
+*/
 CREATE VIEW [dbo].[v_OrderPropertiesAll]
 AS
 SELECT sp.ID,

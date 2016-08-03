@@ -7,7 +7,11 @@ GO
 IF OBJECT_ID ('dbo.v_MaterialLotProperty', N'V') IS NOT NULL
    DROP VIEW dbo.v_MaterialLotProperty;
 GO
-
+/*
+   View: v_MaterialLotProperty
+    Возвращает список свойств бирки.
+	Используется в спец режимах.
+*/
 CREATE VIEW [dbo].[v_MaterialLotProperty]
 AS
 WITH MaterialLotFilt AS (SELECT ml.[ID],

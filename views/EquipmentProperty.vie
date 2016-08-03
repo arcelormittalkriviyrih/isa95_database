@@ -1,4 +1,4 @@
-SET ANSI_NULLS ON;
+﻿SET ANSI_NULLS ON;
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
@@ -6,7 +6,10 @@ GO
 IF OBJECT_ID('dbo.v_EquipmentProperty', N'V') IS NOT NULL
     DROP VIEW [dbo].[v_EquipmentProperty];
 GO
-
+/*
+   View: v_EquipmentProperty
+    Возвращает свойств оборудования.
+*/
 CREATE VIEW [dbo].[v_EquipmentProperty]
 AS
      SELECT ep.ID,

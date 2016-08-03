@@ -5,7 +5,10 @@ GO
 IF OBJECT_ID ('dbo.v_Parameter_Order', 'V') IS NOT NULL
    DROP VIEW [dbo].[v_Parameter_Order];
 GO
-
+/*
+   View: v_Parameter_Order
+    Возвращает список свойств JobOrder.
+*/
 CREATE VIEW [dbo].[v_Parameter_Order] WITH SCHEMABINDING
 AS
 SELECT p.[ID], p.[Value], p.[Description], p.[JobOrder], p.[Parameter], p.[PropertyType], er.[EquipmentID]

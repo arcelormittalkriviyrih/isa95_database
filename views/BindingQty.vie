@@ -7,7 +7,10 @@ GO
 IF OBJECT_ID('dbo.v_BindingQty', N'V') IS NOT NULL
     DROP VIEW dbo.[v_BindingQty];
 GO
-
+/*
+   View: v_BindingQty
+   Возвращает список возможных количеств увязки.
+*/
 CREATE VIEW [dbo].[v_BindingQty]
 AS
 SELECT min(p.ID) ID,

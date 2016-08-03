@@ -1,4 +1,4 @@
-IF OBJECT_ID ('dbo.v_ProductionParameter_Files', 'V') IS NOT NULL
+﻿IF OBJECT_ID ('dbo.v_ProductionParameter_Files', 'V') IS NOT NULL
 	DROP VIEW dbo.v_ProductionParameter_Files;
 GO
 

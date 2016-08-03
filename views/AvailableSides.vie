@@ -6,7 +6,10 @@ GO
 IF OBJECT_ID('dbo.v_AvailableSides', N'V') IS NOT NULL
     DROP VIEW [dbo].[v_AvailableSides];
 GO
-
+/*
+   View: v_AvailableSides
+   Возвращает список доступных сторон.
+*/
 CREATE VIEW [dbo].[v_AvailableSides]
 AS
      SELECT DISTINCT

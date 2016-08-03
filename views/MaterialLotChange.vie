@@ -7,7 +7,10 @@ GO
 IF OBJECT_ID('dbo.v_MaterialLotChange', N'V') IS NOT NULL
     DROP VIEW dbo.[v_MaterialLotChange];
 GO
-
+/*
+   View: v_MaterialLotChange
+    Возвращает список бирок для режима изменения заказа.
+*/
 CREATE VIEW [dbo].[v_MaterialLotChange]
 AS
      WITH MaterialLotProperties

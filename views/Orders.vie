@@ -1,7 +1,10 @@
 ﻿IF OBJECT_ID ('dbo.v_Orders', N'V') IS NOT NULL
    DROP VIEW dbo.v_Orders;
 GO
-
+/*
+   View: v_Orders
+    Возвращает список заказов.
+*/
 CREATE VIEW [dbo].[v_Orders]
 AS
 select opr.id,

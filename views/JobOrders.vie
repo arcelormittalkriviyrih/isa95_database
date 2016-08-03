@@ -6,7 +6,10 @@ GO
 IF OBJECT_ID('dbo.v_JobOrders', N'V') IS NOT NULL
     DROP VIEW [dbo].[v_JobOrders];
 GO
-
+/*
+   View: v_JobOrders
+   Возвращает список JobOrder.
+*/
 CREATE VIEW [dbo].[v_JobOrders]
 AS
      SELECT ID,

@@ -1,7 +1,10 @@
 ﻿IF OBJECT_ID ('dbo.v_LatestWorkRequests', N'V') IS NOT NULL
    DROP VIEW dbo.v_LatestWorkRequests;
 GO
-
+/*
+   View: v_LatestWorkRequests
+   Возвращает текущий LatestWorkRequest для весов.
+*/
 CREATE VIEW [dbo].[v_LatestWorkRequests]
 AS
 SELECT newID() ID,

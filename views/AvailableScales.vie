@@ -6,7 +6,10 @@ GO
 IF OBJECT_ID('dbo.v_AvailableScales', N'V') IS NOT NULL
     DROP VIEW [dbo].[v_AvailableScales];
 GO
-
+/*
+   View: v_AvailableScales
+   Возвращает список доступных весов.
+*/
 CREATE VIEW [dbo].[v_AvailableScales]
 AS
      SELECT DISTINCT
