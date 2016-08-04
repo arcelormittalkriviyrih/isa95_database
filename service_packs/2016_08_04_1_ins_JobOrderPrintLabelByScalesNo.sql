@@ -1,7 +1,5 @@
 ﻿--------------------------------------------------------------
 -- Процедура ins_JobOrderPrintLabelByScalesNo
-
-
 IF OBJECT_ID('dbo.ins_JobOrderPrintLabelByScalesNo', N'P') IS NOT NULL
     BEGIN
         DROP PROCEDURE dbo.ins_JobOrderPrintLabelByScalesNo;
