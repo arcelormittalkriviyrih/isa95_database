@@ -6,7 +6,22 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: ins_MaterialLotPropertyByWorkDefinition
+	Добавляет свойства бирки из WorkDefinition.
 
+	Parameters:
+
+		MaterialLotID    - MaterialLot ID,
+		WorkRequestID    - WorkRequest ID,
+		MEASURE_TIME	 - Дата и время,
+        AUTO_MANU_VALUE  - Признак AUTO_MANU,
+		MILL_ID			 - ID стана
+		NEMERA			 - Признак "Немера"
+        IDENT			 - Идентификатор взвешивания
+
+	
+*/
 CREATE PROCEDURE [dbo].[ins_MaterialLotPropertyByWorkDefinition]
 @WorkDefinitionID INT,
 @MaterialLotID    INT,
@@ -14,7 +29,8 @@ CREATE PROCEDURE [dbo].[ins_MaterialLotPropertyByWorkDefinition]
 @AUTO_MANU_VALUE  NVARCHAR(50),
 @MILL_ID          NVARCHAR(50) = NULL,
 @NEMERA           NVARCHAR(50) = NULL,
-@IDENT			  NVARCHAR(50) = NULL
+@IDENT			  NVARCHAR(50) = NULL,
+@CREATE_MODE	  NVARCHAR(50) = NULL
 AS
 BEGIN
 
@@ -47,7 +63,11 @@ BEGIN
    UNION ALL
    SELECT N'LEAVE_NO',CAST(CAST(@LEAVE_NO AS NUMERIC(11,0))-5000000000 as nvarchar(50)) WHERE @LEAVE_NO IS NOT NULL
    UNION ALL
-   SELECT N'MATERIAL_LOT_IDENT',@IDENT WHERE @IDENT IS NOT NULL;
+   SELECT N'MATERIAL_LOT_IDENT',@IDENT WHERE @IDENT IS NOT NULL
+   UNION ALL
+   SELECT N'CREATOR',SYSTEM_USER
+   UNION ALL
+   SELECT N'CREATE_MODE',@CREATE_MODE WHERE @CREATE_MODE IS NOT NULL;
 
    INSERT INTO [dbo].[MaterialLotProperty] ([Value],[MaterialLotID],[PropertyType])
    SELECT t.value,@MaterialLotID,pt.ID

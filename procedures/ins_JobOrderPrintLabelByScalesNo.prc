@@ -10,7 +10,20 @@ GO
 
 SET QUOTED_IDENTIFIER ON;
 GO
+/*
+	Procedure: ins_JobOrderToPrint
+	Процедура создания бирки и Job на печать бирки.
 
+	Parameters:
+
+		SCALES_NO  - Идентификатор весов,
+		TIMESTAMP  - Дата и время,
+        WEIGHT_FIX - Вес,
+        AUTO_MANU  - Признак AUTO_MANU,
+        IDENT      - Идентификатор взвешивания
+
+	
+*/
 CREATE PROCEDURE dbo.ins_JobOrderPrintLabelByScalesNo @SCALES_NO  NVARCHAR(50),
                                                       @TIMESTAMP  DATETIME,
                                                       @WEIGHT_FIX INT,
@@ -109,7 +122,8 @@ AS
                           @AUTO_MANU_VALUE = @AUTO_MANU,
                           @MILL_ID = @MILL_ID,
                           @NEMERA = @NEMERA,
-					 @IDENT = @IDENT;
+						  @IDENT = @IDENT,
+						  @CREATE_MODE = N'Авто печать';
 
 /*
       EXEC [dbo].[ins_MaterialLotPropertyByJobOrder] @MaterialLotID   = @MaterialLotID,

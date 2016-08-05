@@ -8,7 +8,16 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 --------------------------------------------------------------
--- Используется для тестовой печати и для ручной печати с вводом кол-ва
+
+/*
+	Procedure: ins_MaterialLotByEquipment
+	Используется для тестовой печати и для ручной печати с вводом кол-ва.
+
+	Parameters:
+
+		EquipmentID     - ID весов,
+		Quantity        - Значение веса.
+*/
 CREATE PROCEDURE [dbo].[ins_MaterialLotByEquipment]
 @EquipmentID   INT,
 @Quantity      INT = NULL
@@ -22,18 +31,21 @@ DECLARE @MaterialLotID    INT,
         @PrinterID       [NVARCHAR](50),
         @Status          [NVARCHAR](250),
 	    @JobOrderID      INT,
-        @WorkType	     [NVARCHAR](50);
+        @WorkType	     [NVARCHAR](50),
+		@CREATE_MODE	 [NVARCHAR](50);
 
 SET @Status=N'0';
 SET @AUTO_MANU_VALUE=N'0';
 SET @WorkType = [dbo].[get_CurrentWorkType](@EquipmentID);
 SET @JobOrderID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'JOB_ORDER_ID');
+SET @CREATE_MODE = N'Тестовая печать';
 
 IF @Quantity IS NOT NULL
    BEGIN
       SET @Status=[dbo].[get_MaterialLotStatusByWorkType](@WorkType);
       SET @AUTO_MANU_VALUE=N'1';
       SET @Quantity=dbo.get_RoundedWeightByEquipment(@Quantity,@EquipmentID);
+	  SET @CREATE_MODE = N'Печать с ручным вводом веса';
    END;
 
 IF @WorkType IN (N'Sort',N'Reject')	     
@@ -41,19 +53,7 @@ IF @WorkType IN (N'Sort',N'Reject')
 ELSE 
     SET @FactoryNumber=[dbo].[get_GenMaterialLotNumber](@EquipmentID,NEXT VALUE FOR dbo.gen_MaterialLotNumber);
 
-if @WorkType IN (N'Separate')
-	begin
-		DECLARE @LinkFactoryNumber   [NVARCHAR](12);
-        SET @LinkFactoryNumber=[dbo].[get_GenMaterialLotNumber](@EquipmentID,NEXT VALUE FOR dbo.gen_MaterialLotNumber);
-        SET @FactoryNumber=[dbo].[get_JobOrderPropertyValue](@JobOrderID,N'FACTORY_NUMBER');
-        EXEC [dbo].[ins_MaterialLotWithLinks] @FactoryNumber       = @FactoryNumber,
-                                                  @Status              = @Status,
-                                                  @Quantity            = @Quantity,
-                                                  @LinkFactoryNumber   = @LinkFactoryNumber,
-                                                  @MaterialLotID	     = @MaterialLotID OUTPUT;
-	end
-else
-	EXEC [dbo].[ins_MaterialLot] @FactoryNumber = @FactoryNumber,
+EXEC [dbo].[ins_MaterialLot] @FactoryNumber = @FactoryNumber,
                              @Status        = @Status,
                              @Quantity      = @Quantity,
                              @MaterialLotID = @MaterialLotID OUTPUT;
@@ -74,7 +74,8 @@ IF @WorkDefinitionID IS NOT NULL
                                                            @MEASURE_TIME     = @MEASURE_TIME,
                                                            @AUTO_MANU_VALUE  = @AUTO_MANU_VALUE,
                                                            @MILL_ID          = @MILL_ID,
-                                                           @NEMERA           = @NEMERA;
+                                                           @NEMERA           = @NEMERA,
+														   @CREATE_MODE		 = @CREATE_MODE;
 
       SET @PrinterID = [dbo].[get_EquipmentPropertyValue](@EquipmentID,N'USED_PRINTER');
       EXEC [dbo].[ins_JobOrderPrintLabel] @PrinterID     = @PrinterID,

@@ -6,7 +6,37 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: ins_MaterialLotForTestPrint
+	Используется для тестовой печати.
 
+	Parameters:
+
+		COMM_ORDER     - Коммерческий заказ,
+		PROD_ORDER     - Производственный заказ,
+		CONTRACT_NO    - Контракт №,
+		DIRECTION      - Направление,
+		SIZE           - Размер,
+		LENGTH         - Длина,
+		TOLERANCE      - Допуск,
+		CLASS          - Класс,
+		STEEL_CLASS    - Марка стали,
+		MELT_NO        - Плавка,
+		PART_NO        - Партия,
+		MIN_ROD        - Количество прутков,
+		BUYER_ORDER_NO - № заказа у покупателя,
+		BRIGADE_NO     - Бригада,
+		PROD_DATE      - Производственная дата,
+		UTVK           - УТВК,
+		CHANGE_NO      - Смена,
+		MATERIAL_NO    - № материала,
+		BUNT_DIA       - Диаметр бунта,
+		BUNT_NO        - № бунта,
+		PRODUCT        - Продукция,
+		STANDARD       - Стандарт,
+		CHEM_ANALYSIS  - Хим. Анализ,
+		TEMPLATE       - Шаблон бирки.
+*/
 CREATE PROCEDURE [dbo].[ins_MaterialLotForTestPrint]
 @COMM_ORDER      NVARCHAR(50) = NULL,
 @PROD_ORDER      NVARCHAR(50) = NULL,
@@ -111,7 +141,11 @@ EXEC [dbo].[ins_MaterialLot] @FactoryNumber = N'0',
    UNION ALL
    SELECT N'CHEM_ANALYSIS',@CHEM_ANALYSIS WHERE @CHEM_ANALYSIS IS NOT NULL
    UNION ALL
-   SELECT N'TEMPLATE',@TEMPLATE WHERE @TEMPLATE IS NOT NULL;
+   SELECT N'TEMPLATE',@TEMPLATE WHERE @TEMPLATE IS NOT NULL
+   UNION ALL
+   SELECT N'CREATOR',SYSTEM_USER
+   UNION ALL
+   SELECT N'CREATE_MODE',N'Тестовая печать';
 
    INSERT INTO [dbo].[MaterialLotProperty] ([Value],[MaterialLotID],[PropertyType])
    SELECT t.value,@MaterialLotID,pt.ID
