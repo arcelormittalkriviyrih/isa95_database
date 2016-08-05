@@ -6,7 +6,14 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: del_Order
+	Процедура удаления заказа.
 
+	Parameters:
+
+      COMM_ORDER - Номер коммерческого заказа
+*/
 CREATE PROCEDURE [dbo].[del_Order]
 @COMM_ORDER    NVARCHAR(50)
 AS

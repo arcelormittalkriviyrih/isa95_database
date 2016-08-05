@@ -5,7 +5,16 @@ IF OBJECT_ID ('dbo.upd_JobOrderPrintLabelCancel',N'P') IS NOT NULL
    DROP PROCEDURE dbo.upd_JobOrderPrintLabelCancel;
 GO
 --------------------------------------------------------------
--- Используется для отмены задания на печать
+
+/*
+	Procedure: upd_JobOrderPrintLabelCancel
+	Используется для отмены задания на печать.
+
+	Parameters:
+		
+		MaterialLotIDs - Айдишники бирок для отмены печати
+		
+*/
 CREATE PROCEDURE [dbo].[upd_JobOrderPrintLabelCancel] @MaterialLotIDs NVARCHAR(MAX)
 AS
      BEGIN

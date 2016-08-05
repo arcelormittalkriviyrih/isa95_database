@@ -5,7 +5,11 @@ IF OBJECT_ID ('dbo.exec_SAPExport',N'P') IS NOT NULL
    DROP PROCEDURE dbo.exec_SAPExport;
 GO
 --------------------------------------------------------------
--- Используется для выполнения экспорта бирок в САП
+/*
+	Procedure: exec_SAPExport
+	Используется для выполнения экспорта бирок в САП.
+*/
+
 CREATE PROCEDURE [dbo].[exec_SAPExport]
 AS
 BEGIN

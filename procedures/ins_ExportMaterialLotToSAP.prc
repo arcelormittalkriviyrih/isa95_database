@@ -6,7 +6,14 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: ins_ExportMaterialLotToSAP
+	Отправляет информацию о напечатанной бирке в SAP.
 
+	Parameters:
+
+      MaterialLotID - MaterialLot ID.
+*/
 CREATE PROCEDURE [dbo].[ins_ExportMaterialLotToSAP]
 @MaterialLotID INT
 AS

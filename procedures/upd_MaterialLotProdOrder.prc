@@ -6,7 +6,16 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: upd_MaterialLotProdOrder
+	Процедура изменения призводственного заказа.
 
+	Parameters:
+
+		MaterialLotIDs - Айдишники бирок для изменения,
+		PROD_ORDER     - Производственный заказ.
+		
+*/
 CREATE PROCEDURE [dbo].[upd_MaterialLotProdOrder]
 @MaterialLotIDs   NVARCHAR(MAX),
 @PROD_ORDER       NVARCHAR(50)

@@ -5,7 +5,17 @@ IF OBJECT_ID ('dbo.ins_ManualWeightEntry',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_ManualWeightEntry;
 GO
 --------------------------------------------------------------
--- Используется для ручного ввода веса
+
+/*
+	Procedure: ins_ManualWeightEntry
+	Используется для ручного ввода веса.
+
+	Parameters:
+
+		EquipmentID     - ID весов,
+		Quantity        - Значение веса.
+
+*/
 CREATE PROCEDURE [dbo].[ins_ManualWeightEntry] @EquipmentID INT,
                                                @Quantity    INT
 AS

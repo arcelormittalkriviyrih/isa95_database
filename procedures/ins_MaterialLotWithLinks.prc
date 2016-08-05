@@ -6,7 +6,21 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: ins_MaterialLotWithLinks
+	Создаёт новый  и запись в таблице связи бирок.
 
+	Parameters:
+
+		FactoryNumber     - Номер бирки,
+		Status            - Статус,
+		Quantity          - Вес,
+		LinkType          - Тип связки,
+		LinkFactoryNumber - Номер новой бирки,
+		MaterialLotID     - MaterialLot ID OUTPUT
+
+	
+*/
 CREATE PROCEDURE [dbo].[ins_MaterialLotWithLinks]
 @FactoryNumber       NVARCHAR(250),
 @Status              NVARCHAR(250),

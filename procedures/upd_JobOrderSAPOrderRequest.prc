@@ -7,7 +7,17 @@ GO
 IF OBJECT_ID ('dbo.upd_JobOrderSAPOrderRequest',N'P') IS NOT NULL
    DROP PROCEDURE dbo.upd_JobOrderSAPOrderRequest;
 GO
+/*
+	Procedure: upd_JobOrderSAPOrderRequest
+	Процедура изменения параметров запроса в SAP.
 
+	Parameters:
+		ServiceURL - Service URL,
+		Login	   - Логин,
+		Password   - Пароль.
+
+		
+*/
 
 CREATE PROCEDURE [dbo].[upd_JobOrderSAPOrderRequest]
 @ServiceURL NVARCHAR(1000),

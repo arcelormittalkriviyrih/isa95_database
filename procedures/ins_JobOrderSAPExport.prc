@@ -5,7 +5,18 @@ IF OBJECT_ID ('dbo.ins_JobOrderSAPExport',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderSAPExport;
 GO
 --------------------------------------------------------------
--- Используется для создания задания на отправку бирки в САП
+
+/*
+	Procedure: ins_JobOrderSAPExport
+	Используется для создания задания на отправку бирки в САП.
+
+	Parameters:
+
+		MaterialLotID  - MaterialLot ID,
+		WorkRequestID  - WorkRequest ID
+
+	
+*/
 CREATE PROCEDURE [dbo].[ins_JobOrderSAPExport]
 @MaterialLotID   INT,
 @WorkRequestID   INT = NULL

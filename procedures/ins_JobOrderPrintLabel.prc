@@ -6,7 +6,22 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: ins_JobOrderPrintLabel
+	Процедура создания Job на печать или отправку бирки.
 
+	Parameters:
+
+		PrinterID     - Printer ID,
+		MaterialLotID - MaterialLot ID,
+		Command       - Email или Print,
+		CommandRule   - Список адресов,
+		WorkRequestID - WorkRequestID
+
+	See Also:
+
+		<ins_JobOrderToPrint>
+*/
 CREATE PROCEDURE [dbo].[ins_JobOrderPrintLabel]
 @PrinterID      NVARCHAR(255) = NULL,
 @MaterialLotID  INT,

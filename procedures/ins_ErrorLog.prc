@@ -6,6 +6,10 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: ins_ErrorLog
+	Добаляет информацию об ошибке в таблицу ErrorLog.
+*/
 
 CREATE PROCEDURE [dbo].[ins_ErrorLog]
 AS

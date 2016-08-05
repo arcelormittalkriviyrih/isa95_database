@@ -32,10 +32,7 @@ GO
 		PACKS_LEFT      - Количество оставшихся пачек для режима "Разделение пачки",
 		BINDING_DIA     - Диаметр увязки,
 		BINDING_QTY     - Количество увязок.
-
-	Returns:
-
-      Job Order ID.
+		JobOrderID      - Job Order ID OUTPUT.
 
 */
 

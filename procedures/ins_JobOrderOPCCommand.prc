@@ -6,6 +6,19 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: ins_JobOrderOPCCommand
+	Процедура отправки комманд на контроллер.
+
+	Parameters:
+
+		WorkRequestID   - WorkRequest ID,
+		EquipmentID     - ID весов,
+		Tag             - Имя комманды,
+		TagType         - Тип,
+		TagValue        - Значение.
+
+*/
 
 CREATE PROCEDURE [dbo].[ins_JobOrderOPCCommand]
 @WorkRequestID   INT,

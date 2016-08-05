@@ -5,7 +5,19 @@ IF OBJECT_ID ('dbo.get_SAPOrderRequestURL',N'P') IS NOT NULL
    DROP PROCEDURE dbo.get_SAPOrderRequestURL;
 GO
 --------------------------------------------------------------
--- Используется для генерации URL для обращения к SAP сервису для получения информации о заказе
+
+/*
+	Procedure: get_SAPOrderRequestURL
+	Используется для генерации URL для обращения к SAP сервису для получения информации о заказе.
+	Parameters:
+
+		COMM_ORDER - Номер коммерческого заказа
+		URL        - URL OUTPUT
+	
+	 
+	  
+*/
+
 CREATE PROCEDURE [dbo].[get_SAPOrderRequestURL](
 	   @COMM_ORDER [nvarchar](50), @URL nvarchar(1000) OUTPUT)
 WITH ENCRYPTION

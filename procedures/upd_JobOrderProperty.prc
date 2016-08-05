@@ -6,7 +6,17 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: upd_JobOrderProperty
+	Процедура изменения свойства Job Order.
 
+	Parameters:
+		JobOrderID     - Job Order ID ,
+		PropertyType   - Свойство,
+		PropertyValue  - Значение свойства
+
+		
+*/
 CREATE PROCEDURE [dbo].[upd_JobOrderProperty]
 @JobOrderID      INT,
 @PropertyType    NVARCHAR(50),

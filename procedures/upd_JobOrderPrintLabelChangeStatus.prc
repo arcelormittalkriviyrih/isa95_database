@@ -5,7 +5,17 @@ IF OBJECT_ID ('dbo.upd_JobOrderPrintLabelChangeStatus',N'P') IS NOT NULL
    DROP PROCEDURE dbo.upd_JobOrderPrintLabelChangeStatus;
 GO
 --------------------------------------------------------------
--- Используется для смены статуса задания на печать
+
+/*
+	Procedure: upd_JobOrderPrintLabelChangeStatus
+	Используется для смены статуса задания на печать.
+
+	Parameters:
+		
+		MaterialLotIDs - Айдишники бирок для измениния,
+		Status		   - Статус.
+		
+*/
 CREATE PROCEDURE [dbo].[upd_JobOrderPrintLabelChangeStatus]
 @MaterialLotIDs   NVARCHAR(MAX),
 @Status NVARCHAR(50)

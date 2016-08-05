@@ -6,7 +6,21 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: ins_JobOrderOPCCommandAutoManu
+	Процедура отправки AutoManu на контроллер.
 
+	Parameters:
+
+		WorkRequestID   - WorkRequest ID,
+		EquipmentID     - ID весов,
+		TagValue        - Значение.
+
+	See Also:
+
+		<ins_JobOrderOPCCommand>
+
+*/
 CREATE PROCEDURE [dbo].[ins_JobOrderOPCCommandAutoManu]
 @WorkRequestID   INT,
 @EquipmentID     INT,

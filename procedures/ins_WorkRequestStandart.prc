@@ -6,7 +6,32 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: ins_WorkRequestStandart
+	Процедура вставки  стандартного Work Request.
 
+	Parameters:
+
+		EquipmentID     - ID весов,
+		ProfileID       - ID профиля,
+		COMM_ORDER      - Номер коммерческого заказа,
+		LENGTH          - Длина,
+		BAR_WEIGHT      - Вес прутка,
+		BAR_QUANTITY    - Количество прутков,
+		MAX_WEIGHT      - Максимальный вес,
+		MIN_WEIGHT      - Минимальный вес,
+		SAMPLE_WEIGHT   - Вес образца,
+		SAMPLE_LENGTH   - Длина образца,
+		DEVIATION       - Отклонение,
+		SANDWICH_MODE   - Признак "Бутерброд",
+		AUTO_MANU_VALUE - Признак "Автоматический режим",
+		NEMERA          - Признак "Немера",
+		FACTORY_NUMBER  - Номер бирки,
+		PACKS_LEFT      - Количество оставшихся пачек для режима "Разделение пачки",
+		BINDING_DIA     - Диаметр увязки,
+		BINDING_QTY     - Количество увязок.
+
+*/
 CREATE PROCEDURE [dbo].[ins_WorkRequestStandart]
 @EquipmentID      INT,
 @ProfileID        INT,

@@ -6,6 +6,17 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: upd_EquipmentProperty
+	Процедура изменения свойства оборудования.
+
+	Parameters:
+		EquipmentID					- ID оборудования,
+		EquipmentClassPropertyValue - Свойство,
+		EquipmentPropertyValue		- Значение свойства.
+
+		
+*/
 
 CREATE PROCEDURE [dbo].[upd_EquipmentProperty]
 @EquipmentID                   INT,

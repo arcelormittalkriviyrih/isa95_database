@@ -6,7 +6,19 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: ins_JobOrderOPCCommandTakeTara
+	Процедура отправки Взять тару на контроллер.
 
+	Parameters:
+
+		EquipmentID     - ID весов.
+
+	See Also:
+
+		<ins_JobOrderOPCCommand>
+
+*/
 CREATE PROCEDURE [dbo].[ins_JobOrderOPCCommandTakeTara]
 @EquipmentID     INT
 AS

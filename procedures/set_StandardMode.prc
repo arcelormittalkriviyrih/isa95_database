@@ -6,7 +6,15 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: set_StandardMode
+	Процедура установки стандартного режима.
 
+	Parameters:
+		EquipmentID	- ID оборудования.
+	
+		
+*/
 CREATE PROCEDURE [dbo].[set_StandardMode]
 @EquipmentID    INT
 AS

@@ -6,7 +6,39 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: set_SortMode
+	Процедура установки режима сортировки.
 
+	Parameters:
+
+		EquipmentID    - ID весов,
+		FACTORY_NUMBER - Номер бирки
+		COMM_ORDER     - Коммерческий заказ,
+		PROD_ORDER     - Производственный заказ,
+		CONTRACT_NO    - Контракт №,
+		DIRECTION      - Направление,
+		SIZE           - Размер,
+		LENGTH         - Длина,
+		TOLERANCE      - Допуск,
+		CLASS          - Класс,
+		STEEL_CLASS    - Марка стали,
+		MELT_NO        - Плавка,
+		PART_NO        - Партия,
+		MIN_ROD        - Количество прутков,
+		BUYER_ORDER_NO - № заказа у покупателя,
+		BRIGADE_NO     - Бригада,
+		PROD_DATE      - Производственная дата,
+		UTVK           - УТВК,
+		CHANGE_NO      - Смена,
+		MATERIAL_NO    - № материала,
+		BUNT_DIA       - Диаметр бунта,
+		BUNT_NO        - № бунта,
+		PRODUCT        - Продукция,
+		STANDARD       - Стандарт,
+		CHEM_ANALYSIS  - Хим. Анализ,
+		TEMPLATE       - Шаблон бирки.
+*/
 CREATE PROCEDURE [dbo].[set_SortMode]
 @EquipmentID    INT,
 @FACTORY_NUMBER NVARCHAR(50),

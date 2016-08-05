@@ -6,7 +6,15 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: set_DecreasePacksLeft
+	Процедура уменьшения количества пачек.
 
+	Parameters:
+
+		EquipmentID    - ID весов,
+	
+*/
 CREATE PROCEDURE [dbo].[set_DecreasePacksLeft]
 @EquipmentID    INT
 AS

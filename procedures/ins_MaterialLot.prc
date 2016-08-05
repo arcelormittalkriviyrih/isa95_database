@@ -6,7 +6,17 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+	Procedure: ins_MaterialLot
+	Процедура создания бирки.
 
+	Parameters:
+
+		FactoryNumber  - Номер бирки,
+		Status         - Режим,
+		Quantity       - Значение веса.
+		MaterialLotID  - MaterialLot ID OUTPUT
+*/
 CREATE PROCEDURE [dbo].[ins_MaterialLot]
 @FactoryNumber   NVARCHAR(250),
 @Status          NVARCHAR(250),
