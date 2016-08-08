@@ -1,4 +1,68 @@
-﻿--------------------------------------------------------------
+﻿SET ANSI_NULLS ON;
+GO
+
+SET QUOTED_IDENTIFIER ON;
+GO
+
+DECLARE @WorkDefinitionID int;
+
+IF NOT EXISTS
+(
+	SELECT NULL
+	FROM [dbo].[WorkDefinition]
+	WHERE [WorkType] = N'SAPExport'
+)
+BEGIN
+   SET @WorkDefinitionID=NEXT VALUE FOR [dbo].[gen_WorkDefinition];
+   INSERT INTO [dbo].[WorkDefinition] ([ID],[WorkType],[PublishedDate], Parameter) VALUES (@WorkDefinitionID,N'SAPExport',CURRENT_TIMESTAMP, N'[KRR-SQL23-ZPP]');
+END;
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID ('dbo.ins_JobOrderSAPExport',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_JobOrderSAPExport;
+GO
+--------------------------------------------------------------
+
+/*
+	Procedure: ins_JobOrderSAPExport
+	Используется для создания задания на отправку бирки в САП.
+
+	Parameters:
+
+		MaterialLotID  - MaterialLot ID,
+		WorkRequestID  - WorkRequest ID
+
+	
+*/
+CREATE PROCEDURE [dbo].[ins_JobOrderSAPExport]
+@MaterialLotID   INT,
+@WorkRequestID   INT = NULL
+AS
+BEGIN
+
+   DECLARE @JobOrderID    INT,
+           @err_message   NVARCHAR(255),
+		   @LinkedServer  NVARCHAR(50);
+
+   SET @LinkedServer=(SELECT top 1 Parameter from WorkDefinition where WORKType='SAPExport' order by ID desc);
+
+   SET @JobOrderID=NEXT VALUE FOR [dbo].[gen_JobOrder];
+   INSERT INTO [dbo].[JobOrder] ([ID],[WorkType],[DispatchStatus],[StartTime],[WorkRequest],CommandRule)
+   VALUES (@JobOrderID,N'SAPExport',N'TODO',CURRENT_TIMESTAMP,@WorkRequestID,@LinkedServer);
+ 
+   INSERT INTO [dbo].[Parameter] ([Value],[JobOrder],[PropertyType])
+   SELECT @MaterialLotID,@JobOrderID,pt.[ID]
+   FROM [dbo].[PropertyTypes] pt
+   WHERE pt.[Value]=N'MaterialLotID';
+
+END;
+
+GO
+
+
+--------------------------------------------------------------
 -- Процедура ins_ExportMaterialLotToSAP
 IF OBJECT_ID ('dbo.ins_ExportMaterialLotToSAP',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_ExportMaterialLotToSAP;
@@ -111,3 +175,55 @@ BEGIN
 
 END;
 GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID ('dbo.exec_SAPExport',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.exec_SAPExport;
+GO
+--------------------------------------------------------------
+/*
+	Procedure: exec_SAPExport
+	Используется для выполнения экспорта бирок в САП.
+*/
+
+CREATE PROCEDURE [dbo].[exec_SAPExport]
+AS
+BEGIN
+
+	DECLARE @MaterialLotID int, @JobOrderID int, @LinkedServer NVARCHAR(50);
+
+
+	DECLARE selMaterialLots CURSOR
+	FOR SELECT p.[Value], o.ID, o.CommandRule
+		FROM [dbo].JobOrder AS o, [dbo].[Parameter] AS p, [dbo].[PropertyTypes] AS pt
+		WHERE o.ID = p.JobOrder AND 
+			  p.PropertyType = pt.ID AND 
+			  pt.[Value] = N'MaterialLotID' AND 
+			  o.WorkType = N'SAPExport' AND
+			  o.DispatchStatus = N'TODO';
+	OPEN selMaterialLots;
+	FETCH NEXT FROM selMaterialLots INTO @MaterialLotID, @JobOrderID, @LinkedServer;
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		BEGIN TRY
+			EXEC DBO.[ins_ExportMaterialLotToSAP] @MaterialLotID = @MaterialLotID, @LinkedServer = @LinkedServer;
+			update [dbo].JobOrder set DispatchStatus=N'Done',EndTime=CURRENT_TIMESTAMP where id=@JobOrderID;
+		END TRY
+		BEGIN CATCH
+
+			EXEC [dbo].[ins_ErrorLog];
+		END CATCH;
+
+		FETCH NEXT FROM selMaterialLots INTO @MaterialLotID, @JobOrderID;
+	END;
+	CLOSE selMaterialLots;
+	DEALLOCATE selMaterialLots;
+END;
+
+GO
+
+
+
+ 

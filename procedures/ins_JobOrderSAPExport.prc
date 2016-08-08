@@ -24,12 +24,14 @@ AS
 BEGIN
 
    DECLARE @JobOrderID    INT,
-           @err_message   NVARCHAR(255);
+           @err_message   NVARCHAR(255),
+		   @LinkedServer  NVARCHAR(50);
 
+   SET @LinkedServer=(SELECT top 1 Parameter from WorkDefinition where WORKType='SAPExport' order by ID desc);
 
    SET @JobOrderID=NEXT VALUE FOR [dbo].[gen_JobOrder];
-   INSERT INTO [dbo].[JobOrder] ([ID],[WorkType],[DispatchStatus],[StartTime],[WorkRequest])
-   VALUES (@JobOrderID,N'SAPExport',N'TODO',CURRENT_TIMESTAMP,@WorkRequestID);
+   INSERT INTO [dbo].[JobOrder] ([ID],[WorkType],[DispatchStatus],[StartTime],[WorkRequest],CommandRule)
+   VALUES (@JobOrderID,N'SAPExport',N'TODO',CURRENT_TIMESTAMP,@WorkRequestID,@LinkedServer);
  
    INSERT INTO [dbo].[Parameter] ([Value],[JobOrder],[PropertyType])
    SELECT @MaterialLotID,@JobOrderID,pt.[ID]
@@ -38,5 +40,5 @@ BEGIN
 
 END;
 
-
+GO
 
