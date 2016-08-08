@@ -3,7 +3,6 @@
 GO
 
 --------------------------------------------------------------
--- Функция генерирует уникальный № бирки
 IF OBJECT_ID ('dbo.get_GenMaterialLotNumber', N'FN') IS NOT NULL
    DROP FUNCTION dbo.get_GenMaterialLotNumber;
 GO
@@ -13,7 +12,21 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+/*
+   Function: get_GenMaterialLotNumber
 
+   Функция генерирует уникальный № бирки
+
+   Parameters:
+
+      EquipmentID - ID весов,
+	  SerialID    - Счётчик.
+     
+   Returns:
+	  
+	  № бирки.
+
+*/
 CREATE FUNCTION dbo.get_GenMaterialLotNumber(@EquipmentID  [INT],
                                              @SerialID     [INT])
 RETURNS [NVARCHAR](12)

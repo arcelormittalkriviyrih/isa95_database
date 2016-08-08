@@ -1,9 +1,22 @@
 ﻿--------------------------------------------------------------
--- Процедура вычитки поля Value из таблицы Parameter
 IF OBJECT_ID ('dbo.get_JobOrderPropertyValue', N'FN') IS NOT NULL
    DROP FUNCTION dbo.get_JobOrderPropertyValue;
 GO
+/*
+   Function: get_JobOrderPropertyValue
 
+   Функция вычитки поля Value из таблицы Parameter
+
+   Parameters:
+
+      JobOrderID   - Job Order ID,
+	  PropertyType - Свойство.
+     
+   Returns:
+	  
+	  Значение свойства.
+
+*/
 CREATE FUNCTION dbo.get_JobOrderPropertyValue(@JobOrderID   INT,
                                               @PropertyType [NVARCHAR](50))
 RETURNS [NVARCHAR](50)

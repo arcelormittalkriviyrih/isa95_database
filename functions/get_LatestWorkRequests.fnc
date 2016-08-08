@@ -1,7 +1,26 @@
 ﻿IF OBJECT_ID ('dbo.get_LatestWorkRequests', N'TF') IS NOT NULL
    DROP FUNCTION dbo.get_LatestWorkRequests;
 GO
+/*
+   Function: get_LatestWorkRequests
 
+   Получает свойства Work Request(Job Order) по ID весов.
+
+   Parameters:
+
+      EquipmentID - ID весов
+     
+   Returns:
+
+      TABLE (WorkRequestID INT,
+             JobOrderID    INT,
+             EquipmentID   INT,
+             ProfileID     INT,
+             WorkType      NVARCHAR(50),
+             PropertyType  NVARCHAR(50),
+             Value         NVARCHAR(50)).
+
+*/
 CREATE FUNCTION dbo.get_LatestWorkRequests(@EquipmentID INT)
 RETURNS @get_LatestWorkRequests TABLE (WorkRequestID INT,
                                        JobOrderID    INT,

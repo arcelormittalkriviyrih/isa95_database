@@ -1,9 +1,23 @@
 ﻿--------------------------------------------------------------
--- Функция округляет вес
 IF OBJECT_ID('dbo.get_RoundedWeight', N'FN') IS NOT NULL
     DROP FUNCTION dbo.get_RoundedWeight;
 GO
+/*
+   Function: dbo.get_RoundedWeight
+   
+   Функция округляет вес.
 
+   Parameters:
+
+	  WeightValue	 - Исходный вес,
+	  RoundRule		 - Правило округления,
+	  RoundPrecision - Точность.
+     
+	Returns:
+
+      Округлённый вес.
+	
+*/
 CREATE FUNCTION dbo.get_RoundedWeight
 (@WeightValue INT,
  @RoundRule   NVARCHAR(50),

@@ -1,9 +1,22 @@
 ﻿--------------------------------------------------------------
--- Процедура возвращает ID родителя из таблицы Equipment соответствующего EquipmentClass.Code
 IF OBJECT_ID ('dbo.get_ParentEquipmentIDByClass', N'FN') IS NOT NULL
    DROP FUNCTION [dbo].[get_ParentEquipmentIDByClass];
 GO
+/*
+   Function: get_ParentEquipmentIDByClass
 
+   Функция возвращает ID родителя из таблицы Equipment соответствующего EquipmentClass.Code
+
+   Parameters:
+
+      @EquipmentID  - ID оборудования,
+      @Code         - EquipmentClass.Code
+      
+   Returns:
+	  
+	  Parent Equipment ID.
+
+*/
 CREATE FUNCTION [dbo].[get_ParentEquipmentIDByClass](@EquipmentID   INT,
                                                      @Code          NVARCHAR(50))
 RETURNS INT

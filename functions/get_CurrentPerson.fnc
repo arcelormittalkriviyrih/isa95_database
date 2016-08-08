@@ -6,6 +6,16 @@ GO
 IF OBJECT_ID(N'dbo.get_CurrentPerson', N'FN') IS NOT NULL
     DROP FUNCTION dbo.get_CurrentPerson;
 GO
+/*
+   Function: get_CurrentPerson
+
+   Функция возвращает текущий Person ID
+      
+   Returns:
+	  
+	  Текущий Person ID.
+
+*/
 CREATE FUNCTION dbo.get_CurrentPerson
 (
 )

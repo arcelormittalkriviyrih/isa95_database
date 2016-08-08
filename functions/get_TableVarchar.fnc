@@ -1,7 +1,21 @@
 ﻿IF OBJECT_ID ('dbo.get_TableVarchar', N'TF') IS NOT NULL
    DROP FUNCTION dbo.get_TableVarchar;
 GO
+/*
+   Function: get_TableVarchar
+   
+   Превращает строку в таблицу NVARCHAR.
 
+   Parameters:
+
+      input_str - входная строка,
+	  delimeter - разделитель.
+     
+   Returns:
+
+      Таблицу NVARCHAR.
+
+*/
 CREATE FUNCTION dbo.get_TableVarchar(@input_str NVARCHAR(MAX),
                                      @delimeter NVARCHAR(5) = ','
                                      )

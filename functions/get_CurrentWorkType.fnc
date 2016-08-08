@@ -3,7 +3,20 @@
 IF OBJECT_ID ('dbo.get_CurrentWorkType', N'FN') IS NOT NULL
    DROP FUNCTION dbo.get_CurrentWorkType;
 GO
+/*
+   Function: get_CurrentWorkType
 
+   Функция возвращает текущий режим по весам
+
+   Parameters:
+
+      EquipmentID - ID весов.
+      
+   Returns:
+	  
+	  Текущий режим работы АРМ.
+
+*/
 CREATE FUNCTION dbo.get_CurrentWorkType(@EquipmentID INT)
 RETURNS [NVARCHAR](50)
 AS

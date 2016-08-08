@@ -1,8 +1,27 @@
 ﻿--------------------------------------------------------------
--- Функция округляет вес для конкретных весов
+
 IF OBJECT_ID('dbo.get_RoundedWeightByEquipment', N'FN') IS NOT NULL
     DROP FUNCTION dbo.get_RoundedWeightByEquipment;
 GO
+/*
+   Function: get_RoundedWeightByEquipment
+   
+   Функция округляет вес для конкретных весов.
+
+   Parameters:
+
+      EquipmentID - ID весов,
+	  WeightValue - Исходный вес
+     
+	Returns:
+
+      Округлённый вес.
+	
+	See Also:
+
+      <get_RoundedWeight>
+
+*/
 
 CREATE FUNCTION dbo.get_RoundedWeightByEquipment
 (@WeightValue INT,

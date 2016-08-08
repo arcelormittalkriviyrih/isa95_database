@@ -1,7 +1,21 @@
 ﻿IF OBJECT_ID ('dbo.get_TableInteger', N'TF') IS NOT NULL
    DROP FUNCTION dbo.get_TableInteger;
 GO
+/*
+   Function: get_TableInteger
+   
+   Превращает строку в таблицу Integer.
 
+   Parameters:
+
+      input_str - входная строка,
+	  delimeter - разделитель.
+     
+   Returns:
+
+      Таблицу Integer.
+
+*/
 CREATE FUNCTION dbo.get_TableInteger(@input_str NVARCHAR(MAX),
                                      @delimeter NVARCHAR(5) = ','
                                      )

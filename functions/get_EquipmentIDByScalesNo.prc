@@ -1,9 +1,21 @@
 ﻿--------------------------------------------------------------
--- Процедура вычитки поля ID из таблицы Equipment по EquipmentClassProperty N'SCALES_NO'
 IF OBJECT_ID ('dbo.get_EquipmentIDByScalesNo', N'FN') IS NOT NULL
    DROP FUNCTION dbo.get_EquipmentIDByScalesNo;
 GO
+/*
+   Function: get_EquipmentIDByScalesNo
 
+   Функция вычитки поля ID из таблицы Equipment по EquipmentClassProperty N'SCALES_NO'
+
+   Parameters:
+
+      Value - Идентификатор весов.
+     
+   Returns:
+	  
+	  ID весов.
+
+*/
 CREATE FUNCTION dbo.get_EquipmentIDByScalesNo(@Value [nvarchar](50))
 RETURNS INT
 AS

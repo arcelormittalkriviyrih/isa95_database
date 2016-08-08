@@ -2,7 +2,24 @@
 IF OBJECT_ID ('dbo.get_WorkDefinitionPropertiesAll', N'TF') IS NOT NULL
    DROP FUNCTION dbo.get_WorkDefinitionPropertiesAll;
 GO
+/*
+   Function: get_WorkDefinitionPropertiesAll
 
+   Получает свойства WorkDefinition по COMM_ORDER.
+
+   Parameters:
+
+      COMM_ORDER - Коммерческий заказ
+     
+   Returns:
+
+      TABLE (ID               INT,
+             Description      NVARCHAR(50),
+             Value            NVARCHAR(50),
+             WorkDefinitionID INT,
+             Property         NVARCHAR(50)).
+
+*/
 CREATE FUNCTION dbo.get_WorkDefinitionPropertiesAll(@COMM_ORDER NVARCHAR(50))
 RETURNS @retWorkDefinitionPropertiesAll TABLE (ID               INT,
                                                Description      NVARCHAR(50),

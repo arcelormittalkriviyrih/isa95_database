@@ -2,6 +2,22 @@
 IF OBJECT_ID('dbo.get_CalculateBindingWeightByEquipment', N'FN') IS NOT NULL
     DROP FUNCTION dbo.get_CalculateBindingWeightByEquipment;
 GO
+/*
+   Function: get_CalculateBindingWeightByEquipment
+   
+   Функция отнимает вес упаковки для бунтовых весовх.
+
+   Parameters:
+
+      EquipmentID    - ID весов,
+	  OriginalWeight - Исходный вес
+     
+	Returns:
+
+      Вес нетто.
+
+
+*/
 
 CREATE FUNCTION dbo.get_CalculateBindingWeightByEquipment
 (@EquipmentID    INT,
