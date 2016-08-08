@@ -1,4 +1,10 @@
-﻿--------------------------------------------------------------
+﻿
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+--------------------------------------------------------------
 IF OBJECT_ID('dbo.get_CalculateBindingWeightByEquipment', N'FN') IS NOT NULL
     DROP FUNCTION dbo.get_CalculateBindingWeightByEquipment;
 GO
@@ -74,7 +80,9 @@ AS
          RETURN @OriginalWeight;
          RETURN @OriginalWeight;
      END;
-GO﻿SET ANSI_NULLS ON;
+GO
+
+SET ANSI_NULLS ON;
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
@@ -110,7 +118,8 @@ AS
                AND pp.Value = SYSTEM_USER;
          RETURN(@PersonID);
      END;
-GO﻿--------------------------------------------------------------
+GO 
+--------------------------------------------------------------
 -- Функция возвращает текущий режим по весам
 IF OBJECT_ID ('dbo.get_CurrentWorkType', N'FN') IS NOT NULL
    DROP FUNCTION dbo.get_CurrentWorkType;
@@ -146,7 +155,7 @@ RETURN @WorkType;
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 IF OBJECT_ID ('dbo.get_EquipmentClassPropertyByValue', N'FN') IS NOT NULL
    DROP FUNCTION dbo.get_EquipmentClassPropertyByValue;
 GO
@@ -179,7 +188,7 @@ RETURN @Id;
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 IF OBJECT_ID ('dbo.get_EquipmentIdByDescription', N'FN') IS NOT NULL
    DROP FUNCTION dbo.get_EquipmentIdByDescription;
 GO
@@ -212,7 +221,7 @@ RETURN @Id;
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 IF OBJECT_ID ('dbo.get_EquipmentIdByPropertyValue', N'FN') IS NOT NULL
    DROP FUNCTION [dbo].[get_EquipmentIdByPropertyValue];
 GO
@@ -247,7 +256,7 @@ RETURN @Id;
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 IF OBJECT_ID ('dbo.get_EquipmentPropertyValue', N'FN') IS NOT NULL
    DROP FUNCTION dbo.get_EquipmentPropertyValue;
 GO
@@ -283,7 +292,7 @@ RETURN @Value;
 
 END;
 GO
-﻿IF OBJECT_ID('dbo.gen_MaterialLotNumber', N'SO') IS NULL 
+ IF OBJECT_ID('dbo.gen_MaterialLotNumber', N'SO') IS NULL 
    CREATE SEQUENCE dbo.gen_MaterialLotNumber AS INT START WITH 1 INCREMENT BY 1 MINVALUE 1 MAXVALUE 9999 CYCLE NO CACHE;
 GO
 
@@ -336,7 +345,7 @@ RETURN @MaterialLotNumber;
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 IF OBJECT_ID ('dbo.get_JobOrderPropertyValue', N'FN') IS NOT NULL
    DROP FUNCTION dbo.get_JobOrderPropertyValue;
 GO
@@ -372,7 +381,7 @@ RETURN @Value;
 
 END;
 GO
-﻿IF OBJECT_ID ('dbo.get_LatestWorkRequests', N'TF') IS NOT NULL
+IF OBJECT_ID ('dbo.get_LatestWorkRequests', N'TF') IS NOT NULL
    DROP FUNCTION dbo.get_LatestWorkRequests;
 GO
 /*
@@ -453,7 +462,7 @@ RETURN;
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 IF OBJECT_ID ('dbo.get_MaterialClassIDByCode', N'FN') IS NOT NULL
    DROP FUNCTION dbo.get_MaterialClassIDByCode;
 GO
@@ -487,7 +496,7 @@ RETURN @Id;
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 IF OBJECT_ID ('dbo.get_MaterialLotStatusByWorkType', N'FN') IS NOT NULL
    DROP FUNCTION [dbo].[get_MaterialLotStatusByWorkType];
 GO
@@ -519,7 +528,7 @@ BEGIN
    RETURN N'0';
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 IF OBJECT_ID ('dbo.get_ParentEquipmentIDByClass', N'FN') IS NOT NULL
    DROP FUNCTION [dbo].[get_ParentEquipmentIDByClass];
 GO
@@ -566,7 +575,7 @@ RETURN @ReturnEquipmentID;
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 IF OBJECT_ID('dbo.get_RoundedWeight', N'FN') IS NOT NULL
     DROP FUNCTION dbo.get_RoundedWeight;
 GO
@@ -609,7 +618,8 @@ AS
              RETURN @WeightValue - @WeightValue % @RoundPrecision;
          RETURN @WeightValue;
      END;
-GO﻿--------------------------------------------------------------
+GO 
+--------------------------------------------------------------
 
 IF OBJECT_ID('dbo.get_RoundedWeightByEquipment', N'FN') IS NOT NULL
     DROP FUNCTION dbo.get_RoundedWeightByEquipment;
@@ -647,7 +657,10 @@ AS
 	    SET @WeightValue = dbo.get_CalculateBindingWeightByEquipment(@EquipmentID,@WeightValue);
          RETURN dbo.[get_RoundedWeight](@WeightValue, @RoundRule, @RoundPrecision);
      END;
-GO﻿IF OBJECT_ID ('dbo.get_TableInteger', N'TF') IS NOT NULL
+GO 
+
+
+IF OBJECT_ID ('dbo.get_TableInteger', N'TF') IS NOT NULL
    DROP FUNCTION dbo.get_TableInteger;
 GO
 /*
@@ -701,7 +714,9 @@ BEGIN
 RETURN;
 
 END;
-GO﻿IF OBJECT_ID ('dbo.get_TableVarchar', N'TF') IS NOT NULL
+GO 
+
+IF OBJECT_ID ('dbo.get_TableVarchar', N'TF') IS NOT NULL
    DROP FUNCTION dbo.get_TableVarchar;
 GO
 /*
@@ -755,7 +770,9 @@ BEGIN
 RETURN;
 
 END;
-GO﻿-- 
+GO 
+
+-- 
 IF OBJECT_ID ('dbo.get_WorkDefinitionPropertiesAll', N'TF') IS NOT NULL
    DROP FUNCTION dbo.get_WorkDefinitionPropertiesAll;
 GO
@@ -829,7 +846,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 IF OBJECT_ID ('dbo.get_WorkRequestByJobOrder', N'FN') IS NOT NULL
    DROP FUNCTION dbo.get_WorkRequestByJobOrder;
 GO
@@ -886,7 +903,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура del_Order
 IF OBJECT_ID ('dbo.del_Order',N'P') IS NOT NULL
    DROP PROCEDURE dbo.del_Order;
@@ -934,7 +951,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура del_WorkDefinition
 IF OBJECT_ID ('dbo.del_WorkDefinition',N'P') IS NOT NULL
    DROP PROCEDURE dbo.del_WorkDefinition;
@@ -978,7 +995,7 @@ BEGIN
 
 END;
 GO
-﻿SET QUOTED_IDENTIFIER ON
+ SET QUOTED_IDENTIFIER ON
 GO
 
 IF OBJECT_ID ('dbo.exec_SAPExport',N'P') IS NOT NULL
@@ -1027,7 +1044,7 @@ END;
 GO
 
 
-﻿SET QUOTED_IDENTIFIER ON
+ SET QUOTED_IDENTIFIER ON
 GO
 
 IF OBJECT_ID ('dbo.get_SAPOrderRequestURL',N'P') IS NOT NULL
@@ -1087,7 +1104,9 @@ BEGIN
 	SET @URL = @SAP_SERVICE_URL+N'&SLS_ORDR='+@COMM_ORDER+N'&OutputParameter=RSLT&XacuteLoginName='+@SAP_SERVICE_LOGIN+N'&XacuteLoginPassword='+@SAP_SERVICE_PASS+N'&Content-Type=text/xml';
 
 END;
-GO﻿--------------------------------------------------------------
+GO 
+
+--------------------------------------------------------------
 -- Процедура ins_ErrorLog
 IF OBJECT_ID ('dbo.ins_ErrorLog',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_ErrorLog;
@@ -1108,7 +1127,7 @@ BEGIN
           ERROR_MESSAGE();
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_ExportMaterialLotToSAP
 IF OBJECT_ID ('dbo.ins_ExportMaterialLotToSAP',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_ExportMaterialLotToSAP;
@@ -1221,7 +1240,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_JobOrder
 IF OBJECT_ID ('dbo.ins_JobOrder',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrder;
@@ -1358,7 +1377,7 @@ BEGIN
 END;
 GO
 
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_JobOrderOPCCommand
 IF OBJECT_ID ('dbo.ins_JobOrderOPCCommand',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderOPCCommand;
@@ -1429,7 +1448,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_JobOrderOPCCommandAutoManu
 IF OBJECT_ID ('dbo.ins_JobOrderOPCCommandAutoManu',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderOPCCommandAutoManu;
@@ -1475,7 +1494,7 @@ EXEC [dbo].[ins_JobOrderOPCCommand] @WorkRequestID = @WorkRequestID,
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_JobOrderOPCCommandMaxWeight
 IF OBJECT_ID ('dbo.ins_JobOrderOPCCommandMaxWeight',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderOPCCommandMaxWeight;
@@ -1522,7 +1541,7 @@ EXEC [dbo].[ins_JobOrderOPCCommand] @WorkRequestID = @WorkRequestID,
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_JobOrderOPCCommandMinWeight
 IF OBJECT_ID ('dbo.ins_JobOrderOPCCommandMinWeight',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderOPCCommandMinWeight;
@@ -1568,7 +1587,7 @@ EXEC [dbo].[ins_JobOrderOPCCommand] @WorkRequestID = @WorkRequestID,
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_JobOrderOPCCommandSandwich
 IF OBJECT_ID ('dbo.ins_JobOrderOPCCommandSandwich',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderOPCCommandSandwich;
@@ -1614,7 +1633,7 @@ EXEC [dbo].[ins_JobOrderOPCCommand] @WorkRequestID = @WorkRequestID,
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_JobOrderOPCCommandTakeTara
 IF OBJECT_ID ('dbo.ins_JobOrderOPCCommandTakeTara',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderOPCCommandTakeTara;
@@ -1657,7 +1676,7 @@ EXEC [dbo].[ins_JobOrderOPCCommand] @WorkRequestID = @WorkRequestID,
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_JobOrderOPCCommandTakeWeight
 IF OBJECT_ID ('dbo.ins_JobOrderOPCCommandTakeWeight',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderOPCCommandTakeWeight;
@@ -1708,7 +1727,7 @@ EXEC [dbo].[ins_JobOrderOPCCommand] @WorkRequestID = @WorkRequestID,
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_JobOrderPrintLabel
 IF OBJECT_ID ('dbo.ins_JobOrderPrintLabel',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderPrintLabel;
@@ -1776,7 +1795,7 @@ BEGIN
 END;
 GO
 
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_JobOrderPrintLabelByScalesNo
 
 
@@ -1921,7 +1940,9 @@ AS
              EXEC dbo.ins_ErrorLog;
          END CATCH;
      END;
-GO﻿SET QUOTED_IDENTIFIER ON
+GO 
+
+SET QUOTED_IDENTIFIER ON
 GO
 
 IF OBJECT_ID ('dbo.ins_JobOrderSAPExport',N'P') IS NOT NULL
@@ -1965,7 +1986,7 @@ END;
 
 GO
 
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_JobOrderToPrint
 IF OBJECT_ID ('dbo.ins_JobOrderToPrint',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderToPrint;
@@ -2032,7 +2053,7 @@ BEGIN
 END;
 GO
 
-﻿SET QUOTED_IDENTIFIER ON
+ SET QUOTED_IDENTIFIER ON
 GO
 
 IF OBJECT_ID ('dbo.ins_ManualWeightEntry',N'P') IS NOT NULL
@@ -2060,7 +2081,9 @@ AS
               @EquipmentID = @EquipmentID,
               @Quantity = @Quantity;
      END;
-GO﻿--------------------------------------------------------------
+GO 
+
+--------------------------------------------------------------
 -- Процедура ins_MaterialLot
 IF OBJECT_ID ('dbo.ins_MaterialLot',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_MaterialLot;
@@ -2093,7 +2116,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_MaterialLotByEquipment
 IF OBJECT_ID ('dbo.ins_MaterialLotByEquipment',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_MaterialLotByEquipment;
@@ -2185,7 +2208,7 @@ IF @WorkType IN (N'Sort',N'Reject')
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура для печати перемаркированой бирки ins_MaterialLotByFactoryNumber
 IF OBJECT_ID ('dbo.ins_MaterialLotByFactoryNumber',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_MaterialLotByFactoryNumber;
@@ -2346,7 +2369,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура для тестовой печати бирки ins_MaterialLotForTestPrint
 IF OBJECT_ID ('dbo.ins_MaterialLotForTestPrint',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_MaterialLotForTestPrint;
@@ -2506,7 +2529,7 @@ EXEC [dbo].[ins_MaterialLot] @FactoryNumber = N'0',
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_MaterialLotPropertyByWorkDefinition
 IF OBJECT_ID ('dbo.ins_MaterialLotPropertyByWorkDefinition',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_MaterialLotPropertyByWorkDefinition;
@@ -2583,7 +2606,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_MaterialLotWithLinks
 IF OBJECT_ID ('dbo.ins_MaterialLotWithLinks',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_MaterialLotWithLinks;
@@ -2644,7 +2667,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_CreateOrder
 IF OBJECT_ID ('dbo.ins_Order',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_Order;
@@ -2806,7 +2829,7 @@ BEGIN
 END;
 GO
 
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_WorkDefinition
 IF OBJECT_ID ('dbo.ins_WorkDefinition',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_WorkDefinition;
@@ -3017,7 +3040,7 @@ BEGIN
 END;
 GO
 
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_WorkDefinitionStandard
 IF OBJECT_ID ('dbo.ins_WorkDefinitionStandard',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_WorkDefinitionStandard;
@@ -3121,7 +3144,7 @@ EXEC [dbo].[ins_WorkDefinition] @WorkType       = N'Standard',
 END;
 GO
 
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_WorkRequest
 IF OBJECT_ID ('dbo.ins_WorkRequest',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_WorkRequest;
@@ -3223,7 +3246,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура ins_WorkRequestStandart
 IF OBJECT_ID ('dbo.ins_WorkRequestStandart',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_WorkRequestStandart;
@@ -3316,7 +3339,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура dbo.set_DecreasePacksLeft
 IF OBJECT_ID ('dbo.set_DecreasePacksLeft',N'P') IS NOT NULL
    DROP PROCEDURE dbo.set_DecreasePacksLeft;
@@ -3360,7 +3383,7 @@ BEGIN
       END;
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура dbo.set_RejectMode
 IF OBJECT_ID ('dbo.set_RejectMode',N'P') IS NOT NULL
    DROP PROCEDURE dbo.set_RejectMode;
@@ -3471,7 +3494,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура dbo.set_SeparateMode
 IF OBJECT_ID ('dbo.set_SeparateMode',N'P') IS NOT NULL
    DROP PROCEDURE dbo.set_SeparateMode;
@@ -3585,7 +3608,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура dbo.set_SortMode
 IF OBJECT_ID ('dbo.set_SortMode',N'P') IS NOT NULL
    DROP PROCEDURE dbo.set_SortMode;
@@ -3696,7 +3719,7 @@ BEGIN
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура dbo.set_StandardMode
 IF OBJECT_ID ('dbo.set_StandardMode',N'P') IS NOT NULL
    DROP PROCEDURE dbo.set_StandardMode;
@@ -3786,7 +3809,7 @@ BEGIN
 */
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура upd_EquipmentProperty
 IF OBJECT_ID ('dbo.upd_EquipmentProperty',N'P') IS NOT NULL
    DROP PROCEDURE dbo.upd_EquipmentProperty;
@@ -3849,7 +3872,7 @@ BEGIN
 END;
 GO
 
-﻿SET QUOTED_IDENTIFIER ON
+ SET QUOTED_IDENTIFIER ON
 GO
 
 IF OBJECT_ID ('dbo.upd_JobOrderPrintLabelCancel',N'P') IS NOT NULL
@@ -3873,7 +3896,9 @@ AS
               @MaterialLotIDs = @MaterialLotIDs,
               @Status = N'Done';
      END;
-GO﻿SET QUOTED_IDENTIFIER ON
+GO 
+
+SET QUOTED_IDENTIFIER ON
 GO
 
 IF OBJECT_ID ('dbo.upd_JobOrderPrintLabelChangeStatus',N'P') IS NOT NULL
@@ -3939,7 +3964,7 @@ END;
 GO
 
 
-﻿SET QUOTED_IDENTIFIER ON
+ SET QUOTED_IDENTIFIER ON
 GO
 
 IF OBJECT_ID ('dbo.upd_JobOrderPrintLabelReprint',N'P') IS NOT NULL
@@ -3967,7 +3992,7 @@ AS
 GO
 
 
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура upd_JobOrderProperty
 IF OBJECT_ID ('dbo.upd_JobOrderProperty',N'P') IS NOT NULL
    DROP PROCEDURE dbo.upd_JobOrderProperty;
@@ -4030,7 +4055,7 @@ BEGIN
 END;
 GO
 
-﻿SET ANSI_NULLS ON
+ SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
@@ -4110,7 +4135,7 @@ END;
 GO
 
 
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура upd_MaterialLotProdOrder
 IF OBJECT_ID ('dbo.upd_MaterialLotProdOrder',N'P') IS NOT NULL
    DROP PROCEDURE dbo.upd_MaterialLotProdOrder;
@@ -4187,7 +4212,7 @@ DEALLOCATE selMaterialLots;
 
 END;
 GO
-﻿--------------------------------------------------------------
+ --------------------------------------------------------------
 -- Процедура upd_Order
 IF OBJECT_ID ('dbo.upd_Order',N'P') IS NOT NULL
    DROP PROCEDURE dbo.upd_Order;
@@ -4361,7 +4386,9 @@ BEGIN
    */
 
 END;
-GO﻿--------------------------------------------------------------
+GO 
+
+--------------------------------------------------------------
 -- Процедура upd_WorkDefinition
 IF OBJECT_ID ('dbo.upd_WorkDefinition',N'P') IS NOT NULL
    DROP PROCEDURE dbo.upd_WorkDefinition;
@@ -4598,7 +4625,9 @@ AS
            AND side.ID = e.Equipment
            AND ec.Code = N'SCALES'
            AND ec.ID = e.EquipmentClassID;
-GO﻿SET ANSI_NULLS ON;
+GO 
+
+SET ANSI_NULLS ON;
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
@@ -4633,7 +4662,9 @@ AS
            AND ep.ClassPropertyID = ecp.ID
            AND mill.id = side.Equipment
 		   AND workshop.id=mill.Equipment;
-GO﻿SET ANSI_NULLS ON;
+GO 
+
+SET ANSI_NULLS ON;
 GO
 
 SET QUOTED_IDENTIFIER ON;
@@ -4658,7 +4689,7 @@ FROM MaterialDefinitionProperty p
  group by p.[Value];
 GO
 
-﻿SET ANSI_NULLS ON;
+ SET ANSI_NULLS ON;
 GO
 
 SET QUOTED_IDENTIFIER ON;
@@ -4681,7 +4712,9 @@ FROM MaterialDefinitionProperty p
      INNER JOIN MaterialClass mc ON mc.ID = mcp.MaterialClassID
                                     AND mc.Code = N'BINDING'
 							 group by p.[Value];
-GO﻿SET ANSI_NULLS ON;
+GO 
+
+SET ANSI_NULLS ON;
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
@@ -4704,7 +4737,7 @@ AS
           dbo.EquipmentClassProperty ecp
      WHERE ecp.ID = ep.ClassPropertyID;
 GO
-﻿SET NUMERIC_ROUNDABORT OFF;
+ SET NUMERIC_ROUNDABORT OFF;
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
 
@@ -4723,7 +4756,9 @@ FROM [dbo].[EquipmentProperty] ep
 GO
 
 CREATE UNIQUE CLUSTERED INDEX [u_EquipmentProperty_PrinterNo] ON [dbo].[v_EquipmentProperty_PrinterNo] (Value)
-GO﻿SET NUMERIC_ROUNDABORT OFF;
+GO 
+
+SET NUMERIC_ROUNDABORT OFF;
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
 
@@ -4742,7 +4777,9 @@ FROM [dbo].[EquipmentProperty] ep
 GO
 
 CREATE UNIQUE CLUSTERED INDEX [u_EquipmentProperty_ScalesNo] ON [dbo].[v_EquipmentProperty_ScalesNo] (Value)
-GO﻿SET ANSI_NULLS ON;
+GO 
+
+SET ANSI_NULLS ON;
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
@@ -4762,7 +4799,9 @@ AS
 		  Command,
 		  CommandRule
      FROM dbo.JobOrder;
-GO﻿IF OBJECT_ID ('dbo.v_LatestWorkRequests', N'V') IS NOT NULL
+GO 
+
+IF OBJECT_ID ('dbo.v_LatestWorkRequests', N'V') IS NOT NULL
    DROP VIEW dbo.v_LatestWorkRequests;
 GO
 /*
@@ -4781,7 +4820,9 @@ SELECT newID() ID,
        wr.Value
 FROM dbo.Equipment eq
      CROSS APPLY dbo.get_LatestWorkRequests(eq.[ID]) wr
-GO﻿SET ANSI_NULLS ON;
+GO 
+
+SET ANSI_NULLS ON;
 GO
 
 SET QUOTED_IDENTIFIER ON;
@@ -4829,7 +4870,9 @@ FROM [dbo].[MaterialLot] mlp
                               AND jo.ID = p.JobOrder
                               AND jo.WorkType=N'Print') ww
                        WHERE ww.rnum=1) ps ON ps.MaterialLotID=mlp.ID;
-GO﻿SET ANSI_NULLS ON;
+GO 
+
+SET ANSI_NULLS ON;
 GO
 
 SET QUOTED_IDENTIFIER ON;
@@ -4884,7 +4927,7 @@ AS
                      WHERE ml.RowNumber=1;
 GO      
 
-﻿SET ANSI_NULLS ON;
+ SET ANSI_NULLS ON;
 GO
 
 SET QUOTED_IDENTIFIER ON;
@@ -4923,7 +4966,7 @@ FROM MaterialLotFilt ml
      INNER JOIN [dbo].[MaterialLotProperty] mlp ON (mlp.[MaterialLotID]=ml.[ID])
      INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=mlp.[PropertyType]);
 GO
-﻿SET ANSI_NULLS ON;
+ SET ANSI_NULLS ON;
 GO
 
 SET QUOTED_IDENTIFIER ON;
@@ -4946,7 +4989,9 @@ AS
      FROM [dbo].[MaterialLotProperty] mlp
           INNER JOIN [dbo].[PropertyTypes] pt ON(pt.[ID] = mlp.[PropertyType]);
 	  
-GO﻿SET ANSI_NULLS ON;
+GO 
+
+SET ANSI_NULLS ON;
 GO
 
 SET QUOTED_IDENTIFIER ON;
@@ -5016,7 +5061,9 @@ AS
                                   ROW_NUMBER() OVER (PARTITION BY ml.[FactoryNumber] ORDER BY ml.[CreateTime] DESC, ml.[ID] DESC) RowNumber
                            FROM [dbo].[MaterialLot] ml) ml
                      WHERE ml.RowNumber=1;
-GO﻿IF OBJECT_ID ('dbo.v_OrderProperties', N'V') IS NOT NULL
+GO 
+
+IF OBJECT_ID ('dbo.v_OrderProperties', N'V') IS NOT NULL
    DROP VIEW dbo.v_OrderProperties;
 GO
 /*
@@ -5035,7 +5082,9 @@ FROM dbo.OpSegmentRequirement sr
      INNER JOIN dbo.SegmentParameter sp ON (sp.OpSegmentRequirement=sr.id)
      INNER JOIN dbo.PropertyTypes pt ON (pt.ID=sp.PropertyType AND pt.[Value] IN ('PROD_ORDER','SIZE','LENGTH','TOLERANCE','CLASS','STEEL_CLASS','MELT_NO','PART_NO','MIN_ROD','BUYER_ORDER_NO','BRIGADE_NO','PROD_DATE','UTVK','CHANGE_NO','MATERIAL_NO','BUNT_DIA','PRODUCT','STANDARD','CHEM_ANALYSIS', 'BUNT_NO'))
 
-GO﻿IF OBJECT_ID ('dbo.v_OrderPropertiesAll', N'V') IS NOT NULL
+GO 
+
+IF OBJECT_ID ('dbo.v_OrderPropertiesAll', N'V') IS NOT NULL
    DROP VIEW dbo.v_OrderPropertiesAll;
 GO
 /*
@@ -5053,7 +5102,9 @@ SELECT sp.ID,
 FROM dbo.OpSegmentRequirement sr
      INNER JOIN dbo.SegmentParameter sp ON (sp.OpSegmentRequirement=sr.id)
      INNER JOIN dbo.PropertyTypes pt ON (pt.ID=sp.PropertyType)
-GO﻿IF OBJECT_ID ('dbo.v_Orders', N'V') IS NOT NULL
+GO 
+
+IF OBJECT_ID ('dbo.v_Orders', N'V') IS NOT NULL
    DROP VIEW dbo.v_Orders;
 GO
 /*
@@ -5071,7 +5122,7 @@ from OperationsRequest as opr,
 OpSegmentRequirement sr
 where opr.ID=sr.OperationsRequest;
 GO
-﻿SET NUMERIC_ROUNDABORT OFF;
+ SET NUMERIC_ROUNDABORT OFF;
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
 
@@ -5094,7 +5145,7 @@ GO
 CREATE UNIQUE CLUSTERED INDEX [u_ParameterSpecification_Order] ON [dbo].[v_ParameterSpecification_Order] ([Value],[WorkDefinitionID],[EquipmentID])
 GO
 
-﻿SET NUMERIC_ROUNDABORT OFF;
+ SET NUMERIC_ROUNDABORT OFF;
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
 
@@ -5115,7 +5166,9 @@ FROM [dbo].[Parameter] p
 GO
 
 CREATE UNIQUE CLUSTERED INDEX [u_Parameter_Order] ON [dbo].[v_Parameter_Order] ([EquipmentID],[Value])
-GO﻿SET NUMERIC_ROUNDABORT OFF;
+GO 
+
+SET NUMERIC_ROUNDABORT OFF;
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
 
@@ -5136,7 +5189,7 @@ GO
 CREATE UNIQUE CLUSTERED INDEX [u_PersonProperty_AD_Login] ON [dbo].[v_PersonProperty_AD_Login] ([Value])
 GO
 
-﻿SET ANSI_NULLS ON;
+ SET ANSI_NULLS ON;
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
@@ -5163,7 +5216,9 @@ AS
 	       AND mlp.[Value] = f.ID
            AND mlp.PropertyType = pt.ID
            AND pt.[Value] = N'TEMPLATE';
-GO﻿SET ANSI_NULLS ON;
+GO 
+
+SET ANSI_NULLS ON;
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
@@ -5191,7 +5246,9 @@ AS
             er.JobOrderID,
             'PrinterID' AS Property
      FROM OpEquipmentRequirement er;
-GO﻿SET ANSI_NULLS ON;
+GO 
+
+SET ANSI_NULLS ON;
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
@@ -5232,7 +5289,9 @@ AS
             CONVERT( NVARCHAR, ml.FactoryNumber) Value
      FROM dbo.MaterialLot ml
      WHERE ml.FactoryNumber IS NOT NULL;
-GO﻿SET ANSI_NULLS ON;
+GO 
+
+SET ANSI_NULLS ON;
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
@@ -5267,7 +5326,9 @@ SELECT NEWID() AS ID,
        N'№ бирки для штрих-кода' AS Description,
        NULL AS [Value];
 
-GO﻿IF OBJECT_ID ('dbo.v_Roles', N'V') IS NOT NULL
+GO 
+
+IF OBJECT_ID ('dbo.v_Roles', N'V') IS NOT NULL
    DROP VIEW dbo.v_Roles;
 GO
 /*
@@ -5282,7 +5343,7 @@ FROM sys.server_permissions sper
      INNER JOIN sys.server_principals sprin ON (sprin.principal_id=sper.grantee_principal_id AND sprin.is_disabled=0 AND sprin.type=N'G' AND sprin.type_desc=N'WINDOWS_GROUP')
      INNER JOIN dbo.KPPRoles kppr ON (kppr.ADRoleName=sprin.name)
 GO
-﻿SET ANSI_NULLS ON
+ SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
@@ -5304,7 +5365,9 @@ WHERE WorkType = 'SAPOrderRequest'
       AND p.JobOrder = o.ID
       AND pt.ID = p.PropertyType
 	  and pt.[Value]=N'SAP_SERVICE_URL';
-GO﻿SET NUMERIC_ROUNDABORT OFF;
+GO 
+
+SET NUMERIC_ROUNDABORT OFF;
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
@@ -5380,7 +5443,9 @@ AS
                                                   AND bmaxW.PropertyType = N'MAX_WEIGHT'
 			LEFT OUTER JOIN BarWeight bQty ON bQty.EquipmentId = eq.ID
                                                   AND bQty.PropertyType = N'BAR_QUANTITY';
-GO﻿SET NUMERIC_ROUNDABORT OFF;
+GO 
+
+SET NUMERIC_ROUNDABORT OFF;
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
@@ -5436,7 +5501,9 @@ AS
                                                AND bw.PropertyType = N'BAR_WEIGHT'
                LEFT OUTER JOIN BarWeight bQty ON bQty.EquipmentId = eq.ID
                                                   AND bQty.PropertyType = N'BAR_QUANTITY';
-GO﻿SET NUMERIC_ROUNDABORT OFF;
+GO 
+
+SET NUMERIC_ROUNDABORT OFF;
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
 
@@ -5455,7 +5522,9 @@ FROM [dbo].[SegmentParameter] sp
 GO
 
 CREATE UNIQUE CLUSTERED INDEX [u_SegmentParameter_Order] ON [dbo].[v_SegmentParameter_Order] (Value)
-GO﻿IF OBJECT_ID ('dbo.v_WorkDefinitionPropertiesAll', N'V') IS NOT NULL
+GO 
+
+IF OBJECT_ID ('dbo.v_WorkDefinitionPropertiesAll', N'V') IS NOT NULL
    DROP VIEW dbo.v_WorkDefinitionPropertiesAll;
 GO
 /*
