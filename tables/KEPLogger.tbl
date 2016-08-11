@@ -13,13 +13,12 @@ CREATE TABLE [dbo].[KEP_logger](
 	[REM_BAR] [int] NULL,
 	[WEIGHT_CURRENT] [real] NULL,
 	[TIMESTAMP] [datetime] NULL,
-	--[WEIGHT_FIX] [int] NULL,
-	--[WEIGHT_OK] [bit] NULL,
 	[WEIGHT_SP_MAX] [real] NULL,
 	[WEIGHT_SP_MIN] [real] NULL,
 	[WEIGHT_STAB] [bit] NULL,
 	[WEIGHT_ZERO] [bit] NULL,
-	[PACK_SANDWICH] [bit] NULL
+	[PACK_SANDWICH] [bit] NULL,
+	[ALARM] [bit] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
