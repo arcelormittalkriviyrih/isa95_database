@@ -47,7 +47,7 @@ FROM dbo.Equipment side
      INNER JOIN dbo.EquipmentClassProperty ecp ON(ecp.ID = eqp.ClassPropertyID AND ecp.value = N'SCALES_NO')
      LEFT OUTER JOIN Kep_Data kd ON(ISNUMERIC(eqp.value) = 1 AND kd.[NUMBER_POCKET] = CAST(eqp.value AS INT))     
 UNION
-SELECT side.ID,
+SELECT abs(Checksum(NewID())),
 	  N'PLC',
 	  side.ID,
 	  IIF(diag.Controller_Last_Connect IS NULL, NULL, IIF(DATEPART(second, CURRENT_TIMESTAMP-diag.Controller_Last_Connect)>5,N'Error',N'OK'))	  
@@ -56,7 +56,7 @@ FROM dbo.Equipment side
      INNER JOIN dbo.EquipmentProperty ep ON (ep.EquipmentID = side.ID and ep.ClassPropertyID=dbo.get_EquipmentClassPropertyByValue( N'CONTROLLER_ID' ))
 	LEFT OUTER JOIN dbo.kep_controller_diag diag ON (cast(diag.Controller_ID as nvarchar) = ep.[Value])
 UNION
-SELECT side.ID,
+SELECT abs(Checksum(NewID())),
  	  N'UPS',
 	  side.ID,
 	  CASE diag.UPS_FAIL
