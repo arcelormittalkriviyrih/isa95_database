@@ -60,8 +60,8 @@ SELECT abs(Checksum(NewID())),
  	  N'UPS',
 	  side.ID,
 	  CASE diag.UPS_FAIL
-	  WHEN 1 THEN N'OK'
-	  WHEN 0 THEN N'Error'
+	  WHEN 0 THEN N'OK'
+	  WHEN 1 THEN N'Error'
 	  WHEN NULL THEN NULL
 	  END
 FROM dbo.Equipment side
