@@ -1,4 +1,16 @@
-﻿--------------------------------------------------------------
+﻿SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+BEGIN TRANSACTION;
+
+IF NOT EXISTS (SELECT NULL FROM [dbo].[MaterialLinkTypes] WHERE [ID]=5)
+   INSERT INTO [dbo].[MaterialLinkTypes]([ID],[Description]) VALUES (5,N'изменение заказа');
+
+COMMIT;
+GO
+
+--------------------------------------------------------------
 -- Процедура upd_MaterialLotProdOrder
 IF OBJECT_ID ('dbo.upd_MaterialLotProdOrder',N'P') IS NOT NULL
    DROP PROCEDURE dbo.upd_MaterialLotProdOrder;
