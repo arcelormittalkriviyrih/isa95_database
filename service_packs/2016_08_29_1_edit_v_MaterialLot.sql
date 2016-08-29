@@ -1,4 +1,8 @@
-﻿SET ANSI_NULLS ON;
+﻿UPDATE [dbo].[MaterialLinkTypes]
+SET Description = UPPER(LEFT(description,1))+LOWER(SUBSTRING(description,2,LEN(description)))
+GO
+
+SET ANSI_NULLS ON;
 GO
 
 SET QUOTED_IDENTIFIER ON;
