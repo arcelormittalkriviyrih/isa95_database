@@ -63,12 +63,6 @@ AS
               SELECT [Value]
               FROM MaterialLotProperties
               WHERE MaterialLotID = ml.Id
-                    AND PropertyType = 'CREATE_MODE'
-          ) CREATE_MODE, 
-		(
-              SELECT CONVERT(DATETIMEOFFSET(3),[Value],121)
-              FROM MaterialLotProperties
-              WHERE MaterialLotID = ml.Id
                     AND PropertyType = 'MEASURE_TIME'
           ) MEASURE_TIME,
 		(
@@ -79,7 +73,7 @@ AS
           ) MATERIAL_NO,
          (SELECT eq.Equipment
           FROM [dbo].[Equipment] eq
-          WHERE eq.ID=[dbo].[get_EquipmentIdByPropertyValue](SUBSTRING(ml.FactoryNumber,7,2),'SCALES_NO')) SideID
+          WHERE eq.ID=[dbo].[get_EquipmentIdByPropertyValue](SUBSTRING(FactoryNumber,7,2),'SCALES_NO')) SideID
           FROM (SELECT ml.[ID],
                                   ml.[FactoryNumber],
                                   ml.[Status],

@@ -45,7 +45,7 @@ IF @Quantity IS NOT NULL
       SET @Status=[dbo].[get_MaterialLotStatusByWorkType](@WorkType);
       SET @AUTO_MANU_VALUE=N'1';
       SET @Quantity=dbo.get_RoundedWeightByEquipment(@Quantity,@EquipmentID);
-	  SET @CREATE_MODE = N'Печать с ручным вводом веса';
+	  SET @CREATE_MODE = N'Печать с ручным вводом веса'; --Используется в интерфейсе на странице построения статистики для фильтрации бирок введенных вручную
    END;
 
 IF @WorkType IN (N'Sort',N'Reject')	     

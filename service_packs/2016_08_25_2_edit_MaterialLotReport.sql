@@ -60,12 +60,6 @@ AS
                     AND PropertyType = 'AUTO_MANU_VALUE'
           ) AUTO_MANU_VALUE, 
 		(
-              SELECT [Value]
-              FROM MaterialLotProperties
-              WHERE MaterialLotID = ml.Id
-                    AND PropertyType = 'CREATE_MODE'
-          ) CREATE_MODE, 
-		(
               SELECT CONVERT(DATETIMEOFFSET(3),[Value],121)
               FROM MaterialLotProperties
               WHERE MaterialLotID = ml.Id
