@@ -8,6 +8,8 @@ GO
 CREATE VIEW dbo.v_Diagram
 AS
 SELECT d.ID,
-       d.Description
+       d.Description,
+       p.Value json
 FROM dbo.WorkflowSpecification d
+     LEFT OUTER JOIN [dbo].[WorkflowSpecificationProperty] p ON (p.WorkflowSpecification=d.ID)
 GO
