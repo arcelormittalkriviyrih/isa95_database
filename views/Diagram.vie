@@ -1,0 +1,13 @@
+﻿IF OBJECT_ID ('dbo.v_Diagram', N'V') IS NOT NULL
+   DROP VIEW dbo.v_Diagram;
+GO
+/*
+   View: v_Diagram
+    Возвращает список диаграмм
+*/
+CREATE VIEW dbo.v_Diagram
+AS
+SELECT d.ID,
+       d.Description
+FROM dbo.WorkflowSpecification d
+GO

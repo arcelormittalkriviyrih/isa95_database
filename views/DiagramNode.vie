@@ -1,0 +1,16 @@
+﻿IF OBJECT_ID ('dbo.v_DiagramNode', N'V') IS NOT NULL
+   DROP VIEW dbo.v_DiagramNode;
+GO
+/*
+   View: v_DiagramNode
+    Возвращает список диаграмм.
+*/
+CREATE VIEW dbo.v_DiagramNode
+AS
+SELECT d.ID,
+       d.Description,
+       d.WorkflowSpecification DiagramID,
+       p.Value json
+FROM [dbo].[WorkflowSpecificationNode] d
+     LEFT OUTER JOIN [dbo].[WorkflowSpecificationProperty] p ON (p.WorkflowSpecificationNode=d.ID)
+GO
