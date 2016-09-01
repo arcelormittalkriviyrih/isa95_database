@@ -107,7 +107,7 @@ AS
                                  END;
                          END;
                      DECLARE @MEASURE_TIME NVARCHAR(50), @MILL_ID NVARCHAR(50), @NEMERA NVARCHAR(50);
-                     SET @MEASURE_TIME = CONVERT(NVARCHAR, @TIMESTAMP, 121);
+                     SET @MEASURE_TIME = FORMAT(CURRENT_TIMESTAMP, 'dd.MM.yyyy hh:mm:ss');
                      SET @MILL_ID = dbo.get_EquipmentPropertyValue(dbo.get_ParentEquipmentIDByClass(@EquipmentID, N'MILL'), N'MILL_ID');
                      SET @WorkDefinitionID = dbo.get_EquipmentPropertyValue(@EquipmentID, N'WORK_DEFINITION_ID');
                      SET @NEMERA = dbo.get_JobOrderPropertyValue(@JobOrderID, N'NEMERA');

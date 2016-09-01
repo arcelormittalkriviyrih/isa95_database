@@ -92,7 +92,7 @@ BEGIN
    DECLARE @MILL_ID NVARCHAR(50),
            @MEASURE_TIME NVARCHAR(50);
    SET @MILL_ID=[dbo].[get_EquipmentPropertyValue]([dbo].[get_ParentEquipmentIDByClass](@EquipmentID,N'MILL'),N'MILL_ID');
-   SET @MEASURE_TIME=CONVERT(NVARCHAR,CURRENT_TIMESTAMP,121);
+   SET @MEASURE_TIME=FORMAT(CURRENT_TIMESTAMP, 'dd.MM.yyyy hh:mm:ss');
 
    DECLARE @tblParams TABLE(ID    NVARCHAR(50),
                             Value NVARCHAR(50));

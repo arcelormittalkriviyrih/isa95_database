@@ -66,7 +66,7 @@ AS
                     AND PropertyType = 'CREATE_MODE'
           ) CREATE_MODE, 
 		(
-              SELECT TRY_CONVERT(DATETIMEOFFSET(3),[Value],121)
+              SELECT CONVERT(DATETIMEOFFSET(3),[Value],121)
               FROM MaterialLotProperties
               WHERE MaterialLotID = ml.Id
                     AND PropertyType = 'MEASURE_TIME'
@@ -78,10 +78,11 @@ AS
                     AND PropertyType = 'MATERIAL_NO'
           ) MATERIAL_NO,
 		(
-              SELECT TRY_CONVERT(DATETIMEOFFSET(3),[Value],104)
+              SELECT CONVERT(DATETIMEOFFSET(3),[Value],104)
               FROM MaterialLotProperties
               WHERE MaterialLotID = ml.Id
                     AND PropertyType = 'PROD_DATE'
+                    AND ISDATE([Value])=1
           ) PROD_DATE,
          (SELECT eq.Equipment
           FROM [dbo].[Equipment] eq
