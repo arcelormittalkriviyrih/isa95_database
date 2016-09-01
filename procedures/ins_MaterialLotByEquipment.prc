@@ -65,7 +65,7 @@ IF @WorkDefinitionID IS NOT NULL
       DECLARE @MEASURE_TIME NVARCHAR(50),
               @MILL_ID      NVARCHAR(50),
               @NEMERA       NVARCHAR(50);
-      SET @MEASURE_TIME=FORMAT(CURRENT_TIMESTAMP, 'dd.mm.yyyy hh:mm:ss');
+      SET @MEASURE_TIME=FORMAT(CURRENT_TIMESTAMP, 'dd.MM.yyyy hh:mm:ss');
       SET @MILL_ID=[dbo].[get_EquipmentPropertyValue]([dbo].[get_ParentEquipmentIDByClass](@EquipmentID,N'MILL'),N'MILL_ID');      
       SET @NEMERA=[dbo].[get_JobOrderPropertyValue](@JobOrderID,N'NEMERA');
       
