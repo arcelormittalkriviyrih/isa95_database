@@ -409,5 +409,8 @@ END;
 GO
 
 
-update MaterialLotProperty set [Value]=FORMAT(CONVERT(DATETIME,[Value],121), 'dd.mm.yyyy hh:mm:ss') where PropertyType=149 and ISDATE([Value])=1 and [Value] is not null;
+DECLARE @MEASURE_TIME_ID int;
+SET @MEASURE_TIME_ID=(select ID from PropertyTypes where  [Value]='MEASURE_TIME');
+
+update MaterialLotProperty set [Value]=FORMAT(CONVERT(DATETIME,[Value],121), 'dd.mm.yyyy hh:mm:ss') where PropertyType=@MEASURE_TIME_ID and ISDATE([Value])=1 and [Value] is not null;
 GO
