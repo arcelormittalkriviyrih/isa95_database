@@ -107,7 +107,7 @@ AS
                                  END;
                          END;
                      DECLARE @MEASURE_TIME NVARCHAR(50), @MILL_ID NVARCHAR(50), @NEMERA NVARCHAR(50);
-                     SET @MEASURE_TIME = FORMAT(CURRENT_TIMESTAMP, 'dd.mm.yyyy hh:mm:ss');
+                     SET @MEASURE_TIME = FORMAT(CURRENT_TIMESTAMP, 'dd.MM.yyyy hh:mm:ss');
                      SET @MILL_ID = dbo.get_EquipmentPropertyValue(dbo.get_ParentEquipmentIDByClass(@EquipmentID, N'MILL'), N'MILL_ID');
                      SET @WorkDefinitionID = dbo.get_EquipmentPropertyValue(@EquipmentID, N'WORK_DEFINITION_ID');
                      SET @NEMERA = dbo.get_JobOrderPropertyValue(@JobOrderID, N'NEMERA');
@@ -216,7 +216,7 @@ IF @WorkDefinitionID IS NOT NULL
       DECLARE @MEASURE_TIME NVARCHAR(50),
               @MILL_ID      NVARCHAR(50),
               @NEMERA       NVARCHAR(50);
-      SET @MEASURE_TIME=FORMAT(CURRENT_TIMESTAMP, 'dd.mm.yyyy hh:mm:ss');
+      SET @MEASURE_TIME=FORMAT(CURRENT_TIMESTAMP, 'dd.MM.yyyy hh:mm:ss');
       SET @MILL_ID=[dbo].[get_EquipmentPropertyValue]([dbo].[get_ParentEquipmentIDByClass](@EquipmentID,N'MILL'),N'MILL_ID');      
       SET @NEMERA=[dbo].[get_JobOrderPropertyValue](@JobOrderID,N'NEMERA');
       
@@ -336,7 +336,7 @@ BEGIN
    DECLARE @MILL_ID NVARCHAR(50),
            @MEASURE_TIME NVARCHAR(50);
    SET @MILL_ID=[dbo].[get_EquipmentPropertyValue]([dbo].[get_ParentEquipmentIDByClass](@EquipmentID,N'MILL'),N'MILL_ID');
-   SET @MEASURE_TIME=FORMAT(CURRENT_TIMESTAMP, 'dd.mm.yyyy hh:mm:ss');
+   SET @MEASURE_TIME=FORMAT(CURRENT_TIMESTAMP, 'dd.MM.yyyy hh:mm:ss');
 
    DECLARE @tblParams TABLE(ID    NVARCHAR(50),
                             Value NVARCHAR(50));
@@ -412,5 +412,5 @@ GO
 DECLARE @MEASURE_TIME_ID int;
 SET @MEASURE_TIME_ID=(select ID from PropertyTypes where  [Value]='MEASURE_TIME');
 
-update MaterialLotProperty set [Value]=FORMAT(CONVERT(DATETIME,[Value],121), 'dd.mm.yyyy hh:mm:ss') where PropertyType=@MEASURE_TIME_ID and ISDATE([Value])=1 and [Value] is not null;
+update MaterialLotProperty set [Value]=FORMAT(CONVERT(DATETIME,[Value],121), 'dd.MM.yyyy hh:mm:ss') where PropertyType=@MEASURE_TIME_ID and ISDATE([Value])=1 and [Value] is not null;
 GO
