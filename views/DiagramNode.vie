@@ -13,4 +13,5 @@ SELECT d.ID,
        p.Value json
 FROM [dbo].[WorkflowSpecificationNode] d
      LEFT OUTER JOIN [dbo].[WorkflowSpecificationProperty] p ON (p.WorkflowSpecificationNode=d.ID)
+     LEFT OUTER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=p.[PropertyType] AND pt.[Value]=N'JSON')
 GO
