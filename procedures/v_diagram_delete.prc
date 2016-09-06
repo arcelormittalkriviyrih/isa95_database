@@ -12,11 +12,11 @@ CREATE PROCEDURE [dbo].[v_Diagram_delete]
 AS
 BEGIN
 
-DELETE FROM [dbo].[WorkflowSpecification]
-WHERE [ID]=@ID;
-
 DELETE FROM [dbo].[WorkflowSpecificationProperty]
 WHERE [WorkflowSpecification]=@ID;
+
+DELETE FROM [dbo].[WorkflowSpecification]
+WHERE [ID]=@ID;
 
 END;
 GO

@@ -12,11 +12,11 @@ CREATE PROCEDURE [dbo].[v_DiagramNode_delete]
 AS
 BEGIN
 
-DELETE FROM [dbo].[WorkflowSpecificationNode]
-WHERE [ID]=@ID;
-
 DELETE FROM [dbo].[WorkflowSpecificationProperty]
 WHERE [WorkflowSpecificationNode]=@ID;
+
+DELETE FROM [dbo].[WorkflowSpecificationNode]
+WHERE [ID]=@ID;
 
 END;
 GO
