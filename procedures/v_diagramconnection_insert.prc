@@ -9,8 +9,8 @@ GO
 
 CREATE PROCEDURE [dbo].[v_DiagramConnection_insert]
 --@ConnectionType          INT,
-@FromNodeID              NVARCHAR(50),
-@ToNodeID                NVARCHAR(50),
+@FromNodeID              INT,
+@ToNodeID                INT,
 @DiagramID               INT,
 @json                    NVARCHAR(MAX),
 @Description             NVARCHAR(50) = NULL

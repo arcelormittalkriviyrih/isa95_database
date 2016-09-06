@@ -11,8 +11,8 @@ CREATE PROCEDURE [dbo].[v_DiagramConnection_update]
 @ID                 INT,
 @json               NVARCHAR(MAX),
 --@ConnectionType     INT,
-@FromNodeID         NVARCHAR(50),
-@ToNodeID           NVARCHAR(50),
+@FromNodeID         INT,
+@ToNodeID           INT,
 @DiagramID          INT,
 @Description        NVARCHAR(50) = NULL
 AS
