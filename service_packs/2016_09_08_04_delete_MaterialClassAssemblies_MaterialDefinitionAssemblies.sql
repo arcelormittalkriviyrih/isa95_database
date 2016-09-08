@@ -1,0 +1,5 @@
+drop table MaterialDefinitionAssemblies
+go
+
+drop table MaterialClassAssemblies
+go
