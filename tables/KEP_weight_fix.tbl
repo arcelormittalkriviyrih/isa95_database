@@ -1,0 +1,95 @@
+﻿
+/****** Object:  Table [dbo].[KEP_weight_fix]    Script Date: 01.07.2016 12:05:04 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[KEP_weight_fix](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[AUTO_MANU] [bit] NOT NULL,
+	[NUMBER_POCKET] [int] NOT NULL,
+	[TIMESTAMP] [datetime] NOT NULL,
+	[WEIGHT_FIX] [int] NOT NULL,
+	[WEIGHT_OK] [bit] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE INDEX [i1_KEP_weight_fix] ON [dbo].[KEP_weight_fix] ([NUMBER_POCKET]) INCLUDE ([TIMESTAMP],[ID])
+GO
+
+IF OBJECT_ID ('dbo.InsKepWeightFix_archive',N'TR') IS NOT NULL
+   DROP TRIGGER [dbo].[InsKepWeightFix_archive];
+GO
+
+CREATE TRIGGER [dbo].[InsKepWeightFix_archive] ON [dbo].[KEP_weight_fix]
+AFTER INSERT
+AS
+BEGIN
+
+   INSERT INTO [dbo].[KEP_weight_fix_archive] SELECT * FROM INSERTED;
+
+END
+GO
+
+EXEC sp_settriggerorder @triggername=N'[dbo].[InsKepWeightFix_archive]', @order=N'First', @stmttype=N'INSERT'
+
+
+IF OBJECT_ID ('dbo.InsKepWeightFix',N'TR') IS NOT NULL
+   DROP TRIGGER [dbo].[InsKepWeightFix];
+GO
+
+CREATE TRIGGER [dbo].[InsKepWeightFix] ON [dbo].[KEP_weight_fix]
+AFTER INSERT
+AS
+BEGIN
+
+SET NOCOUNT ON;
+SET XACT_ABORT OFF;
+
+BEGIN TRY
+
+   DECLARE @AUTO_MANU       BIT, --AUTO_MANU_VALUE,
+           @NUMBER_POCKET   INT, --WEIGHT__FIX_NUMERICID
+           @TIMESTAMP       DATETIME, --WEIGHT__FIX_TIMESTAMP
+           @WEIGHT_FIX      INT, --WEIGHT__FIX_VALUE
+           @WEIGHT_OK       BIT, --WEIGHT_OK_VALUE
+		   @IDENT		    varchar(50); --WEIGHT__FIX_VALUE
+
+   SELECT @AUTO_MANU=[AUTO_MANU],
+          @NUMBER_POCKET=[NUMBER_POCKET],
+          @TIMESTAMP=[TIMESTAMP],
+          @WEIGHT_FIX=[WEIGHT_FIX],
+          @WEIGHT_OK=[WEIGHT_OK],
+		  @IDENT=concat([NUMBER_POCKET],'-',[IDENT])
+   FROM INSERTED;
+
+   SAVE TRANSACTION insJobOrderPrintLabel;
+   IF @WEIGHT_OK=1
+      EXEC [dbo].[ins_JobOrderPrintLabelByScalesNo] @SCALES_NO  = @NUMBER_POCKET,
+                                                    @TIMESTAMP  = @TIMESTAMP,
+                                                    @WEIGHT_FIX = @WEIGHT_FIX,
+                                                    @AUTO_MANU  = '0',
+													@IDENT	    = @IDENT;
+END TRY
+
+BEGIN CATCH
+   ROLLBACK TRANSACTION insJobOrderPrintLabel;
+   BEGIN TRY
+      SAVE TRANSACTION InsErr;
+      EXEC [dbo].[ins_ErrorLog];
+   END TRY
+   BEGIN CATCH
+      ROLLBACK TRANSACTION InsErr;
+   END CATCH
+END CATCH
+
+END
+GO
+
+EXEC sp_settriggerorder @triggername=N'[dbo].[InsKepWeightFix]', @order=N'Last', @stmttype=N'INSERT'
