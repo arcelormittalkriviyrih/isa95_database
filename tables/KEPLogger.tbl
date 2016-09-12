@@ -19,6 +19,7 @@ CREATE TABLE [dbo].[KEP_logger](
 	[WEIGHT_ZERO] [bit] NULL,
 	[PACK_SANDWICH] [bit] NULL,
 	[ALARM] [bit] NULL,
+	[KEY_MANU] [bit] NULL,	
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC

@@ -31,6 +31,7 @@ AS
                   SELECT ROW_NUMBER() OVER(PARTITION BY kl.[NUMBER_POCKET] ORDER BY kl.[TIMESTAMP] DESC) RowNumber,
                          kl.[WEIGHT_CURRENT],
                          kl.[AUTO_MANU],
+                         kl.[KEY_MANU],
                          kl.[POCKET_LOC],
                          kl.[NUMBER_POCKET]
                   FROM dbo.KEP_logger kl
@@ -41,6 +42,7 @@ AS
                  eq.[Description] AS ScalesName,
                  dbo.get_RoundedWeightByEquipment(kd.WEIGHT_CURRENT, eq.ID) WEIGHT_CURRENT,
                  kd.AUTO_MANU,
+                 kd.KEY_MANU,
                  kd.POCKET_LOC,
                  CAST(FLOOR(dbo.get_RoundedWeightByEquipment(kd.WEIGHT_CURRENT, eq.ID) / bw.PropertyValue) AS   INT) RodsQuantity,
                  CAST(bQty.PropertyValue AS INT)		BAR_QUANTITY
