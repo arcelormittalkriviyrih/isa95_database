@@ -1,4 +1,24 @@
-﻿SET NUMERIC_ROUNDABORT OFF;
+﻿SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF NOT EXISTS (SELECT NULL
+               FROM information_schema.columns
+               WHERE table_name = 'KEP_logger_archive'
+                 AND column_name = 'EN_BUTTON_TARA')
+   ALTER TABLE [dbo].[KEP_logger_archive] ADD [EN_BUTTON_TARA] [BIT]  NULL
+GO
+
+IF NOT EXISTS (SELECT NULL
+               FROM information_schema.columns
+               WHERE table_name = 'KEP_logger'
+                 AND column_name = 'EN_BUTTON_TARA')
+   ALTER TABLE [dbo].[KEP_logger] ADD [EN_BUTTON_TARA] [BIT]  NULL
+GO
+
+SET NUMERIC_ROUNDABORT OFF;
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
