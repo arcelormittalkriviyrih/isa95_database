@@ -15,10 +15,12 @@ BEGIN
 
 DECLARE @DiagramID INT;
 
-SET @DiagramID=NEXT VALUE FOR dbo.gen_WorkflowSpecification;
+INSERT INTO [dbo].[WorkflowSpecification] ([Description])
+VALUES (@Description);
 
-INSERT INTO [dbo].[WorkflowSpecification] ([ID],[Description])
-VALUES (@DiagramID,@Description);
+SELECT SCOPE_IDENTITY() as ID;
+
+SELECT @DiagramID=SCOPE_IDENTITY();
 
 INSERT INTO [dbo].[WorkflowSpecificationProperty]([PropertyType],[Value],[WorkflowSpecification])
 SELECT pt.[ID],@json,@DiagramID

@@ -19,10 +19,13 @@ BEGIN
 
 DECLARE @DiagramConnectionID INT;
 
-SET @DiagramConnectionID=NEXT VALUE FOR dbo.gen_WorkflowSpecificationConnection;
 
-INSERT INTO [dbo].[WorkflowSpecificationConnection] ([ID],[Description],[ConnectionType],[FromNodeID],[ToNodeID],[WorkflowSpecification])
-VALUES (@DiagramConnectionID,@Description,1,@FromNodeID,@ToNodeID,@DiagramID);
+INSERT INTO [dbo].[WorkflowSpecificationConnection] ([Description],[ConnectionType],[FromNodeID],[ToNodeID],[WorkflowSpecification])
+VALUES (@Description,1,@FromNodeID,@ToNodeID,@DiagramID);
+
+SELECT SCOPE_IDENTITY() as ID;
+
+SELECT @DiagramConnectionID=SCOPE_IDENTITY();
 
 INSERT INTO [dbo].[WorkflowSpecificationProperty]([PropertyType],[Value],[WorkflowSpecificationConnection])
 SELECT pt.[ID],@json,@DiagramConnectionID

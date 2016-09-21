@@ -18,10 +18,12 @@ BEGIN
 
 DECLARE @DiagramNodeID INT;
 
-SET @DiagramNodeID=NEXT VALUE FOR dbo.gen_WorkflowSpecificationNode;
+INSERT INTO [dbo].[WorkflowSpecificationNode] ([Description],[NodeType],[WorkflowSpecification],[WorkDefinition])
+VALUES (@Description,1,@DiagramID,NULL);
 
-INSERT INTO [dbo].[WorkflowSpecificationNode] ([ID],[Description],[NodeType],[WorkflowSpecification],[WorkDefinition])
-VALUES (@DiagramNodeID,@Description,1,@DiagramID,NULL);
+SELECT SCOPE_IDENTITY() as ID;
+
+SELECT @DiagramNodeID=SCOPE_IDENTITY();
 
 INSERT INTO [dbo].[WorkflowSpecificationProperty]([PropertyType],[Value],[WorkflowSpecificationNode])
 SELECT pt.[ID],@json,@DiagramNodeID
