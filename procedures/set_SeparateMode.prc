@@ -106,6 +106,10 @@ BEGIN
                                 @PACKS_LEFT      = @PACKS_LEFT,
                                 @WorkRequestID   = @WorkRequestID OUTPUT;
 
+   EXEC [dbo].[ins_JobOrderOPCCommandSandwich] @WorkRequestID = @WorkRequestID,
+                                               @EquipmentID   = @EquipmentID,
+                                               @TagValue      = N'false';
+
    EXEC [dbo].[ins_JobOrderOPCCommandAutoManu] @WorkRequestID = @WorkRequestID,
                                                @EquipmentID   = @EquipmentID,
                                                @TagValue      = N'false';
