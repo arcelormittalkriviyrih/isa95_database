@@ -1,8 +1,8 @@
---------------------------------------------------------------
+п»ї--------------------------------------------------------------
 /*
-Заполнение таблиц WorkflowSpecificationNodeType, WorkflowSpecificationConnectionType
-данными 
-по проекту Система упрвления операциями СЦиО
+Р—Р°РїРѕР»РЅРµРЅРёРµ С‚Р°Р±Р»РёС† WorkflowSpecificationNodeType, WorkflowSpecificationConnectionType
+РґР°РЅРЅС‹РјРё 
+РїРѕ РїСЂРѕРµРєС‚Сѓ РЎРёСЃС‚РµРјР° СѓРїСЂРІР»РµРЅРёСЏ РѕРїРµСЂР°С†РёСЏРјРё РЎР¦РёРћ
 */
 INSERT INTO [dbo].[WorkflowSpecificationNodeType] ([ID], [Description]) VALUES( 100000, N'Event')
 INSERT INTO [dbo].[WorkflowSpecificationNodeType] ([ID], [Description]) VALUES( 100001, N'Input')
