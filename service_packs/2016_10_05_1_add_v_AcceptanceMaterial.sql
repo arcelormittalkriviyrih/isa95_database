@@ -5,7 +5,7 @@ SET QUOTED_IDENTIFIER ON;
 GO
 
 IF OBJECT_ID ('dbo.v_AcceptanceMaterial', N'V') IS NOT NULL
-   DROP VIEW dbo.v_MaterialLot;
+   DROP VIEW dbo.v_AcceptanceMaterial;
 GO
 
 
