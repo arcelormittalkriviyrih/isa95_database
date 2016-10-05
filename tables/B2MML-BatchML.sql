@@ -1,5 +1,5 @@
-﻿USE [B2MML-BatchML-TEST]
-GO
+﻿
+
 /****** Object:  Table [dbo].[AlarmData]    Script Date: 08.12.2015 12:35:04 ******/
 SET ANSI_NULLS ON
 GO

@@ -5,6 +5,7 @@ PackagingUnits, PackagingUnitsProperty
 данными 
 по проекту Копр4
 */
+SET NOCOUNT ON
 
 INSERT INTO [dbo].[PackagingClassProperty]
            ([ID]

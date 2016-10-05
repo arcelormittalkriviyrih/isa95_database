@@ -6,6 +6,8 @@ LocationDefinition Location PackagingClass
 по проекту Копр4
 */
 
+SET NOCOUNT ON
+
 INSERT INTO [dbo].[LocationClass]           ([ID]           ,[Description]           ,[ParentID])     
    VALUES           (1,N'ж\д транспорт',1)
 
