@@ -475,7 +475,7 @@ begin
 end
 go
 
-IF OBJECT_ID (N'OrgStructure.FK_EmployeeClass_EmpoloyeeClass', N'F') IS NULL 
+IF OBJECT_ID (N'OrgStructure.FK_EmployeeClass_EmployeeClass', N'F') IS NULL 
 begin
 	alter table OrgStructure.EmployeeClass
 		WITH CHECK ADD CONSTRAINT FK_EmployeeClass_EmployeeClass FOREIGN KEY(ParentID)  
@@ -483,7 +483,7 @@ begin
 end
 go
 
-IF OBJECT_ID (N'OrgStructure.FK_Employee_EmpolyeeClass', N'F') IS NULL 
+IF OBJECT_ID (N'OrgStructure.FK_Employee_EmployeeClass', N'F') IS NULL 
 begin
 	alter table OrgStructure.Employee
 		WITH CHECK ADD CONSTRAINT FK_Employee_EmployeeClass FOREIGN KEY(EmployeeClassID)  
@@ -491,7 +491,7 @@ begin
 end
 go
 
-IF OBJECT_ID (N'OrgStructure.FK_ProfessionClasProperty_ProfessionClassProperty', N'F') IS NULL 
+IF OBJECT_ID (N'OrgStructure.FK_ProfessionClassProperty_ProfessionClassProperty', N'F') IS NULL 
 begin
 	alter table OrgStructure.ProfessionClassProperty
 		WITH CHECK ADD CONSTRAINT FK_ProfessionClassProperty_ProfessionClassProperty FOREIGN KEY(ProfessionClassPropertyID)  
@@ -499,7 +499,7 @@ begin
 end
 go
 
-IF OBJECT_ID (N'OrgStructure.FK_ProfessionClasProperty_ProfessionClass', N'F') IS NULL 
+IF OBJECT_ID (N'OrgStructure.FK_ProfessionClassProperty_ProfessionClass', N'F') IS NULL 
 begin
 	alter table OrgStructure.ProfessionClassProperty
 		WITH CHECK ADD CONSTRAINT FK_ProfessionClassProperty_ProfessionClass FOREIGN KEY(ProfessionClassID)  
