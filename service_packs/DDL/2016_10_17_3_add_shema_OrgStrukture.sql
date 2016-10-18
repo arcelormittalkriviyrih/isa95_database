@@ -1,6 +1,7 @@
 
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'OrgStructure')
 	EXEC sp_executesql N'CREATE SCHEMA OrgStructure;';
+go
 
 IF OBJECT_ID (N'OrgStructure.OrganizationClass', N'U') IS NULL  
 begin 
