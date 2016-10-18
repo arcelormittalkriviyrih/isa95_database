@@ -1,244 +1,325 @@
-create schema OrgStructure
 
-create table OrganizationClass (
-	ID int not null,
-	Description nvarchar (50) null,
-	ParentID int null
-	CONSTRAINT PK_OrganizationClass PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'OrgStructure')
+	create schema OrgStructure
 
-create table Organization (
-	ID int not null,
-	Description nvarchar (50) null,
-	OrganizationClassID int null,
-	OrganizationID int null
-	CONSTRAINT PK_Organization PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF OBJECT_ID (N'OrganizationClass', N'U') IS NULL  
+begin 
+	create table OrganizationClass (
+		ID int not null,
+		Description nvarchar (50) null,
+		ParentID int null
+		CONSTRAINT PK_OrganizationClass PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
 
-create table OrganizationClassProperty (
-	ID int not null, 
-	Description nvarchar (50) null,
-	Value nvarchar (50) null,
-	OrganizationClassPropertyID int null,
-	OrganizationClassID int null
-	CONSTRAINT PK_OrganizationClassProperty PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF OBJECT_ID (N'Organization', N'U') IS NULL  
+begin 
+	create table Organization (
+		ID int not null,
+		Description nvarchar (50) null,
+		OrganizationClassID int null,
+		OrganizationID int null
+		CONSTRAINT PK_Organization PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
 
-create table OrganizationProperty (
-	ID int not null, 
-	Description nvarchar (50) null,
-	Value nvarchar (50) null,
-	OrganizationPropertyID int null,
-	OrganizationClassPropertyID int null,
-	OrganizationID int null
-	CONSTRAINT PK_OrganizationProperty PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF OBJECT_ID (N'OrganizationClassProperty', N'U') IS NULL  
+begin 
+	create table OrganizationClassProperty (
+		ID int not null, 
+		Description nvarchar (50) null,
+		Value nvarchar (50) null,
+		OrganizationClassPropertyID int null,
+		OrganizationClassID int null
+		CONSTRAINT PK_OrganizationClassProperty PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
 
-create table OrgUnitClass (
-	ID int not null,
-	Description nvarchar (50) null,
-	ParentID int null
-	CONSTRAINT PK_OrgUnitClass PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF OBJECT_ID (N'OrganizationProperty', N'U') IS NULL  
+begin 
+	create table OrganizationProperty (
+		ID int not null, 
+		Description nvarchar (50) null,
+		Value nvarchar (50) null,
+		OrganizationPropertyID int null,
+		OrganizationClassPropertyID int null,
+		OrganizationID int null
+		CONSTRAINT PK_OrganizationProperty PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
 
-create table OrgUnit (
-	ID int not null,
-	Description nvarchar (50) null,
-	OrgUnitClassID int null,
-	OrgUnitID int null
-	CONSTRAINT PK_OrgUnit PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]	
+IF OBJECT_ID (N'OrgUnitClass', N'U') IS NULL  
+begin
+	create table OrgUnitClass (
+		ID int not null,
+		Description nvarchar (50) null,
+		ParentID int null
+		CONSTRAINT PK_OrgUnitClass PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
 
-create table OrgUnitClassProperty (
-	ID int not null, 
-	Description nvarchar (50) null,
-	Value nvarchar (50) null,
-	OrgUnitClassPropertyID int null,
-	OrgUnitClassID int null
-	CONSTRAINT PK_OrgUnitClassProperty PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF OBJECT_ID (N'OrgUnit', N'U') IS NULL  
+begin
+	create table OrgUnit (
+		ID int not null,
+		Description nvarchar (50) null,
+		OrgUnitClassID int null,
+		OrgUnitID int null
+		CONSTRAINT PK_OrgUnit PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]	
+end
+go
 
-create table OrgUnitProperty (
-	ID int not null, 
-	Description nvarchar (50) null,
-	Value nvarchar (50) null,
-	OrgUnitPropertyID int null,
-	OrgUnitClassPropertyID int null,
-	OrgUnitID int null
-	CONSTRAINT PK_OrgUnitProperty PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF OBJECT_ID (N'OrgUnitClassProperty', N'U') IS NULL  
+begin
+	create table OrgUnitClassProperty (
+		ID int not null, 
+		Description nvarchar (50) null,
+		Value nvarchar (50) null,
+		OrgUnitClassPropertyID int null,
+		OrgUnitClassID int null
+		CONSTRAINT PK_OrgUnitClassProperty PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
 
-create table ProfessionClass (
-	ID int not null,
-	Description nvarchar (50) null,
-	ParentID int null
-	CONSTRAINT PK_ProfessionClass PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]	
+IF OBJECT_ID (N'OrgUnitProperty', N'U') IS NULL  
+begin
+	create table OrgUnitProperty (
+		ID int not null, 
+		Description nvarchar (50) null,
+		Value nvarchar (50) null,
+		OrgUnitPropertyID int null,
+		OrgUnitClassPropertyID int null,
+		OrgUnitID int null
+		CONSTRAINT PK_OrgUnitProperty PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
 
-create table Profession (
-	ID int not null,
-	Description nvarchar (50) null,
-	ProfessionID int null,
-	ProfessionClassID int null
-	CONSTRAINT PK_Profession PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]	
+IF OBJECT_ID (N'ProfessionClass', N'U') IS NULL  
+begin
+	create table ProfessionClass (
+		ID int not null,
+		Description nvarchar (50) null,
+		ParentID int null
+		CONSTRAINT PK_ProfessionClass PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]	
+end
+go
 
-create table EmployeeClass (
-	ID int not null,
-	Description nvarchar (50) null,
-	ParentID int null
-	CONSTRAINT PK_EmployeeClass PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]	
+IF OBJECT_ID (N'Profession', N'U') IS NULL  
+begin
+	create table Profession (
+		ID int not null,
+		Description nvarchar (50) null,
+		ProfessionID int null,
+		ProfessionClassID int null
+		CONSTRAINT PK_Profession PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]	
+end
+go
 
-create table Employee (
-	ID int not null,
-	Description nvarchar (50) null,
-	Location nvarchar (50) null,
-	EmployeeClassID int null,
-	PersonelName nvarchar (50) null
-	CONSTRAINT PK_Employee PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]	
+IF OBJECT_ID (N'EmployeeClass', N'U') IS NULL  
+begin
+	create table EmployeeClass (
+		ID int not null,
+		Description nvarchar (50) null,
+		ParentID int null
+		CONSTRAINT PK_EmployeeClass PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]	
+end
+go
 
-create table ProfessionClassProperty (
-	ID int not null, 
-	Description nvarchar (50) null,
-	Value nvarchar (50) null,
-	ProfessionClassPropertyID int null,
-	ProfessionClassID int null
-	CONSTRAINT PK_ProfessionClassProperty PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF OBJECT_ID (N'Employee', N'U') IS NULL  
+begin
+	create table Employee (
+		ID int not null,
+		Description nvarchar (50) null,
+		Location nvarchar (50) null,
+		EmployeeClassID int null,
+		PersonelName nvarchar (50) null
+		CONSTRAINT PK_Employee PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]	
+end
+go
 
-create table ProfessionProperty (
-	ID int not null, 
-	Description nvarchar (50) null,
-	Value nvarchar (50) null,
-	ProfessionPropertyID int null,
-	ProfessionClassPropertyID int null,
-	ProfessionID int null
-	CONSTRAINT PK_ProfessionProperty PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF OBJECT_ID (N'ProfessionClassProperty', N'U') IS NULL  
+begin
+	create table ProfessionClassProperty (
+		ID int not null, 
+		Description nvarchar (50) null,
+		Value nvarchar (50) null,
+		ProfessionClassPropertyID int null,
+		ProfessionClassID int null
+		CONSTRAINT PK_ProfessionClassProperty PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
 
-create table EmployeeClassProperty (
-	ID int not null, 
-	Description nvarchar (50) null,
-	Value nvarchar (50) null,
-	EmployeeClassPropertyID int null,
-	EmployeeClassID int null
-	CONSTRAINT PK_EmployeeClassProperty PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF OBJECT_ID (N'ProfessionProperty', N'U') IS NULL  
+begin
+	create table ProfessionProperty (
+		ID int not null, 
+		Description nvarchar (50) null,
+		Value nvarchar (50) null,
+		ProfessionPropertyID int null,
+		ProfessionClassPropertyID int null,
+		ProfessionID int null
+		CONSTRAINT PK_ProfessionProperty PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
 
-create table EmployeeProperty (
-	ID int not null, 
-	Description nvarchar (50) null,
-	Value nvarchar (50) null,
-	EmployeePropertyID int null,
-	EmployeeClassPropertyID int null,
-	EmployeeID int null
-	CONSTRAINT PK_EmployeeProperty PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF OBJECT_ID (N'EmployeeClassProperty', N'U') IS NULL  
+begin
+	create table EmployeeClassProperty (
+		ID int not null, 
+		Description nvarchar (50) null,
+		Value nvarchar (50) null,
+		EmployeeClassPropertyID int null,
+		EmployeeClassID int null
+		CONSTRAINT PK_EmployeeClassProperty PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
 
-create table OrgItemRelationshipClass (
-	ID int not null,
-	Description nvarchar (50) null,
-	LLinkEntity nvarchar (50) null,
-	RLinkEntity nvarchar (50) null,
-	ParentID int null,
-	Bdate datetime null,
-	Edate datetime null
-	CONSTRAINT PK_OrgItemRelationshipClass PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]	
+IF OBJECT_ID (N'EmployeeProperty', N'U') IS NULL  
+begin
+	create table EmployeeProperty (
+		ID int not null, 
+		Description nvarchar (50) null,
+		Value nvarchar (50) null,
+		EmployeePropertyID int null,
+		EmployeeClassPropertyID int null,
+		EmployeeID int null
+		CONSTRAINT PK_EmployeeProperty PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
 
-create table OrgItemRelationship (
-	ID int not null,
-	Description nvarchar (50) null,
-	OrgItemRelationshipClassID int null,
-	LLink nvarchar (50) null,
-	RLink nvarchar (50) null,
-	Bdate datetime null,
-	Edate datetime null
-	CONSTRAINT PK_OrgItemRelationship PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]	
+IF OBJECT_ID (N'OrgItemRelationshipClass', N'U') IS NULL  
+begin
+	create table OrgItemRelationshipClass (
+		ID int not null,
+		Description nvarchar (50) null,
+		LLinkEntity nvarchar (50) null,
+		RLinkEntity nvarchar (50) null,
+		ParentID int null,
+		Bdate datetime null,
+		Edate datetime null
+		CONSTRAINT PK_OrgItemRelationshipClass PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]	
+end
+go
 
-create table OrgItemRelationshipClassProperty (
-	ID int not null, 
-	Description nvarchar (50) null,
-	Value nvarchar (50) null,
-	OrgItemRelationshipClassPropertyID int null,
-	OrgItemRelationshipClassID int null
-	CONSTRAINT PK_OrgItemRelationshipClassProperty PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF OBJECT_ID (N'OrgItemRelationship', N'U') IS NULL  
+begin
+	create table OrgItemRelationship (
+		ID int not null,
+		Description nvarchar (50) null,
+		OrgItemRelationshipClassID int null,
+		LLink nvarchar (50) null,
+		RLink nvarchar (50) null,
+		Bdate datetime null,
+		Edate datetime null
+		CONSTRAINT PK_OrgItemRelationship PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]	
+end
+go
 
-create table OrgItemRelationshipProperty (
-	ID int not null, 
-	Description nvarchar (50) null,
-	Value nvarchar (50) null,
-	OrgItemRelationshipPropertyID int null,
-	OrgItemRelationshipClassPropertyID int null,
-	OrgItemRelationshipID int null
-	CONSTRAINT PK_OrgItemRelationshipProperty PRIMARY KEY CLUSTERED (ID) 
-		WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
-ON [PRIMARY]
-) 
-ON [PRIMARY]
+IF OBJECT_ID (N'OrgItemRelationshipClassProperty', N'U') IS NULL  
+begin
+	create table OrgItemRelationshipClassProperty (
+		ID int not null, 
+		Description nvarchar (50) null,
+		Value nvarchar (50) null,
+		OrgItemRelationshipClassPropertyID int null,
+		OrgItemRelationshipClassID int null
+		CONSTRAINT PK_OrgItemRelationshipClassProperty PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
 
-GO
+IF OBJECT_ID (N'OrgItemRelationshipProperty', N'U') IS NULL  
+begin
+	create table OrgItemRelationshipProperty (
+		ID int not null, 
+		Description nvarchar (50) null,
+		Value nvarchar (50) null,
+		OrgItemRelationshipPropertyID int null,
+		OrgItemRelationshipClassPropertyID int null,
+		OrgItemRelationshipID int null
+		CONSTRAINT PK_OrgItemRelationshipProperty PRIMARY KEY CLUSTERED (ID) 
+			WITH (PAD_INDEX=OFF, STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+	ON [PRIMARY]
+	) 
+	ON [PRIMARY]
+end
+go
+
 
 
 IF OBJECT_ID (N'FK_OrganizationClass_OrganizationClass', N'F') IS NULL 
