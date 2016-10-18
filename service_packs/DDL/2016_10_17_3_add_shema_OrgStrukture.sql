@@ -306,7 +306,7 @@ go
 
 IF OBJECT_ID (N'OrgStructure.OrgItemRelationshipProperty', N'U') IS NULL  
 begin
-	create table OrgItemRelationshipProperty (
+	create table OrgStructure.OrgItemRelationshipProperty (
 		ID int not null, 
 		Description nvarchar (50) null,
 		Value nvarchar (50) null,
