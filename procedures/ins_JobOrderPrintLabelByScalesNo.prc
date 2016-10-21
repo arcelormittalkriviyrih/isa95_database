@@ -11,7 +11,7 @@ GO
 SET QUOTED_IDENTIFIER ON;
 GO
 /*
-	Procedure: ins_JobOrderToPrint
+	Procedure: ins_JobOrderPrintLabelByScalesNo
 	Процедура создания бирки и Job на печать бирки.
 
 	Parameters:
