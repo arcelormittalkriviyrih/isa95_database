@@ -23,20 +23,27 @@ CREATE PROCEDURE [dbo].[ins_JobOrderSAPExport]
 AS
 BEGIN
 
-   DECLARE @JobOrderID    INT,
-           @err_message   NVARCHAR(255),
-		   @LinkedServer  NVARCHAR(50);
+	IF dbo.get_GlobalOption(N'PRINT_SYSTEM_ENABLED')=N'false'
+		NOTHING_TODO:
+	ELSE
+		BEGIN
 
-   SET @LinkedServer=(SELECT top 1 Parameter from WorkDefinition where WORKType='SAPExport' order by ID desc);
+		   DECLARE @JobOrderID    INT,
+				   @err_message   NVARCHAR(255),
+				   @LinkedServer  NVARCHAR(50);
 
-   SET @JobOrderID=NEXT VALUE FOR [dbo].[gen_JobOrder];
-   INSERT INTO [dbo].[JobOrder] ([ID],[WorkType],[DispatchStatus],[StartTime],[WorkRequest],CommandRule)
-   VALUES (@JobOrderID,N'SAPExport',N'TODO',CURRENT_TIMESTAMP,@WorkRequestID,@LinkedServer);
+		   SET @LinkedServer=(SELECT top 1 Parameter from WorkDefinition where WORKType='SAPExport' order by ID desc);
+
+		   SET @JobOrderID=NEXT VALUE FOR [dbo].[gen_JobOrder];
+		   INSERT INTO [dbo].[JobOrder] ([ID],[WorkType],[DispatchStatus],[StartTime],[WorkRequest],CommandRule)
+		   VALUES (@JobOrderID,N'SAPExport',N'TODO',CURRENT_TIMESTAMP,@WorkRequestID,@LinkedServer);
  
-   INSERT INTO [dbo].[Parameter] ([Value],[JobOrder],[PropertyType])
-   SELECT @MaterialLotID,@JobOrderID,pt.[ID]
-   FROM [dbo].[PropertyTypes] pt
-   WHERE pt.[Value]=N'MaterialLotID';
+		   INSERT INTO [dbo].[Parameter] ([Value],[JobOrder],[PropertyType])
+		   SELECT @MaterialLotID,@JobOrderID,pt.[ID]
+		   FROM [dbo].[PropertyTypes] pt
+		   WHERE pt.[Value]=N'MaterialLotID';
+
+		END;
 
 END;
 
