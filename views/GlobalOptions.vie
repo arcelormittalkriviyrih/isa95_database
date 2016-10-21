@@ -1,0 +1,16 @@
+﻿IF OBJECT_ID ('dbo.v_GlobalOptions', N'V') IS NOT NULL
+   DROP VIEW dbo.v_GlobalOptions;
+GO
+/*
+   View: v_GlobalOptions
+    Возвращает список глобальных опций и их значений.
+*/
+CREATE VIEW dbo.v_GlobalOptions
+AS
+SELECT [ID]
+	  ,[OptionCode]
+      ,[OptionName]
+      ,[OptionValue]
+      ,[OptionDescription]
+  FROM [dbo].[GlobalOptions]
+GO
