@@ -8,7 +8,7 @@ INSERT INTO [dbo].[PhysicalAsset]  (ID,[Description])
 VALUES (0,N'Root')
 
   ALTER SEQUENCE gen_PhysicalAsset
-    RESTART WITH 10120
+    RESTART WITH 10121
 
 
 INSERT INTO [dbo].[PhysicalAsset]  ([Description], [EquipmentLevel] ,[PhysicalAsset] ,[PhysicalAssetClassID])
