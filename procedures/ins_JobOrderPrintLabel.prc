@@ -38,6 +38,8 @@ BEGIN
 		BEGIN
 
 		   DECLARE @err_message NVARCHAR(255),
+				   @SideID		INT,
+				   @SideEnabled NVARCHAR(50),
 				   @EquipmentID INT;
 
 		   IF @Command IS NULL
@@ -62,11 +64,15 @@ BEGIN
 				  THROW 60010, @err_message, 1;
 			  END;
 
-		   EXEC [dbo].[ins_JobOrderToPrint] @EquipmentID = @EquipmentID,
-											@MaterialLotID = @MaterialLotID,
-											@Command = @Command,
-											@CommandRule = @CommandRule,
-											@WorkRequestID = @WorkRequestID;
+		   SET @SideID = dbo.get_SideIdByMaterialLotID(@MaterialLotID);
+		   SET @SideEnabled = dbo.get_EquipmentPropertyValue(@SideID,N'SIDE_ENABLED');
+
+		   IF @SideEnabled =N'1' 
+			   EXEC [dbo].[ins_JobOrderToPrint] @EquipmentID = @EquipmentID,
+												@MaterialLotID = @MaterialLotID,
+												@Command = @Command,
+												@CommandRule = @CommandRule,
+												@WorkRequestID = @WorkRequestID;
 		END;
 END;
 GO

@@ -64,13 +64,21 @@ BEGIN
 
 		   DECLARE @JobOrderID  INT,
 				   @Command     NVARCHAR(50),
+				   @SideID		INT,
+				   @SideEnabled NVARCHAR(50),
 				   @CommandRule NVARCHAR(50);
 
-		   SET @JobOrderID = NEXT VALUE FOR [dbo].[gen_JobOrder];
-		   SET @Command = dbo.get_EquipmentPropertyValue(@EquipmentID,N'OPC_DEVICE_NAME')+ N'.' +  @Tag;
-		   SET @CommandRule = N'(' + @TagType + N')' + @TagValue;
-		   INSERT INTO [dbo].[JobOrder] ([ID], [WorkType], [StartTime], [WorkRequest], [DispatchStatus], [Command], [CommandRule])
-		   VALUES (@JobOrderID,N'KEPCommands',CURRENT_TIMESTAMP,@WorkRequestID,N'ToSend',@Command,@CommandRule);
+		   SET @SideID = (select Equipment from Equipment where ID=@EquipmentID);
+		   SET @SideEnabled = dbo.get_EquipmentPropertyValue(@SideID,N'SIDE_ENABLED');
+
+		   IF @SideEnabled =N'1' 
+		   BEGIN
+			   SET @JobOrderID = NEXT VALUE FOR [dbo].[gen_JobOrder];
+			   SET @Command = dbo.get_EquipmentPropertyValue(@EquipmentID,N'OPC_DEVICE_NAME')+ N'.' +  @Tag;
+			   SET @CommandRule = N'(' + @TagType + N')' + @TagValue;
+			   INSERT INTO [dbo].[JobOrder] ([ID], [WorkType], [StartTime], [WorkRequest], [DispatchStatus], [Command], [CommandRule])
+			   VALUES (@JobOrderID,N'KEPCommands',CURRENT_TIMESTAMP,@WorkRequestID,N'ToSend',@Command,@CommandRule);
+		   END;
 
 		END;
 
