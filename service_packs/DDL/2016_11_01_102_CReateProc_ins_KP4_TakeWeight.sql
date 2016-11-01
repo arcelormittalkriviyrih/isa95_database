@@ -19,7 +19,7 @@ GO
 
 -- Call from program Odata (button "Take weight")
 -- =============================================
-CREATE PROCEDURE [dbo].[ins_KP4_TakeWeight]
+ALTER PROCEDURE [dbo].[ins_KP4_TakeWeight]
    @WorkPerformanceID int,                 --  ID WeightSheet 
    @WeightBridgeID    int,                 --  ID Equipment
    @WeightSheetNumber nvarchar(50),        --  Number WeightSheet 
@@ -77,3 +77,4 @@ BEGIN
 
 
 END
+GO
