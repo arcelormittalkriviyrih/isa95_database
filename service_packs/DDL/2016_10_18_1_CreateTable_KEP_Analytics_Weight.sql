@@ -11,8 +11,12 @@ GO
 SET ANSI_PADDING ON
 GO
 
-IF OBJECT_ID (N'KEP_Analytics_Weight', N'U') IS NULL  
-begin 
+IF OBJECT_ID ('dbo.KEP_Analytics_Weight',N'U') IS NOT NULL
+  DROP TABLE dbo.KEP_Analytics_Weight;
+GO
+
+
+ 
 	CREATE TABLE [dbo].[KEP_Analytics_Weight](
 		[ID] [int] IDENTITY(1,1) NOT NULL,
 		[ID_Scales] [int] NOT NULL,
@@ -30,6 +34,10 @@ begin
 		[trace_sensor_2] [bit] NULL,
 		[trace_sensor_3] [bit] NULL,
 		[trace_sensor_4] [bit] NULL,
+	  [trace_sensor_5] [bit] NULL,
+	  [trace_sensor_6] [bit] NULL,
+	  [trace_sensor_7] [bit] NULL,
+	  [trace_sensor_8] [bit] NULL,
 		[load_sensor_1] [int] NULL,
 		[load_sensor_2] [int] NULL,
 		[load_sensor_3] [int] NULL,
@@ -44,7 +52,7 @@ begin
 		[ID] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
-end
+
 GO
 
 SET ANSI_PADDING OFF
