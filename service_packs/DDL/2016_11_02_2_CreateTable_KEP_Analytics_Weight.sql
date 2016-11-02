@@ -20,7 +20,7 @@ GO
 	CREATE TABLE [dbo].[KEP_Analytics_Weight](
 		[ID] [int] IDENTITY(1,1) NOT NULL,
 		[ID_Scales] [int] NOT NULL,
-		[DT] [datetime] NULL,
+		[DT] [datetime] NULL DEFAULT (getdate()),
 		[Lafet] [varchar](20) NULL,
 		[Wagon] [varchar](20) NULL,
 		[Weight] [int] NULL,

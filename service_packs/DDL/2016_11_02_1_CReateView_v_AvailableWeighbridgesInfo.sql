@@ -54,7 +54,7 @@ SELECT
 		--	then 1
 		--	else 0
 		--end	[stabilizing_weight]
-FROM [KRR-PA-ISA95_SteelSchedule1].[dbo].[KEP_Analytics_Weight]
+FROM [dbo].[KEP_Analytics_Weight]
 )
 
 SELECT top 10
