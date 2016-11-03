@@ -25,3 +25,4 @@ SELECT
 FROM dbo.WorkPerformance 
 left JOIN dbo.WorkResponse 
 ON dbo.WorkPerformance.ID = dbo.WorkResponse.WorkPerfomence
+GO
