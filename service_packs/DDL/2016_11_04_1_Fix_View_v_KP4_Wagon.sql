@@ -5,7 +5,7 @@ IF OBJECT_ID ('dbo.v_KP4_Wagon',N'V') IS NOT NULL
   DROP VIEW dbo.v_KP4_Wagon;
 GO
 
-
+ 
 SET ANSI_NULLS ON
 GO
 

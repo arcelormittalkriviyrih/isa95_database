@@ -2,7 +2,7 @@
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
+ 
 IF OBJECT_ID ('dbo.ins_KP4_TakeWeight',N'P') IS NOT NULL
   DROP PROCEDURE dbo.ins_KP4_TakeWeight;
 GO

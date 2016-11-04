@@ -8,7 +8,7 @@ GO
 IF OBJECT_ID ('dbo.ins_KP4_WorkPerformance',N'P') IS NOT NULL
   DROP PROCEDURE dbo.ins_KP4_WorkPerformance;
 GO
-
+ 
 /****** Object:  StoredProcedure [dbo].[upd_KP4_WorkPerformance]    Script Date: 02.11.2016 14:41:01 ******/
 
 GO
