@@ -44,7 +44,7 @@ from
 where 
 		scrap_type.MaterialDefinitionID = scrap_class.ID
 	and scrap_class.MaterialClassID = MC.ID
-	and MC.Code = N'Scrap type'
+	and MC.Code = N'Scrap'
 
 
 GO
