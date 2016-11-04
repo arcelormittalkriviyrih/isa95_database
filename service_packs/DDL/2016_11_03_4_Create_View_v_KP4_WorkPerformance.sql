@@ -21,8 +21,10 @@ SELECT
 	dbo.WorkResponse.[Description] AS Waybill, 
 	dbo.WorkResponse.WorkType, 
 	dbo.WorkResponse.StartTime	as WorkResponseStartTime, 
-	dbo.WorkResponse.EndTime	as WorkResponseEndTime
+	dbo.WorkResponse.EndTime	as WorkResponseEndTime,
+	OpEquipmentActual.[Description] as WeightBridge
 FROM dbo.WorkPerformance 
-left JOIN dbo.WorkResponse 
-ON dbo.WorkPerformance.ID = dbo.WorkResponse.WorkPerfomence
+left JOIN dbo.WorkResponse 		 ON dbo.WorkPerformance.ID = dbo.WorkResponse.WorkPerfomence
+left JOIN dbo.JobResponse  		 ON dbo.WorkResponse.ID = dbo.JobResponse.WorkResponse
+left JOIN dbo.OpEquipmentActual  ON dbo.JobResponse.ID = dbo.OpEquipmentActual.JobResponseID and OpEquipmentActual.EquipmentClassID=2
 GO
