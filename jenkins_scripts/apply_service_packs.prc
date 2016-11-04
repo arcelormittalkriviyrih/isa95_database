@@ -29,6 +29,8 @@ GO
 
 :r $(FileName)
 :On Error exit
+GO
+
 INSERT INTO dbo.ServicePacksFiles(FileName) VALUES(N'$(FileName)')
 
 SET NOEXEC OFF
