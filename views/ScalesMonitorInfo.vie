@@ -46,7 +46,7 @@ AS
                  kd.KEY_MANU,
                  kd.POCKET_LOC,
 				 kd.WEIGHT_STAB,
-                 CAST(FLOOR(dbo.get_RoundedWeightByEquipment(kd.WEIGHT_CURRENT, eq.ID) / bw.PropertyValue) AS   INT) RodsQuantity,
+                 CAST(FLOOR(dbo.get_RoundedWeightByEquipment(kd.WEIGHT_CURRENT, eq.ID) / case when bw.PropertyValue=0 then NULL else bw.PropertyValue end) AS   INT) RodsQuantity,
                  CAST(bQty.PropertyValue AS INT)		BAR_QUANTITY
           FROM dbo.Equipment eq
                INNER JOIN dbo.EquipmentProperty eqp ON(eqp.EquipmentID = eq.ID)
