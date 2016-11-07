@@ -3,6 +3,20 @@ GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
 
+IF NOT EXISTS(SELECT NULL
+              FROM information_schema.columns
+              WHERE table_name = 'KEP_Logger'
+                AND column_name = 'WEIGHT_OK')
+   ALTER TABLE [dbo].[KEP_logger] ADD [WEIGHT_OK] [bit]  NULL
+GO
+
+IF NOT EXISTS(SELECT NULL
+              FROM information_schema.columns
+              WHERE table_name = 'KEP_Logger_archive'
+                AND column_name = 'WEIGHT_OK')
+   ALTER TABLE [dbo].[KEP_logger_archive] ADD [WEIGHT_OK] [bit]  NULL
+GO
+
 IF OBJECT_ID ('dbo.v_ScalesDetailInfo',N'V') IS NOT NULL
    DROP VIEW dbo.[v_ScalesDetailInfo];
 GO
