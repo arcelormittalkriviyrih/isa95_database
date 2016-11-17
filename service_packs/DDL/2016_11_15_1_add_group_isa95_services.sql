@@ -1,9 +1,0 @@
-﻿USE [KRR-PA-ISA95_PRODUCTION]
-GO
-
-IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'EUROPE\KRR-LG-PA-ISA95_Services')
-	CREATE USER [EUROPE\KRR-LG-PA-ISA95_Services] FOR LOGIN [EUROPE\KRR-LG-PA-ISA95_Services]
-GO
-
-EXEC sp_addrolemember N'db_owner', N'EUROPE\KRR-LG-PA-ISA95_Services'
-GO
