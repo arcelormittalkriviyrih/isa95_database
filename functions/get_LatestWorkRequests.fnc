@@ -18,7 +18,7 @@ GO
              ProfileID     INT,
              WorkType      NVARCHAR(50),
              PropertyType  NVARCHAR(50),
-             Value         NVARCHAR(50)).
+             Value         NVARCHAR(250)).
 
 */
 CREATE FUNCTION dbo.get_LatestWorkRequests(@EquipmentID INT)
@@ -28,7 +28,7 @@ RETURNS @get_LatestWorkRequests TABLE (WorkRequestID INT,
                                        ProfileID     INT,
                                        WorkType      NVARCHAR(50),
                                        PropertyType  NVARCHAR(50),
-                                       Value         NVARCHAR(50))
+                                       Value         NVARCHAR(250))
 AS
 BEGIN
 
