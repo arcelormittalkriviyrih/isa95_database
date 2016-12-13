@@ -15,7 +15,7 @@ GO
 
       TABLE (ID               INT,
              Description      NVARCHAR(50),
-             Value            NVARCHAR(50),
+             Value            NVARCHAR(250),
              WorkDefinitionID INT,
              Property         NVARCHAR(50)).
 
@@ -23,7 +23,7 @@ GO
 CREATE FUNCTION dbo.get_WorkDefinitionPropertiesAll(@COMM_ORDER NVARCHAR(50))
 RETURNS @retWorkDefinitionPropertiesAll TABLE (ID               INT,
                                                Description      NVARCHAR(50),
-                                               Value            NVARCHAR(50),
+                                               Value            NVARCHAR(250),
                                                WorkDefinitionID INT,
                                                Property         NVARCHAR(50))
 AS
