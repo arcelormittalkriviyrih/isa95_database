@@ -54,7 +54,7 @@ SELECT
 		--	then 1
 		--	else 0
 		--end	[stabilizing_weight]
-FROM [dbo].[KEP_Analytics_Weight]
+FROM [AMKR_WEIGHING].[KEP_Analytics_Weight]
 )
 
 SELECT top 100
