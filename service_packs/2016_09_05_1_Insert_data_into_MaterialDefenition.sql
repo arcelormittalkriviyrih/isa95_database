@@ -4,6 +4,9 @@
 по проектам Копр4, График выплавки 
 */
 
+SET NOCOUNT ON
+GO
+
 INSERT INTO MaterialClass
 ([Description],[ID],[Code])
 values( N'Марка стали', N'3', N'STEEL GRADE')

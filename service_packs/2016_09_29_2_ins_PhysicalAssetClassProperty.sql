@@ -1,5 +1,7 @@
 ﻿--- Project gasCollection, Agbor
 --- Insert data to table
+SET NOCOUNT ON
+
 INSERT INTO [dbo].[PhysicalAssetClassProperty](ID, Description, Value, PhysicalAssetClassProperty, PhysicalAssetCapabilityTestSpecification, PhysicalAssetClassID) VALUES (10000, N'Диапазон', '-50..100 С', NULL, NULL, 10014);
 INSERT INTO [dbo].[PhysicalAssetClassProperty](ID, Description, Value, PhysicalAssetClassProperty, PhysicalAssetCapabilityTestSpecification, PhysicalAssetClassID) VALUES (10001, N'Длина погружной части', '250', NULL, NULL, 10014);
 INSERT INTO [dbo].[PhysicalAssetClassProperty](ID, Description, Value, PhysicalAssetClassProperty, PhysicalAssetCapabilityTestSpecification, PhysicalAssetClassID) VALUES (10002, N'Выходной сигнал', 'Pt100', NULL, NULL, 10014);

@@ -1,4 +1,6 @@
-﻿  
+﻿SET NOCOUNT ON
+
+  
   INSERT INTO [dbo].[Equipment] ([ID],[Description],[EquipmentLevel],[Equipment] ,[EquipmentClassID])
   VALUES (170, N'Миксер 1', N'Unit', 131, 11)
 

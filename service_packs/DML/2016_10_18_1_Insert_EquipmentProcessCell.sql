@@ -1,4 +1,7 @@
-﻿INSERT INTO [dbo].[EquipmentClass]           ([Description]           ,[EquipmentLevel]           ,[ParentID]           ,[ID])
+﻿SET NOCOUNT ON
+
+
+INSERT INTO [dbo].[EquipmentClass]           ([Description]           ,[EquipmentLevel]           ,[ParentID]           ,[ID])
 VALUES           ( N'Производственный участок', N'Process Cell', 9, 11)
 
 ---------------------

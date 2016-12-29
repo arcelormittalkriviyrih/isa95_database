@@ -18,6 +18,8 @@ CREATE TABLE [dbo].[TestDataTypes](
 ) ON [PRIMARY]
 
 GO
+SET NOCOUNT ON
+GO
 
 INSERT INTO [dbo].[TestDataTypes](ID, f_nvarchar, f_datetime, f_date, f_hierarchyid, f_real, f_bit, f_varbinary)
 VALUES(1, N'Тест1', CURRENT_TIMESTAMP, CAST('2016-01-01' AS date), hierarchyid::Parse('/'), 11.0001, 1, CAST(N'Тест1' AS varbinary));
