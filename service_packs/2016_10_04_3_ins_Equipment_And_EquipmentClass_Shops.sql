@@ -1,5 +1,4 @@
-﻿USE [KRR-PA-ISA95_PRODUCTION]
-GO
+﻿SET NOCOUNT ON
 
 --> 
 declare @ID int

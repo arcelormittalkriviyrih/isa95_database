@@ -1,5 +1,8 @@
 ﻿--- Project gasCollection, Agbor
 --- Insert data to table
+SET NOCOUNT ON
+
+
 INSERT INTO [dbo].[EquipmentClass](Description, Location, EquipmentLevel, HierarchyScope, ParentID, ID, Code) VALUES (N'Точки измерения', NULL, NULL, NULL, NULL, 10000, NULL);
 INSERT INTO [dbo].[EquipmentClass](Description, Location, EquipmentLevel, HierarchyScope, ParentID, ID, Code) VALUES (N'Точки измерения температуры', NULL, NULL, NULL, 10000, 10001, NULL);
 INSERT INTO [dbo].[EquipmentClass](Description, Location, EquipmentLevel, HierarchyScope, ParentID, ID, Code) VALUES (N'Точки измерения давления', NULL, NULL, NULL, 10000, 10002, NULL);

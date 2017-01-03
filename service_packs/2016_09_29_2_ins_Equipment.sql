@@ -1,5 +1,7 @@
 ﻿--- Project gasCollection, Agbor
 --- Insert data to table to Equipment
+SET NOCOUNT ON
+
 INSERT INTO [dbo].[Equipment](ID, Description, Location, EquipmentLevel, Equipment, HierarchyScope, EquipmentClassID) VALUES (10000, N'ШКУч-1', NULL, NULL, NULL, NULL, 10007);
 INSERT INTO [dbo].[Equipment](ID, Description, Location, EquipmentLevel, Equipment, HierarchyScope, EquipmentClassID) VALUES (10001, N'ШКУч-2', NULL, NULL, NULL, NULL, 10007);
 INSERT INTO [dbo].[Equipment](ID, Description, Location, EquipmentLevel, Equipment, HierarchyScope, EquipmentClassID) VALUES (10002, N'ШКУч-3', NULL, NULL, NULL, NULL, 10007);
