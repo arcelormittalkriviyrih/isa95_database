@@ -2,6 +2,14 @@
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
+
+CREATE TABLE [dbo].[Unit](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Description] [nvarchar](50) NOT NULL,
+    PRIMARY KEY CLUSTERED ([ID])
+);
+
+GO
 IF OBJECT_ID('dbo.gen_ParameterSpecification', N'SO') IS NULL CREATE SEQUENCE dbo.gen_ParameterSpecification
                                                                    AS INT
                                                                    START WITH 1

@@ -1,2 +1,0 @@
-﻿ALTER TABLE [dbo].[PropertyTypes] ADD [Value] [nvarchar](50) NULL
-GO

@@ -9,8 +9,7 @@ CREATE TABLE dbo.KPPRoles (
    RoleName   NVARCHAR(255) NOT NULL,
    ADRoleName NVARCHAR(255) NULL,
    CONSTRAINT UK1_RoleName UNIQUE(RoleName),
-   CONSTRAINT UK1_ADRoleName UNIQUE(ADRoleName),
-   sys.server_principals
+   CONSTRAINT UK1_ADRoleName UNIQUE(ADRoleName)   
 )
 GO
 
