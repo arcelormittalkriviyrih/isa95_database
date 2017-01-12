@@ -28,7 +28,7 @@ SELECT
       ,[Weight_OK]
       ,[Tara_OK]
       ,cast([stabilizing_weight] as int) as [stabilizing_weight]
-FROM [AMKR_WEIGHING].[KEP_Analytics_Weight]
+FROM dbo.[KEP_Analytics_Weight]
 )
 
 SELECT top 100
