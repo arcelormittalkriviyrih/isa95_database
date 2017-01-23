@@ -53,7 +53,7 @@ BEGIN
       SET XACT_ABORT ON;
 	 set dateformat dmy;
 	 SET @DATE_P=(SELECT CONVERT(DATE,t.[Value],104) FROM @tblProperty t WHERE t.[Description]=N'PROD_DATE' AND ISDATE(t.[Value])=1);
-	 --set dateformat ymd;
+	 set dateformat ymd;
 	 SET language Russian;
 
       CREATE TABLE #ZPP_WEIGHT_PROKAT (AUFNR    NVARCHAR(50),
