@@ -1,5 +1,14 @@
 ﻿SET NOCOUNT ON
 GO
+
+--| fix SEQUENCE
+DECLARE @max nvarchar(50), @sql nvarchar(255)
+SELECT @max = cast(max(id)+1 as nvarchar(50)) from dbo.PhysicalAssetClassProperty
+SET @sql = N'ALTER SEQUENCE gen_PhysicalAssetClassProperty RESTART WITH '+@max+';';
+EXEC SP_EXECUTESQL @sql;
+go
+
+
 SET QUOTED_IDENTIFIER ON
 GO
 /*
@@ -55,5 +64,7 @@ select N'Статус'				[Description],	N'' [Value]
 on 1=1
 order by RN
 
+GO
 
+SET QUOTED_IDENTIFIER OFF
 GO

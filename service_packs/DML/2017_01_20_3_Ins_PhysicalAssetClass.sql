@@ -1,7 +1,13 @@
 ﻿SET NOCOUNT ON
 GO
-SET QUOTED_IDENTIFIER ON
-GO
+
+--| fix SEQUENCE
+DECLARE @max nvarchar(50), @sql nvarchar(255)
+SELECT @max = cast(max(id)+1 as nvarchar(50)) from dbo.PhysicalAssetClass
+SET @sql = N'ALTER SEQUENCE gen_PhysicalAssetClass RESTART WITH '+@max+';';
+EXEC SP_EXECUTESQL @sql;
+go
+
 /*
 Author: Timur Kapalov
 Description: Создание новый классов датчиков давления
@@ -33,5 +39,5 @@ VALUES
 (N'Метран 22',N'Метран',10019),
 (N'Метран 55',N'Метран',10019)
 
-
 GO
+
