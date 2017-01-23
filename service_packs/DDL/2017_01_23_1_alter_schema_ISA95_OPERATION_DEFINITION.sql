@@ -1,4 +1,4 @@
-﻿
+
 IF OBJECT_ID ('dbo.OperationsDefinition',N'U') IS NOT NULL
 	ALTER SCHEMA [ISA95_OPERATION_DEFINITION] TRANSFER OBJECT::dbo.OperationsDefinition; 
 go
