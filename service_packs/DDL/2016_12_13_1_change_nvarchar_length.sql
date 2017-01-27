@@ -315,10 +315,10 @@ GO
 --| for test scheme
 declare @name_scheme nvarchar(100) = N'dbo', @query nvarchar(max) = '';
 
-IF OBJECT_ID ('dbo.ParameterSpecification', 'T') IS NULL
+IF OBJECT_ID ('dbo.ParameterSpecification', 'U') IS NULL
 	SET @name_scheme = N'ISA95_OPERATION_DEFINITION';
 
-IF OBJECT_ID (@name_scheme+'.ParameterSpecification', 'T') IS NOT NULL
+IF OBJECT_ID (@name_scheme+'.ParameterSpecification', 'U') IS NOT NULL
 begin
 	SET @query = N'ALTER TABLE '+@name_scheme+'.ParameterSpecification ALTER COLUMN [Value] nvarchar(250);'
 	exec(@query);
@@ -365,7 +365,7 @@ go
 --| for test scheme
 declare @name_scheme nvarchar(100) = N'dbo', @query nvarchar(max) = '';
 
-IF OBJECT_ID ('dbo.ParameterSpecification', 'T') IS NULL
+IF OBJECT_ID ('dbo.ParameterSpecification', 'U') IS NULL
 	SET @name_scheme = N'ISA95_OPERATION_DEFINITION';
 
 SET @query = N'CREATE FUNCTION dbo.get_LatestWorkRequests(@EquipmentID INT)
@@ -471,7 +471,7 @@ GO
 --| for test scheme
 declare @name_scheme nvarchar(100) = N'dbo', @query nvarchar(max) = '';
 
-IF OBJECT_ID ('dbo.ParameterSpecification', 'T') IS NULL
+IF OBJECT_ID ('dbo.ParameterSpecification', 'U') IS NULL
 	SET @name_scheme = N'ISA95_OPERATION_DEFINITION';
 
 set @query = N'CREATE FUNCTION dbo.get_WorkDefinitionPropertiesAll(@COMM_ORDER NVARCHAR(50))
@@ -1062,7 +1062,7 @@ GO
 --| for test scheme
 declare @name_scheme nvarchar(100) = N'dbo', @query nvarchar(max) = '';
 
-IF OBJECT_ID ('dbo.ParameterSpecification', 'T') IS NULL
+IF OBJECT_ID ('dbo.ParameterSpecification', 'U') IS NULL
 	SET @name_scheme = N'ISA95_OPERATION_DEFINITION';
 
 set @query = N'CREATE PROCEDURE [dbo].[ins_WorkDefinition]
@@ -1911,7 +1911,7 @@ GO
 --| for test scheme
 declare @name_scheme nvarchar(100) = N'dbo', @query nvarchar(max) = '';
 
-IF OBJECT_ID ('dbo.ParameterSpecification', 'T') IS NULL
+IF OBJECT_ID ('dbo.ParameterSpecification', 'U') IS NULL
 	SET @name_scheme = N'ISA95_OPERATION_DEFINITION';
 
 set @query = N'CREATE PROCEDURE [dbo].[upd_WorkDefinition]
