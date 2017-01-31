@@ -1,0 +1,13 @@
+﻿SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+BEGIN TRANSACTION;
+
+IF NOT EXISTS (SELECT NULL FROM [dbo].[PropertyTypes] WHERE [Value]=N'LABEL_PRINT_QTY')
+	INSERT INTO [dbo].[PropertyTypes]([Value],[Description]) VALUES (N'LABEL_PRINT_QTY',N'Кол-во печатаемых бирок');
+	
+
+COMMIT;
+GO
+

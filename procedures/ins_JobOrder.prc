@@ -31,7 +31,8 @@ GO
 		FACTORY_NUMBER  - Номер бирки,
 		PACKS_LEFT      - Количество оставшихся пачек для режима "Разделение пачки",
 		BINDING_DIA     - Диаметр увязки,
-		BINDING_QTY     - Количество увязок.
+		BINDING_QTY     - Количество увязок,
+		LABEL_PRINT_QTY - Количество печатаемых копий бирки,
 		JobOrderID      - Job Order ID OUTPUT.
 
 */
@@ -57,6 +58,7 @@ CREATE PROCEDURE [dbo].[ins_JobOrder]
 @PACKS_LEFT       NVARCHAR(250) = NULL,
 @BINDING_DIA      NVARCHAR(250) = NULL,
 @BINDING_QTY      NVARCHAR(250) = NULL,
+@LABEL_PRINT_QTY  INT           = NULL,
 @JobOrderID       INT OUTPUT
 AS
 BEGIN
@@ -126,7 +128,9 @@ BEGIN
    UNION ALL
    SELECT N'BINDING_DIA',@BINDING_DIA WHERE @BINDING_DIA IS NOT NULL
    UNION ALL
-   SELECT N'BINDING_QTY',@BINDING_QTY WHERE @BINDING_QTY IS NOT NULL;
+   SELECT N'BINDING_QTY',@BINDING_QTY WHERE @BINDING_QTY IS NOT NULL
+   UNION ALL
+   SELECT N'LABEL_PRINT_QTY',CAST(@LABEL_PRINT_QTY AS NVARCHAR(50)) WHERE @LABEL_PRINT_QTY IS NOT NULL;
 
    INSERT INTO [dbo].[Parameter] ([Value],[JobOrder],[PropertyType])
    SELECT t.value,@JobOrderID,pt.ID

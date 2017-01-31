@@ -29,7 +29,8 @@ GO
 		FACTORY_NUMBER  - Номер бирки,
 		PACKS_LEFT      - Количество оставшихся пачек для режима "Разделение пачки",
 		BINDING_DIA     - Диаметр увязки,
-		BINDING_QTY     - Количество увязок.
+		BINDING_QTY     - Количество увязок,
+		LABEL_PRINT_QTY - Количество печатаемых копий бирки.
 
 */
 CREATE PROCEDURE [dbo].[ins_WorkRequestStandart]
@@ -48,7 +49,8 @@ CREATE PROCEDURE [dbo].[ins_WorkRequestStandart]
 @AUTO_MANU_VALUE  NVARCHAR(50),
 @NEMERA           NVARCHAR(50),
 @BINDING_DIA      NVARCHAR(50),
-@BINDING_QTY      NVARCHAR(50)
+@BINDING_QTY      NVARCHAR(50),
+@LABEL_PRINT_QTY  INT
 AS
 BEGIN
 
@@ -71,6 +73,7 @@ BEGIN
                                 @NEMERA          = @NEMERA,
                                 @BINDING_DIA     = @BINDING_DIA,
                                 @BINDING_QTY     = @BINDING_QTY,
+								@LABEL_PRINT_QTY = @LABEL_PRINT_QTY,
                                 @WorkRequestID   = @WorkRequestID OUTPUT;
 
    EXEC [dbo].[ins_JobOrderOPCCommandMaxWeight] @WorkRequestID = @WorkRequestID,

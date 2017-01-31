@@ -37,7 +37,8 @@ GO
 		PRODUCT        - Продукция,
 		STANDARD       - Стандарт,
 		CHEM_ANALYSIS  - Хим. Анализ,
-		TEMPLATE       - Шаблон бирки.
+		TEMPLATE       - Шаблон бирки,
+		LABEL_PRINT_QTY - Количество печатаемых копий бирки.
 */
 CREATE PROCEDURE [dbo].[set_SortMode]
 @EquipmentID    INT,
@@ -65,7 +66,8 @@ CREATE PROCEDURE [dbo].[set_SortMode]
 @PRODUCT        NVARCHAR(250) = NULL,
 @STANDARD       NVARCHAR(250) = NULL,
 @CHEM_ANALYSIS  NVARCHAR(250) = NULL,
-@TEMPLATE       INT          = NULL
+@TEMPLATE       INT           = NULL,
+@LABEL_PRINT_QTY INT          = NULL
 AS
 BEGIN
 
@@ -94,7 +96,8 @@ BEGIN
                                    @PRODUCT        = @PRODUCT,
                                    @STANDARD       = @STANDARD,
                                    @CHEM_ANALYSIS  = @CHEM_ANALYSIS,
-                                   @TEMPLATE       = @TEMPLATE;
+                                   @TEMPLATE       = @TEMPLATE,
+								   @LABEL_PRINT_QTY= @LABEL_PRINT_QTY;
 
    DECLARE @WorkRequestID INT;
    EXEC [dbo].[ins_WorkRequest] @WorkType        = N'Sort',
