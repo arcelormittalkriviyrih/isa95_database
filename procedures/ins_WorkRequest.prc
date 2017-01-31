@@ -30,7 +30,8 @@ GO
 		FACTORY_NUMBER  - Номер бирки,
 		PACKS_LEFT      - Количество оставшихся пачек для режима "Разделение пачки",
 		BINDING_DIA     - Диаметр увязки,
-		BINDING_QTY     - Количество увязок.
+		BINDING_QTY     - Количество увязок,
+		LABEL_PRINT_QTY - Количество печатаемых копий бирки,
 		WorkRequestID   - Work Request ID OUTPUT.
 
 */
@@ -54,6 +55,7 @@ CREATE PROCEDURE [dbo].[ins_WorkRequest]
 @PACKS_LEFT       NVARCHAR(50) = NULL,
 @BINDING_DIA      NVARCHAR(50) = NULL,
 @BINDING_QTY      NVARCHAR(50) = NULL,
+@LABEL_PRINT_QTY INT           = NULL,
 @WorkRequestID    INT OUTPUT
 AS
 BEGIN
@@ -96,6 +98,7 @@ BEGIN
                              @PACKS_LEFT      = @PACKS_LEFT,
                              @BINDING_DIA     = @BINDING_DIA,
                              @BINDING_QTY     = @BINDING_QTY,
+							 @LABEL_PRINT_QTY = @LABEL_PRINT_QTY,
                              @JobOrderID      = @JobOrderID OUTPUT;
 
 END;

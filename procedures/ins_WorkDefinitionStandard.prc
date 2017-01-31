@@ -36,7 +36,8 @@ GO
 		PRODUCT        - Продукция,
 		STANDARD       - Стандарт,
 		CHEM_ANALYSIS  - Хим. Анализ,
-		TEMPLATE       - Шаблон бирки.
+		TEMPLATE       - Шаблон бирки,
+		LABEL_PRINT_QTY - Количество печатаемых копий бирки.
 
 	See Also:
 
@@ -68,7 +69,8 @@ CREATE PROCEDURE [dbo].[ins_WorkDefinitionStandard]
 @PRODUCT        NVARCHAR(250) = NULL,
 @STANDARD       NVARCHAR(250) = NULL,
 @CHEM_ANALYSIS  NVARCHAR(250) = NULL,
-@TEMPLATE       INT          = NULL
+@TEMPLATE       INT           = NULL,
+@LABEL_PRINT_QTY INT          = NULL
 AS
 BEGIN
 
@@ -97,7 +99,8 @@ EXEC [dbo].[ins_WorkDefinition] @WorkType       = N'Standard',
                                 @PRODUCT        = @PRODUCT,
                                 @STANDARD       = @STANDARD,
                                 @CHEM_ANALYSIS  = @CHEM_ANALYSIS,
-                                @TEMPLATE       = @TEMPLATE;
+                                @TEMPLATE       = @TEMPLATE,
+                                @LABEL_PRINT_QTY = @LABEL_PRINT_QTY;
 
 END;
 GO

@@ -37,7 +37,8 @@ GO
 		PRODUCT        - Продукция,
 		STANDARD       - Стандарт,
 		CHEM_ANALYSIS  - Хим. Анализ,
-		TEMPLATE       - Шаблон бирки.
+		TEMPLATE       - Шаблон бирки,
+		LABEL_PRINT_QTY - Количество печатаемых копий бирки.
 */
 CREATE PROCEDURE [dbo].[ins_MaterialLotByFactoryNumber]
 @EquipmentID     INT,
@@ -65,7 +66,8 @@ CREATE PROCEDURE [dbo].[ins_MaterialLotByFactoryNumber]
 @PRODUCT         NVARCHAR(250) = NULL,
 @STANDARD        NVARCHAR(250) = NULL,
 @CHEM_ANALYSIS   NVARCHAR(250) = NULL,
-@TEMPLATE        NVARCHAR(50) = NULL
+@TEMPLATE        NVARCHAR(50)  = NULL,
+@LABEL_PRINT_QTY INT           = NULL
 AS
 BEGIN
 
@@ -150,7 +152,9 @@ BEGIN
    UNION ALL
    SELECT N'MILL_ID',@MILL_ID WHERE @MILL_ID IS NOT NULL
    UNION ALL
-   SELECT N'MEASURE_TIME',@MEASURE_TIME WHERE @MEASURE_TIME IS NOT NULL;
+   SELECT N'MEASURE_TIME',@MEASURE_TIME WHERE @MEASURE_TIME IS NOT NULL
+   UNION ALL
+   SELECT N'LABEL_PRINT_QTY',CAST(@LABEL_PRINT_QTY AS NVARCHAR(50)) WHERE @LABEL_PRINT_QTY IS NOT NULL;
 
    INSERT INTO [dbo].[MaterialLotProperty] ([Value],[MaterialLotID],[PropertyType])
    SELECT t.value,@MaterialLotID,pt.ID

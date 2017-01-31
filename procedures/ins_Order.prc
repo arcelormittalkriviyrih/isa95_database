@@ -35,7 +35,9 @@ GO
 		PRODUCT        - Продукция,
 		STANDARD       - Стандарт,
 		CHEM_ANALYSIS  - Хим. Анализ,
-		TEMPLATE       - Шаблон бирки.
+		TEMPLATE       - Шаблон бирки,
+		LABEL_PRINT_QTY - Количество печатаемых копий бирки.
+
 */
 CREATE PROCEDURE [dbo].[ins_Order]
 @COMM_ORDER     NVARCHAR(250),
@@ -61,7 +63,8 @@ CREATE PROCEDURE [dbo].[ins_Order]
 @PRODUCT        NVARCHAR(250) = NULL,
 @STANDARD       NVARCHAR(250) = NULL,
 @CHEM_ANALYSIS  NVARCHAR(250) = NULL,
-@TEMPLATE       INT          = NULL
+@TEMPLATE       INT           = NULL,
+@LABEL_PRINT_QTY INT          = NULL
 AS
 BEGIN
    DECLARE @OperationsRequestID     INT,
@@ -151,7 +154,9 @@ BEGIN
    UNION ALL
    SELECT N'CHEM_ANALYSIS',@CHEM_ANALYSIS WHERE @CHEM_ANALYSIS IS NOT NULL
    UNION ALL
-   SELECT N'TEMPLATE',CAST(@TEMPLATE AS NVARCHAR(50)) WHERE @TEMPLATE IS NOT NULL;
+   SELECT N'TEMPLATE',CAST(@TEMPLATE AS NVARCHAR(50)) WHERE @TEMPLATE IS NOT NULL
+   UNION ALL
+   SELECT N'LABEL_PRINT_QTY',CAST(@LABEL_PRINT_QTY AS NVARCHAR(50)) WHERE @LABEL_PRINT_QTY IS NOT NULL;
 
    INSERT INTO [dbo].[SegmentParameter] ([Value],[OpSegmentRequirement],[PropertyType])
    SELECT t.value,@OpSegmentRequirementID,pt.ID
