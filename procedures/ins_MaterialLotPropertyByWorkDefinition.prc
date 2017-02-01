@@ -36,7 +36,7 @@ BEGIN
 
    DECLARE @LEAVE_NO NVARCHAR(50);
    DECLARE @tblParams TABLE(ID    NVARCHAR(50),
-                            Value NVARCHAR(50));
+                            Value NVARCHAR(250));
 
    SET @LEAVE_NO =
 	   (

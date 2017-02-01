@@ -1,5 +1,7 @@
 ﻿--- Project gasCollection, Agbor
 --- Insert data to table
+SET NOCOUNT ON
+
 INSERT INTO [dbo].[PhysicalAssetClass](Description, Manufacturer, HierarchyScope, ParentID, ID) VALUES (N'Датчики', NULL, NULL, NULL, 10000);
 INSERT INTO [dbo].[PhysicalAssetClass](Description, Manufacturer, HierarchyScope, ParentID, ID) VALUES (N'Датчики давления', NULL, NULL, 10000, 10001);
 INSERT INTO [dbo].[PhysicalAssetClass](Description, Manufacturer, HierarchyScope, ParentID, ID) VALUES (N'Датчики избыточного давления', NULL, NULL, 10001, 10002);

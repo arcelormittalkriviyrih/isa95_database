@@ -13,7 +13,7 @@ GO
 IF OBJECT_ID ('dbo.Ins_KEP_Analytics_Weight',N'TR') IS NOT NULL
 	DROP TRIGGER [dbo].[Ins_KEP_Analytics_Weight]
 GO
-
+/*
 CREATE TRIGGER [dbo].[Ins_KEP_Analytics_Weight] ON [dbo].[KEP_Analytics_Weight]
 FOR INSERT
 AS
@@ -93,7 +93,7 @@ BEGIN
 	set IDENTITY_INSERT [dbo].[KEP_Analytics_Weight] OFF
 
 END
-
+*/
 GO
 
 

@@ -1,5 +1,5 @@
 -- Structure 'DataType1Type' to define field UnitID
-use [KRR-PA-ISA95_PRODUCTION]
+SET NOCOUNT ON
 
 SET IDENTITY_INSERT [dbo].[Unit] ON
 GO

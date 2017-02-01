@@ -1,5 +1,7 @@
 ﻿--- Project gasCollection, Agbor
 --- Insert data to table
+SET NOCOUNT ON
+
 INSERT INTO [dbo].[PhysicalAsset](ID, Description, HierarchyScope, PhysicalLocation, FixedAssetID, VendorID, EquipmentLevel, PhysicalAsset, PhysicalAssetClassID) VALUES (10000, N'Датчик температуры', NULL, NULL, NULL, NULL, NULL, NULL, 10014);
 INSERT INTO [dbo].[PhysicalAsset](ID, Description, HierarchyScope, PhysicalLocation, FixedAssetID, VendorID, EquipmentLevel, PhysicalAsset, PhysicalAssetClassID) VALUES (10001, N'Датчик температуры', NULL, NULL, NULL, NULL, NULL, NULL, 10014);
 INSERT INTO [dbo].[PhysicalAsset](ID, Description, HierarchyScope, PhysicalLocation, FixedAssetID, VendorID, EquipmentLevel, PhysicalAsset, PhysicalAssetClassID) VALUES (10002, N'Датчик температуры', NULL, NULL, NULL, NULL, NULL, NULL, 10014);

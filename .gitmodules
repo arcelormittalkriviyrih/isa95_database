@@ -1,0 +1,4 @@
+[submodule "service_packs_internal"]
+	path = service_packs_internal
+	url = https://krr-app-bbgit01.europe.mittalco.com/isa95_database.git
+	branch = testing

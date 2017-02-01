@@ -1,4 +1,5 @@
 ﻿BEGIN TRANSACTION;
+SET NOCOUNT ON
 
 INSERT INTO [dbo].[MaterialLinkTypes] ([ID],[Description]) VALUES (0,N'печать');
 

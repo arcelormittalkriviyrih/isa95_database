@@ -33,7 +33,8 @@ AS
 BEGIN
 
    DECLARE @JobOrderID    INT,
-           @err_message   NVARCHAR(255);
+           @err_message   NVARCHAR(255),
+		   @LABEL_PRINT_QTY NVARCHAR(250);
 
    IF NOT EXISTS (SELECT NULL 
                   FROM [dbo].[Equipment] eq INNER JOIN [dbo].[EquipmentClass] eqc ON (eqc.[ID] = eq.[EquipmentClassID] AND eqc.[Code]=N'PRINTER')
@@ -43,11 +44,32 @@ BEGIN
          THROW 60010, @err_message, 1;
       END;
 
+   SELECT @LABEL_PRINT_QTY=[Value] FROM [dbo].[MaterialLotProperty] 
+   where PropertyType=[dbo].[get_PropertyTypeIdByValue](N'LABEL_PRINT_QTY') 
+   and MaterialLotID=@MaterialLotID;
+
+   IF @LABEL_PRINT_QTY = N'2'
+	BEGIN
+		SET @JobOrderID=NEXT VALUE FOR [dbo].[gen_JobOrder];
+	   INSERT INTO [dbo].[JobOrder] ([ID],[WorkType],[DispatchStatus],[StartTime],[Command],[CommandRule],[WorkRequest])
+	   VALUES (@JobOrderID,N'Print',N'ToPrint',CURRENT_TIMESTAMP,@Command,@CommandRule,@WorkRequestID);
+
+	   INSERT INTO [dbo].[OpEquipmentRequirement] ([EquipmentClassID],[EquipmentID],[JobOrderID])
+	   SELECT eq.[EquipmentClassID],eq.[ID],@JobOrderID
+	   FROM [dbo].[Equipment] eq
+	   WHERE [ID]=@EquipmentID;
+
+	   INSERT INTO [dbo].[Parameter] ([Value],[JobOrder],[PropertyType])
+	   SELECT @MaterialLotID,@JobOrderID,pt.[ID]
+	   FROM [dbo].[PropertyTypes] pt
+	   WHERE pt.[Value]=N'MaterialLotID';
+	END;
+
    SET @JobOrderID=NEXT VALUE FOR [dbo].[gen_JobOrder];
    INSERT INTO [dbo].[JobOrder] ([ID],[WorkType],[DispatchStatus],[StartTime],[Command],[CommandRule],[WorkRequest])
    VALUES (@JobOrderID,N'Print',N'ToPrint',CURRENT_TIMESTAMP,@Command,@CommandRule,@WorkRequestID);
 
-	 INSERT INTO [dbo].[OpEquipmentRequirement] ([EquipmentClassID],[EquipmentID],[JobOrderID])
+   INSERT INTO [dbo].[OpEquipmentRequirement] ([EquipmentClassID],[EquipmentID],[JobOrderID])
    SELECT eq.[EquipmentClassID],eq.[ID],@JobOrderID
    FROM [dbo].[Equipment] eq
    WHERE [ID]=@EquipmentID;
@@ -64,4 +86,5 @@ BEGIN
 
 END;
 GO
+
 

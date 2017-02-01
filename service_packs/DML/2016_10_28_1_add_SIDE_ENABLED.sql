@@ -3,6 +3,8 @@ GO
 
 SET QUOTED_IDENTIFIER ON;
 GO
+SET NOCOUNT ON
+GO
 
 DECLARE @EquipmentClassID int;
 

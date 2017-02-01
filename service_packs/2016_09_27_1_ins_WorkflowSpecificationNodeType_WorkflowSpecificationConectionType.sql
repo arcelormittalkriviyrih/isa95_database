@@ -4,6 +4,8 @@
 данными 
 по проекту Система упрвления операциями СЦиО
 */
+SET NOCOUNT ON
+
 INSERT INTO [dbo].[WorkflowSpecificationNodeType] ([ID], [Description]) VALUES( 100000, N'Event')
 INSERT INTO [dbo].[WorkflowSpecificationNodeType] ([ID], [Description]) VALUES( 100001, N'Input')
 INSERT INTO [dbo].[WorkflowSpecificationNodeType] ([ID], [Description]) VALUES( 100002, N'Output')

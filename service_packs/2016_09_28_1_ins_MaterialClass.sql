@@ -3,6 +3,8 @@
 Заполнение таблиц MaterialClass 
 данными по проекту Система упрвления операциями СЦиО
 */
+SET NOCOUNT ON
+
 
 INSERT INTO [dbo].[MaterialClass] ([Description],[ID], [Code]) VALUES(N'СИТ',100000, N'Measuring instruments')
 INSERT INTO [dbo].[MaterialClass] ([Description],[ID], [ParentID], [Code]) VALUES(N'Показывающие измерительные приборы',100001,100000, N'Measuring device')
