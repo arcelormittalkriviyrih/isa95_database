@@ -1,14 +1,14 @@
 ﻿--------------------------------------------------------------
--- Процедура для тестовой печати бирки ins_MaterialLotForTestPrint
-IF OBJECT_ID ('dbo.ins_MaterialLotForTestPrint',N'P') IS NOT NULL
-   DROP PROCEDURE dbo.ins_MaterialLotForTestPrint;
+-- Процедура для предварительного просмотра бирки ins_MaterialLotForPreview
+IF OBJECT_ID ('dbo.ins_MaterialLotForPreview',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_MaterialLotForPreview;
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 /*
-	Procedure: ins_MaterialLotForTestPrint
-	Используется для тестовой печати.
+	Procedure: ins_MaterialLotForPreview
+	Используется для предварительного просмотра бирки.
 
 	Parameters:
 
@@ -38,7 +38,7 @@ GO
 		TEMPLATE       - Шаблон бирки,
 		LABEL_PRINT_QTY - Количество печатаемых копий бирки.
 */
-CREATE PROCEDURE [dbo].[ins_MaterialLotForTestPrint]
+CREATE PROCEDURE [dbo].[ins_MaterialLotForPreview]
 @COMM_ORDER      NVARCHAR(250) = NULL,
 @PROD_ORDER      NVARCHAR(250) = NULL,
 @CONTRACT_NO     NVARCHAR(250) = NULL,
@@ -63,20 +63,11 @@ CREATE PROCEDURE [dbo].[ins_MaterialLotForTestPrint]
 @STANDARD        NVARCHAR(250) = NULL,
 @CHEM_ANALYSIS   NVARCHAR(250) = NULL,
 @TEMPLATE        NVARCHAR(50)  = NULL,
-@LABEL_PRINT_QTY INT           = NULL
+@LABEL_PRINT_QTY INT           = NULL,
+@MaterialLotID   INT		   = NULL OUTPUT
 AS
 BEGIN
 
-DECLARE @MaterialLotID INT;
-
-DECLARE @PrinterID NVARCHAR(50);
-
-SET @PrinterID = (SELECT pp.[Value]
-                                FROM [dbo].[PersonProperty] pp
-                                    INNER JOIN [dbo].[PersonnelClassProperty] pcp ON (pcp.[ID]=pp.[ClassPropertyID] AND pcp.[Value]=N'TEST_PRINTER')
-                                WHERE pp.[PersonID]=[dbo].[get_CurrentPerson]())
-IF @PrinterID IS NULL
-THROW 60001, N'Тестовый принтер не указан в настройках!', 1;
 
 IF @COMM_ORDER IS NOT NULL
 	BEGIN TRY
@@ -147,16 +138,11 @@ EXEC [dbo].[ins_MaterialLot] @FactoryNumber = N'0',
    UNION ALL
    SELECT N'CREATOR',SYSTEM_USER
    UNION ALL
-   SELECT N'CREATE_MODE',N'Тестовая печать';
+   SELECT N'CREATE_MODE',N'Предварительный просмотр';
 
    INSERT INTO [dbo].[MaterialLotProperty] ([Value],[MaterialLotID],[PropertyType])
    SELECT t.value,@MaterialLotID,pt.ID
    FROM @tblParams t INNER JOIN [dbo].[PropertyTypes] pt ON (pt.value=t.ID);
-
-   
-    EXEC [dbo].[ins_JobOrderPrintLabel] @PrinterID     = @PrinterID,
-                                        @MaterialLotID = @MaterialLotID,
-                                        @Command       = N'Print';  
 
 END;
 GO
