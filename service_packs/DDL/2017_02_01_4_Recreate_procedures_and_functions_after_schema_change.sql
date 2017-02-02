@@ -38,7 +38,7 @@ BEGIN
    WHERE ID=@WorkDefinitionID;
 
 END;
-GO;
+GO
 
 
 ----------------------------------------------------------------
@@ -80,7 +80,7 @@ GO
 		TEMPLATE       - Шаблон бирки,
 		LABEL_PRINT_QTY - Количество печатаемых копий бирки.
 */
-ALTER PROCEDURE [dbo].[ins_WorkDefinition]
+CREATE PROCEDURE [dbo].[ins_WorkDefinition]
 @WorkType       NVARCHAR(50),
 @EquipmentID    INT,
 @COMM_ORDER     NVARCHAR(250),
@@ -251,13 +251,13 @@ BEGIN
    FROM @tblParams t INNER JOIN [dbo].[PropertyTypes] pt ON (pt.value=t.ID);
 
 END;
-GO;
+GO
 
 
 ----------------------------------------------------------------
 IF OBJECT_ID ('dbo.upd_WorkDefinition',N'P') IS NOT NULL
    DROP PROCEDURE dbo.upd_WorkDefinition;
-GO;
+GO
 
 /*
 	Procedure: upd_WorkDefinition
@@ -292,7 +292,7 @@ GO;
 		TEMPLATE       - Шаблон бирки,
 		LABEL_PRINT_QTY - Количество печатаемых копий бирки.
 */
-ALTER PROCEDURE [dbo].[upd_WorkDefinition]
+CREATE PROCEDURE [dbo].[upd_WorkDefinition]
 @EquipmentID    INT,
 @COMM_ORDER     NVARCHAR(250),
 @PROD_ORDER     NVARCHAR(250),
@@ -453,13 +453,13 @@ BEGIN
    */
 
 END;
-
+go
 
 
 ----------------------------------------------------------------
 IF OBJECT_ID ('dbo.ins_MaterialLotPropertyByWorkDefinition',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_MaterialLotPropertyByWorkDefinition;
-GO;
+GO
 /*
 	Procedure: ins_MaterialLotPropertyByWorkDefinition
 	Добавляет свойства бирки из WorkDefinition.
@@ -528,13 +528,13 @@ BEGIN
    FROM @tblParams t INNER JOIN [dbo].[PropertyTypes] pt ON (pt.value=t.ID);
 
 END;
-
+go
 
 
 ----------------------------------------------------------------
 IF OBJECT_ID ('dbo.get_LatestWorkRequests',N'TF') IS NOT NULL
-   DROP PROCEDURE dbo.get_LatestWorkRequests;
-GO;
+   DROP FUNCTION dbo.get_LatestWorkRequests;
+GO
 
 CREATE FUNCTION dbo.get_LatestWorkRequests(@EquipmentID INT)
 RETURNS @get_LatestWorkRequests TABLE (WorkRequestID INT,
@@ -593,12 +593,13 @@ BEGIN
 RETURN;
 
 END;
+Go
 
 
 ----------------------------------------------------------------
 IF OBJECT_ID ('dbo.get_WorkDefinitionPropertiesAll',N'TF') IS NOT NULL
-   DROP PROCEDURE dbo.get_WorkDefinitionPropertiesAll;
-GO;
+   DROP FUNCTION dbo.get_WorkDefinitionPropertiesAll;
+GO
 
 CREATE FUNCTION dbo.get_WorkDefinitionPropertiesAll(@COMM_ORDER NVARCHAR(50))
 RETURNS @retWorkDefinitionPropertiesAll TABLE (ID               INT,
@@ -651,3 +652,5 @@ BEGIN
   RETURN;
 
 END;
+
+GO
