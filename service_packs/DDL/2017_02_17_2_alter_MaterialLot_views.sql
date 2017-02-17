@@ -4,6 +4,47 @@ GO
 SET QUOTED_IDENTIFIER ON;
 GO
 
+IF OBJECT_ID('dbo.v_MaterialLotChange', N'V') IS NOT NULL
+    DROP VIEW dbo.[v_MaterialLotChange];
+GO
+/*
+   View: v_MaterialLotChange
+    Возвращает список бирок для режима изменения заказа.
+*/
+CREATE VIEW [dbo].[v_MaterialLotChange]
+AS
+SELECT ml.ID,
+       ml.FactoryNumber,
+       ml.CreateTime,
+       ml.Quantity,
+       eq.Equipment SideID,
+       prod_order.[Value] PROD_ORDER,
+       part_no.[Value] PART_NO,
+       bunt_no.[Value] BUNT_NO,
+       CAST(0 AS BIT) selected
+FROM (SELECT ml.[ID],
+             ml.[FactoryNumber],
+             SUBSTRING(ml.FactoryNumber,7,2) FactoryNumberScales,
+             ml.[Status],
+             ml.[Quantity],
+             ml.CreateTime
+      FROM (SELECT ml.[ID],
+                   ml.[FactoryNumber],
+                   ml.[Status],
+                   ml.[Quantity],
+                   ml.CreateTime,
+                   ROW_NUMBER() OVER (PARTITION BY ml.[FactoryNumber] ORDER BY ml.[CreateTime] DESC, ml.[ID] DESC) RowNumber
+            FROM [dbo].[MaterialLot] ml) ml
+            WHERE ml.RowNumber=1) ml
+     INNER JOIN [dbo].[EquipmentProperty] eqp ON (eqp.[ClassPropertyID]=[dbo].[get_EquipmentClassPropertyByValue]('SCALES_NO') AND eqp.[Value]=ml.FactoryNumberScales)
+     INNER JOIN [dbo].[Equipment] eq ON (eq.ID=eqp.EquipmentID)
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] prod_order ON (prod_order.[MaterialLotID]=ml.[ID] AND prod_order.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PROD_ORDER'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] part_no ON (part_no.[MaterialLotID]=ml.[ID] AND part_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PART_NO'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] bunt_no ON (bunt_no.[MaterialLotID]=ml.[ID] AND bunt_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('BUNT_NO'))
+WHERE ml.Quantity>0;
+
+GO
+
 IF OBJECT_ID ('dbo.v_MaterialLotReport', N'V') IS NOT NULL
    DROP VIEW dbo.v_MaterialLotReport;
 GO
@@ -55,3 +96,4 @@ FROM (SELECT ml.[ID],
       LEFT OUTER JOIN [dbo].[MaterialLotProperty] measure_time ON (measure_time.[MaterialLotID]=ml.[ID] AND measure_time.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('MEASURE_TIME'))
       LEFT OUTER JOIN [dbo].[MaterialLotProperty] material_no ON (material_no.[MaterialLotID]=ml.[ID] AND material_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('MATERIAL_NO'))
 GO
+
