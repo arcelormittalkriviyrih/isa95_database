@@ -1,4 +1,10 @@
-﻿--------------------------------------------------------------
+﻿SET ANSI_NULLS ON;
+GO
+
+SET QUOTED_IDENTIFIER ON;
+GO
+
+--------------------------------------------------------------
 -- Процедура upd_WorkDefinitionFromOrder
 IF OBJECT_ID ('dbo.upd_WorkDefinitionFromOrder',N'P') IS NOT NULL
    DROP PROCEDURE dbo.upd_WorkDefinitionFromOrder;
