@@ -63,11 +63,11 @@ BEGIN
 	END;
 
 	--Delete existing parameters from WorkDefinition
-	DELETE FROM [ISA95_OPERATION_DEFINITION].[ParameterSpecification]
+	DELETE FROM [dbo].[ParameterSpecification]
 	WHERE [WorkDefinitionID] = @WorkDefinitionID;
 
 	--Insert parameters from Order to WorkDefinition
-	INSERT INTO [ISA95_OPERATION_DEFINITION].[ParameterSpecification]( [Value], [WorkDefinitionID], [PropertyType] )
+	INSERT INTO [dbo].[ParameterSpecification]( [Value], [WorkDefinitionID], [PropertyType] )
 		   SELECT sp.[Value], @WorkDefinitionID, sp.PropertyType
 		   FROM dbo.SegmentParameter AS sp
 		   WHERE sp.OpSegmentRequirement = @OpSegmentRequirementID;
