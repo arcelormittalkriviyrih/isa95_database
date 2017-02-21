@@ -1,6 +1,6 @@
 ﻿
 IF OBJECT_ID (N'dbo.del_WorkDefinition', N'P') IS NOT NULL
-   DROP PROCEDURE [dbo].[get_WorkDefinitionPropertiesAll];
+   DROP PROCEDURE [dbo].[del_WorkDefinition];
 GO   
    
 CREATE PROCEDURE [dbo].[del_WorkDefinition]
