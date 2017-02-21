@@ -1,7 +1,8 @@
 ﻿
 IF OBJECT_ID (N'dbo.get_LatestWorkRequests', N'TF') IS NOT NULL
    DROP FUNCTION [dbo].[get_LatestWorkRequests];
-
+GO   
+   
 CREATE FUNCTION [dbo].[get_LatestWorkRequests](@EquipmentID INT)
 RETURNS @get_LatestWorkRequests TABLE (WorkRequestID INT,
                                        JobOrderID    INT,
