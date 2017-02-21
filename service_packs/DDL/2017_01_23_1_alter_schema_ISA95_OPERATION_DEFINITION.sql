@@ -45,12 +45,23 @@ begin catch
 end catch
 go
 
+declare @name_scheme nvarchar(100) = N'dbo', @query nvarchar(max) = ''
+
+IF OBJECT_ID ('dbo.v_ParameterSpecification_Order', 'U') IS NULL
+	SET @name_scheme = N'ISA95_OPERATION_DEFINITION';
+
+IF OBJECT_ID ('dbo.v_ParameterSpecification_Order', 'V') IS NOT NULL
+   DROP VIEW [dbo].[v_ParameterSpecification_Order];
+   
 --| restore view SCHEMABINDING
+SET @query = N'
 CREATE VIEW [dbo].[v_ParameterSpecification_Order] WITH SCHEMABINDING
 AS
 SELECT sp.ID, sp.[Value], sp.[Description], sp.[WorkDefinitionID], oes.[EquipmentID], sp.PropertyType
-FROM [ISA95_OPERATION_DEFINITION].[ParameterSpecification] sp
+FROM ['+@name_scheme+'].[ParameterSpecification] sp
      INNER JOIN [dbo].[OpEquipmentSpecification] oes ON (oes.[WorkDefinition]=sp.[WorkDefinitionID])
-     INNER JOIN [dbo].[WorkDefinition] wd ON (wd.[ID]=sp.[WorkDefinitionID] AND wd.[WorkType]=N'Standard')
-     INNER JOIN[dbo].[PropertyTypes] pt ON (pt.ID=sp.PropertyType AND pt.Value=N'COMM_ORDER')
+     INNER JOIN [dbo].[WorkDefinition] wd ON (wd.[ID]=sp.[WorkDefinitionID] AND wd.[WorkType]=N''Standard'')
+     INNER JOIN[dbo].[PropertyTypes] pt ON (pt.ID=sp.PropertyType AND pt.Value=N''COMM_ORDER'')
+'
+exec(@query);
 go
