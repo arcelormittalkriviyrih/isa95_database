@@ -1,6 +1,7 @@
 
 IF OBJECT_ID (N'dbo.v_WorkDefinitionPropertiesAll', N'V') IS NOT NULL
    DROP VIEW [dbo].[v_WorkDefinitionPropertiesAll];
+GO
 
 CREATE VIEW [dbo].[v_WorkDefinitionPropertiesAll]
 AS
