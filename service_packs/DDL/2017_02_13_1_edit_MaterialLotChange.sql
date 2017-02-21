@@ -24,7 +24,6 @@ SELECT ml.ID,
        CAST(0 AS BIT) selected
 FROM (SELECT ml.[ID],
              ml.[FactoryNumber],
-             SUBSTRING(ml.FactoryNumber,7,2) FactoryNumberScales,
              ml.[Status],
              ml.[Quantity],
              ml.CreateTime
@@ -36,12 +35,10 @@ FROM (SELECT ml.[ID],
                    ROW_NUMBER() OVER (PARTITION BY ml.[FactoryNumber] ORDER BY ml.[CreateTime] DESC, ml.[ID] DESC) RowNumber
             FROM [dbo].[MaterialLot] ml) ml
             WHERE ml.RowNumber=1) ml
-     INNER JOIN [dbo].[EquipmentProperty] eqp ON (eqp.[ClassPropertyID]=[dbo].[get_EquipmentClassPropertyByValue]('SCALES_NO') AND eqp.[Value]=ml.FactoryNumberScales)
-     INNER JOIN [dbo].[Equipment] eq ON (eq.ID=eqp.EquipmentID)
+     INNER JOIN [dbo].[Equipment] eq ON (eq.ID=[dbo].[get_EquipmentIdByPropertyValue](SUBSTRING(ml.FactoryNumber,7,2),'SCALES_NO'))
      LEFT OUTER JOIN [dbo].[MaterialLotProperty] prod_order ON (prod_order.[MaterialLotID]=ml.[ID] AND prod_order.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PROD_ORDER'))
      LEFT OUTER JOIN [dbo].[MaterialLotProperty] part_no ON (part_no.[MaterialLotID]=ml.[ID] AND part_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PART_NO'))
      LEFT OUTER JOIN [dbo].[MaterialLotProperty] bunt_no ON (bunt_no.[MaterialLotID]=ml.[ID] AND bunt_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('BUNT_NO'))
-WHERE ml.Quantity>0;
-
+	 WHERE ml.Quantity>0;
 GO
 
