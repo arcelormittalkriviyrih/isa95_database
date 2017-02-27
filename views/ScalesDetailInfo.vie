@@ -68,11 +68,17 @@ AS
                  CAST(bQty.PropertyValue AS INT)		BAR_QUANTITY,
                  ISNULL(dbo.get_EquipmentPropertyValue(eq.ID, N'TAKE_WEIGHT_LOCKED'), '0') TAKE_WEIGHT_LOCKED,
 				 kd.[WEIGHT_OK],
-				 kd.[PEREBOR]
+				 kd.[PEREBOR],
+				 (SELECT 1 WHERE EXISTS (SELECT NULL FROM dbo.JobOrder jo WHERE jo.WorkType = N'KEPCommands'
+																		   AND jo.DispatchStatus=N'ToSend'   
+																		   AND epv.Value=  left(Command, len(Command)- charindex('.', reverse(Command)))
+																		   and DATEDIFF(second, jo.StartTime, CURRENT_TIMESTAMP) > 30 )) Send_OPC_Error
           FROM dbo.Equipment eq
                INNER JOIN dbo.EquipmentProperty eqp ON(eqp.EquipmentID = eq.ID)
                INNER JOIN dbo.EquipmentClassProperty ecp ON(ecp.ID = eqp.ClassPropertyID
                                                             AND ecp.value = N'SCALES_NO')
+			   INNER JOIN dbo.EquipmentProperty epv ON (epv.EquipmentID=eq.ID)
+			   INNER JOIN dbo.EquipmentClassProperty epr ON (epv.ClassPropertyID=epr.ID and epr.Value = N'OPC_DEVICE_NAME')
                LEFT OUTER JOIN Kep_Data kd ON(ISNUMERIC(eqp.value) = 1 AND kd.[NUMBER_POCKET] = CAST(eqp.value AS INT))
                LEFT OUTER JOIN BarWeight bw ON bw.EquipmentId = eq.ID AND bw.PropertyType = N'BAR_WEIGHT'
                LEFT OUTER JOIN BarWeight bminW ON bminW.EquipmentId = eq.ID AND bminW.PropertyType = N'MIN_WEIGHT'
