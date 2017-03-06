@@ -3,6 +3,14 @@ IF OBJECT_ID (N'dbo.v_WorkDefinitionPropertiesAll', N'V') IS NOT NULL
    DROP VIEW [dbo].[v_WorkDefinitionPropertiesAll];
 GO
 
+--| for test scheme
+declare @name_scheme nvarchar(100) = N'dbo', @query nvarchar(max) = '';
+
+IF OBJECT_ID ('dbo.ParameterSpecification', 'U') IS NULL
+	SET @name_scheme = N'ISA95_OPERATION_DEFINITION';
+
+
+SET @query = N'
 CREATE VIEW [dbo].[v_WorkDefinitionPropertiesAll]
 AS
 SELECT ps.[ID],
@@ -12,7 +20,7 @@ SELECT ps.[ID],
        es.[EquipmentID],
        ps.[WorkDefinitionID],
        pt.[Value] Property
-FROM dbo.[ParameterSpecification] ps
+FROM '+@name_scheme+'.[ParameterSpecification] ps
      INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=ps.[PropertyType])
      INNER JOIN [dbo].[v_ParameterSpecification_Order] pso ON (pso.WorkDefinitionID=ps.[WorkDefinitionID])
      INNER JOIN [dbo].[OpEquipmentSpecification] es ON (es.[WorkDefinition]=ps.[WorkDefinitionID])
@@ -32,5 +40,7 @@ FROM dbo.OpSegmentRequirement sr
 WHERE NOT EXISTS (SELECT NULL 
                   FROM [dbo].[v_ParameterSpecification_Order] pso 
                   WHERE (pso.[Value]=spo.[Value])
-                    AND (pso.[EquipmentID]=eq.[ID]));
+                    AND (pso.[EquipmentID]=eq.[ID]));'
+
+exec(@query);
 GO
