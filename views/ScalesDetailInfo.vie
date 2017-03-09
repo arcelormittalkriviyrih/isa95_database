@@ -72,8 +72,8 @@ AS
 				 (SELECT 1 WHERE EXISTS (SELECT NULL FROM dbo.JobOrder jo WHERE jo.WorkType = N'KEPCommands'
 																		   AND jo.DispatchStatus=N'ToSend'   
 																		   AND CAST(epv.Value as nvarchar)=  left(Command, len(Command)- charindex('.', reverse(Command)))
-																		   and DATEDIFF(second, jo.StartTime, CURRENT_TIMESTAMP) > 10 )
-						  OR NOT EXISTS (SELECT * from dbo.kep_controller_diag diag where DATEPART(second, CURRENT_TIMESTAMP-diag.Controller_Last_Connect)<10 
+																		   and DATEDIFF(second, jo.StartTime, CURRENT_TIMESTAMP) > 15 )
+						  OR EXISTS (SELECT * from dbo.kep_controller_diag diag where DATEDIFF(second, diag.Controller_Last_Connect,CURRENT_TIMESTAMP)>15 
 																			AND (cast(diag.Controller_ID as nvarchar) = CAST(epv2.[Value] as nvarchar)))) Send_OPC_Error
           FROM dbo.Equipment eq
                INNER JOIN dbo.EquipmentProperty eqp ON(eqp.EquipmentID = eq.ID)

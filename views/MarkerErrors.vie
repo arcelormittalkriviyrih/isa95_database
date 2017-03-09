@@ -164,6 +164,32 @@ SELECT ABS(CHECKSUM(NEWID())) AS ID,
 		  INNER JOIN dbo.EquipmentProperty esp ON (esp.EquipmentID = side.ID AND esp.ClassPropertyID=dbo.get_EquipmentClassPropertyByValue( N'CONTROLLER_ID' ))
 		  LEFT OUTER JOIN dbo.kep_controller_diag diag ON (cast(diag.Controller_ID as nvarchar) = esp.[Value])
      WHERE p.ID = dbo.get_CurrentPerson()           
-           AND (DATEPART(second, CURRENT_TIMESTAMP-diag.Controller_Last_Connect)>5 OR diag.Controller_Last_Connect IS NULL)
+           AND (DATEDIFF(second, diag.Controller_Last_Connect,CURRENT_TIMESTAMP)>15 OR diag.Controller_Last_Connect IS NULL)
+UNION
+SELECT ABS(CHECKSUM(NEWID())) AS ID,
+	N'Свойство "'+epr.Description+N'" не задано для стороны стана "'+side.Description +N'" ('+workshop.Description+N'\'+mill.Description+N')'
+     FROM dbo.Person p,
+          dbo.PersonProperty pp,
+          dbo.PersonnelClassProperty pcp,
+          dbo.Equipment side,
+          dbo.EquipmentClassProperty ecp,
+          dbo.EquipmentProperty ep,
+          dbo.EquipmentClassProperty epr,
+          dbo.Equipment mill,
+		  dbo.Equipment workshop
+     WHERE pp.PersonID = p.ID
+           AND pcp.Value = 'WORK_WITH'
+           AND pcp.ID = pp.ClassPropertyID
+           AND p.ID = dbo.get_CurrentPerson()
+           AND ep.Value = pp.Value
+           AND ecp.Value = 'SIDE_ID'
+           AND ep.EquipmentID = side.ID
+           AND ep.ClassPropertyID = ecp.ID
+           AND mill.id = side.Equipment
+		   AND workshop.id=mill.Equipment
+		   AND epr.Value in (N'CONTROLLER_ID')
+		   AND NOT EXISTS (select * from EquipmentProperty epv 
+								where epv.ClassPropertyID=epr.ID 
+									and epv.EquipmentID=side.ID);
 
 GO
