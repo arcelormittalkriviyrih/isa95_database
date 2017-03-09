@@ -50,7 +50,7 @@ UNION
 SELECT abs(Checksum(NewID())),
 	  N'PLC',
 	  side.ID,
-	  IIF(diag.Controller_Last_Connect IS NULL, NULL, IIF(DATEPART(second, CURRENT_TIMESTAMP-diag.Controller_Last_Connect)>5,N'Error',N'OK'))	  
+	  IIF(diag.Controller_Last_Connect IS NULL, NULL, IIF(DATEDIFF(second, diag.Controller_Last_Connect,CURRENT_TIMESTAMP)>15,N'Error',N'OK'))	  
 FROM dbo.Equipment side
      INNER JOIN dbo.EquipmentClass ec ON (ec.ID = side.EquipmentClassID and ec.Code=N'SIDE')
      INNER JOIN dbo.EquipmentProperty ep ON (ep.EquipmentID = side.ID and ep.ClassPropertyID=dbo.get_EquipmentClassPropertyByValue( N'CONTROLLER_ID' ))
