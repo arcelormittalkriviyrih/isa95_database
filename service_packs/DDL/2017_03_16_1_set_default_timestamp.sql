@@ -3,5 +3,13 @@ GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
 GO
 
+if NOT EXISTS(SELECT 
+		OBJECT_NAME(OBJECT_ID) AS NameofConstraint
+		,SCHEMA_NAME(schema_id) AS SchemaName
+        ,OBJECT_NAME(parent_object_id) AS TableName
+        ,type_desc AS ConstraintType
+    FROM sys.objects
+    WHERE type_desc LIKE '%CONSTRAINT'
+        AND OBJECT_NAME(OBJECT_ID)='DF_KEP_logger_TIMESTAMP')	
 ALTER TABLE dbo.kep_logger ADD CONSTRAINT [DF_KEP_logger_TIMESTAMP] DEFAULT (getdate()) FOR [TIMESTAMP];
 GO
