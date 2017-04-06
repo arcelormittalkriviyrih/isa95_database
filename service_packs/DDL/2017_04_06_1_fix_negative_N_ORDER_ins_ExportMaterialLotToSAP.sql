@@ -1,19 +1,13 @@
-USE [KRR-PA-ISA95_PRODUCTION]
-GO
-/****** Object:  StoredProcedure [dbo].[ins_ExportMaterialLotToSAP]    Script Date: 05.04.2017 16:37:50 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-/*
-	Procedure: ins_ExportMaterialLotToSAP
-	Отправляет информацию о напечатанной бирке в SAP.
 
-	Parameters:
+IF OBJECT_ID ('dbo.ins_ExportMaterialLotToSAP',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_ExportMaterialLotToSAP;
+GO
 
-      MaterialLotID - MaterialLot ID.
-*/
-ALTER PROCEDURE [dbo].[ins_ExportMaterialLotToSAP]
+CREATE PROCEDURE [dbo].[ins_ExportMaterialLotToSAP]
 @MaterialLotID INT,
 @LinkedServer NVARCHAR(50)
 AS
