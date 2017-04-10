@@ -8,12 +8,6 @@ IF EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[F
 ALTER TABLE [dbo].[PackagingUnitsProperty] 
 DROP CONSTRAINT [FK_PackagingUnitsProperty_PackagingDefinitionProperty] 
 
-IF COLUMNPROPERTY(OBJECT_ID('PackagingUnitsProperty','U'),'PackagingDefinitionPropertyID','ColumnId') IS NOT NULL
-BEGIN
-	ALTER TABLE [dbo].[PackagingUnitsProperty]
-	DROP COLUMN PackagingDefinitionPropertyID
-END
-
 
 IF OBJECT_ID ('dbo.PackagingDefinitionAssemblies',N'U') IS NOT NULL
   DROP TABLE [dbo].PackagingDefinitionAssemblies;
