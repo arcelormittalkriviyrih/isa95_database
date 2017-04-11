@@ -29,7 +29,7 @@ SELECT     TOP (100) PERCENT
 		when dbo.JobResponse.WorkType = 'Taring'
 		then dbo.OpPackagingActualProperty.Value
 		when dbo.JobResponse.WorkType = 'Weighting'
-		then (SELECT Value FROM   dbo.PackagingUnitsProperty WHERE	PackagingDefinitionPropertyID=2	AND PackagingUnitsID = dbo.PackagingUnits.ID)
+		then (SELECT Value FROM   dbo.PackagingUnitsProperty WHERE	 PackagingUnitsID = dbo.PackagingUnits.ID and [Description]=N'Вес тары' )
 	end)									AS Tare, 
 	map.brutto		AS Brutto, 
 	map.netto       AS Netto, 
@@ -40,7 +40,8 @@ SELECT     TOP (100) PERCENT
 	--map.sndr as sender,
 	--map.rcvr as reciever,
 	(select top 1 [Description] from dbo.Equipment where ID = map.sndr) [Sender],
-	(select top 1 [Description] from dbo.Equipment where ID = map.rcvr) [Receiver]
+	(select top 1 [Description] from dbo.Equipment where ID = map.rcvr) [Receiver],
+	opea.Description					as [Person]
 
 FROM
 	dbo.JobResponse INNER JOIN
@@ -63,6 +64,5 @@ FROM
         FROM  dbo.MaterialActualProperty 
         PIVOT (MAX(Value) FOR  [Description] in  ([Вид лома], [Вес брутто], [Вес нетто Дебет], [Получатель], [Отправитель]) ) AS pvt   
         GROUP BY OpMaterialActual ) map  
-	 ON map.OpMaterialActual=om.ID 
-
-GO
+	 ON map.OpMaterialActual=om.ID  LEFT OUTER JOIN
+	 [dbo].[OpPersonnelActual] opea ON dbo.JobResponse.ID = opea.JobResponseID 

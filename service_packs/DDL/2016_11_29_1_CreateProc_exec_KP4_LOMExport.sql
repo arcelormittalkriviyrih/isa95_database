@@ -12,13 +12,14 @@ CREATE PROCEDURE [dbo].[exec_KP4_LOMExport]
 AS
 BEGIN
 
-  DECLARE @ID_JobResp int, @ID_JobOrder int
+  DECLARE @ID_JobResp int, @ID_JobOrder int,
+          @DTtara datetime
 
+-----------------------------------------------------------Information from weighting ------------------------------------------
   BEGIN TRY
 
     SELECT @ID_JobResp=max([ID_JobResponse]) 
 	FROM [KRR-FAS71].LOMSRV.[dbo].[copy_Lom_KP4]
-
 
 	IF @ID_JobResp<(SELECT max(JobResponse.ID)  
 	                FROM  JobResponse 
@@ -45,7 +46,7 @@ BEGIN
                ,[dt_insert]
 			   )
 
-            SELECT   top 50
+            SELECT   
             	WorkResponse.ID as ID_CAR, 
             	WorkPerformance.Description AS N_DOC, 
             	CAST(WorkPerformance.[EndTime] as DateTime) AS DATE_WORK,
@@ -59,7 +60,7 @@ BEGIN
             	CAST(JobResponse.StartTime as DateTime) AS WeightingTime,
             	map.brutto, 
             	map.netto, 
-                (SELECT top 1 CAST(Value as float) FROM   dbo.PackagingUnitsProperty WHERE	PackagingDefinitionPropertyID=2	AND PackagingUnitsID = dbo.PackagingUnits.ID) AS Tare, 
+                (SELECT top 1 CAST(Value as float) FROM   dbo.PackagingUnitsProperty WHERE  PackagingUnitsID=dbo.PackagingUnits.ID and [Description]=N'Вес тары' ) AS Tare, 
 				(ROW_NUMBER() over (partition by dbo.WorkPerformance.ID, dbo.WorkResponse.ID order by map.netto))  AS fl_Add,
             	JobResponse.ID,
             	getdate() dti
@@ -90,25 +91,52 @@ BEGIN
             SET @ID_JobOrder=NEXT  VALUE FOR [dbo].[gen_JobOrder];
             INSERT INTO [dbo].[JobOrder] ([ID], [WorkType], [StartTime], DispatchStatus,  [Command], CommandRule)
             VALUES (@ID_JobOrder, 'KP4_LOMExport', CURRENT_TIMESTAMP, N'Done', 'Send', '[KRR-FAS71]');
+
    END
         
-
    END TRY
-
-
    BEGIN CATCH
-
-        EXEC [dbo].[ins_ErrorLog];
-
-      --   INSERT INTO [dbo].[ErrorLog](error_details,error_message )
-      --   SELECT  N'ERROR_NUMBER: ' + CAST(ERROR_NUMBER() AS NVARCHAR) 
-		    --   + N', ERROR_SEVERITY: '+ IsNull(CAST(ERROR_SEVERITY() AS NVARCHAR),N'')
-			   --+ N', ERROR_STATE: '+ IsNull(CAST(ERROR_STATE() AS NVARCHAR),N'') 
-			   --+ N', ERROR_PROCEDURE: '+ IsNull(ERROR_PROCEDURE(),N'') 
-			   --+ N', ERROR_LINE '+ CAST(ERROR_LINE() AS NVARCHAR),
-      --       ERROR_MESSAGE();
-
+         INSERT INTO [dbo].[ErrorLog](error_details,error_message )
+         SELECT  N'ERROR_NUMBER: ' + CAST(ERROR_NUMBER() AS NVARCHAR) 
+			   + N', ERROR_PROCEDURE: exec_KP4_LOMExport(weight)'
+			   + N', ERROR_LINE '+ CAST(ERROR_LINE() AS NVARCHAR),
+             ERROR_MESSAGE();
    END CATCH;
 
+-----------------------------------------------------------Information from taring ------------------------------------------
+
+  BEGIN TRY
+
+    SELECT @DTtara=max(TIME_TARA) 
+	FROM [KRR-FAS71].LOMSRV.[dbo].WEIGHT_TARA_ALL
+
+
+ --   SELECT * FROM [KRR-FAS71].LOMSRV.[dbo].WEIGHT_TARA_ALL WHERE TIME_TARA>@DTtara
+
+	IF @DTtara<(SELECT max(ValueTime) FROM  PackagingUnitsProperty)
+    BEGIN
+
+		     UPDATE [KRR-FAS71].LOMSRV.[dbo].WEIGHT_TARA_ALL
+			 SET    WEIGHT_CAR= cast(pr2.Value as real),
+			        TIME_TARA =  pr2.ValueTime,
+					PackagingUnitsID=pu.ID
+		     FROM   dbo.PackagingUnitsProperty pr2 
+		            left join dbo.PackagingUnits pu on pr2.PackagingUnitsID=pu.ID
+					left join [KRR-FAS71].LOMSRV.[dbo].WEIGHT_TARA_ALL tara71  on tara71.N_CAR=pu.Description
+		     WHERE  pr2.ValueTime>@DTtara
+
+             SET @ID_JobOrder=NEXT  VALUE FOR [dbo].[gen_JobOrder];
+             INSERT INTO [dbo].[JobOrder] ([ID], [WorkType], [StartTime], DispatchStatus,  [Command], CommandRule)
+             VALUES (@ID_JobOrder, 'KP4_LOMExport', CURRENT_TIMESTAMP, N'Done', 'Send tara', '[KRR-FAS71]');
+
+    END            
+   END TRY
+   BEGIN CATCH
+         INSERT INTO [dbo].[ErrorLog](error_details,error_message )
+         SELECT  N'ERROR_NUMBER: ' + CAST(ERROR_NUMBER() AS NVARCHAR) 
+			   + N', ERROR_PROCEDURE: exec_KP4_LOMExport(tara)'
+			   + N', ERROR_LINE '+ CAST(ERROR_LINE() AS NVARCHAR),
+             ERROR_MESSAGE();
+   END CATCH;
 
 END;

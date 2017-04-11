@@ -19,13 +19,15 @@ select top (100) percent
 	pu.ID,
 	pu.[Description]	as [Wagon],
 	pup.[Description]	as [Parameter],
-	pup.Value
+	pup.Value,
+	pup.ValueTime
+
 from 
 	dbo.PackagingUnits pu,
 	dbo.PackagingUnitsProperty pup
 where 
 	pu.ID = pup.PackagingUnitsID
-and pup.PackagingDefinitionPropertyID in (2)
+    and pup.[Description]=N'Вес тары' 
 order by pup.ID
 
 GO

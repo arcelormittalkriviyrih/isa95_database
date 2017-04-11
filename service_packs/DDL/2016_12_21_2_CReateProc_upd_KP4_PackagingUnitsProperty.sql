@@ -29,8 +29,7 @@ BEGIN
 
 
     SELECT @maxDT_F71=max(TIME_TARA) FROM [KRR-FAS71].[LOMSRV].[dbo].[WEIGHT_TARA_ALL] 
-    SELECT @maxDT_ISA=max(convert(datetime,[Value],120))
-		   FROM  [dbo].[PackagingUnitsProperty] WHERE [PackagingDefinitionPropertyID]=3 --- and PropertyType='getting' or 'weighing'
+    SELECT @maxDT_ISA=max(ValueTime) FROM  [dbo].[PackagingUnitsProperty] WHERE [Description]=N'Вес тары' 
 
  	IF @maxDT_F71>@maxDT_ISA
 	BEGIN  
@@ -51,8 +50,8 @@ BEGIN
 	                 IF NOT EXISTS (SELECT ID FROM [PackagingUnits] WHERE [Description]=RTrim(@N_CAR))
 	                 BEGIN
 	                      SELECT  @ID_PackagingUnits=NEXT  VALUE FOR [dbo].[gen_PackagingUnits];
-                          INSERT INTO [dbo].[PackagingUnits] ([ID],[Description],[Status],[PackagingDefinitionID],[Location]) 
-			              VALUES( @ID_PackagingUnits, RTrim(@N_CAR), null, 1, 1 )
+                          INSERT INTO [dbo].[PackagingUnits] ([ID],[Description],[Status],[Location]) 
+			              VALUES( @ID_PackagingUnits, RTrim(@N_CAR), null, 1 )
 
 	                 END
 	                 ELSE
@@ -62,11 +61,9 @@ BEGIN
 	                 IF NOT EXISTS (SELECT * FROM PackagingUnitsProperty WHERE [PackagingUnitsID]=@ID_PackagingUnits )
 	                 BEGIN
 			               SELECT @ID_PackagingUnitsProperty=(NEXT  VALUE FOR [dbo].[gen_PackagingUnitsProperty]);
-                           INSERT INTO [dbo].[PackagingUnitsProperty]     
-			                      (ID, [Description], [Value], [PackagingDefinitionPropertyID], [PackagingUnitsProperty], [PackagingUnitsID])
-                           VALUES (@ID_PackagingUnitsProperty,  N'Тара', NULL, 1, 0, @ID_PackagingUnits),
-			                      ((NEXT  VALUE FOR [dbo].[gen_PackagingUnitsProperty]),  N'Вес тары',          cast(@WEIGHT_CAR as nvarchar),          2, @ID_PackagingUnitsProperty, @ID_PackagingUnits),
-			                      ((NEXT  VALUE FOR [dbo].[gen_PackagingUnitsProperty]),  N'Время тарирования', convert(nvarchar(max), @TIME_TARA,120), 3, @ID_PackagingUnitsProperty, @ID_PackagingUnits)
+                           INSERT INTO [dbo].[PackagingUnitsProperty]   (ID, [Description], [Value], ValueTime, [PackagingUnitsID])
+                           VALUES (@ID_PackagingUnitsProperty,  N'Вес тары', cast(@WEIGHT_CAR as nvarchar), @TIME_TARA, @ID_PackagingUnits)  
+			                     --- ((NEXT  VALUE FOR [dbo].[gen_PackagingUnitsProperty]),  N'Время тарирования', convert(nvarchar(max), @TIME_TARA,120), 3, @ID_PackagingUnitsProperty, @ID_PackagingUnits)
 
 						   --print 'new '
 						   --print @N_CAR
@@ -76,12 +73,12 @@ BEGIN
 	                 ELSE
 	                 BEGIN
 	                       UPDATE [dbo].[PackagingUnitsProperty]
-	                       SET [Value]=cast(@WEIGHT_CAR as nvarchar)
-	                       WHERE [PackagingUnitsID]=@ID_PackagingUnits and [PackagingDefinitionPropertyID]=2;
+	                       SET [Value]=cast(@WEIGHT_CAR as nvarchar), ValueTime=@TIME_TARA
+	                       WHERE [PackagingUnitsID]=@ID_PackagingUnits  and [Description]=N'Вес тары';
 
-	                       UPDATE [dbo].[PackagingUnitsProperty]
-	                       SET [Value]=convert(nvarchar(max), @TIME_TARA,120)
-	                       WHERE [PackagingUnitsID]=@ID_PackagingUnits and [PackagingDefinitionPropertyID]=3;
+	                       --UPDATE [dbo].[PackagingUnitsProperty]
+	                       --SET [Value]=convert(nvarchar(max), @TIME_TARA,120)
+	                       --WHERE [PackagingUnitsID]=@ID_PackagingUnits and [PackagingDefinitionPropertyID]=3;
                      END
 
 				END TRY
@@ -107,7 +104,3 @@ BEGIN
 
 	 
 END
-
-
-
-GO
