@@ -1,2 +1,2 @@
 ﻿UPDATE  [dbo].[PackagingClass] SET  [ParentID]=NULL
- WHERE [Description]  like N'%ж\д вагоны%'
+ WHERE [Description]  like N'%ЖД вагоны%'
