@@ -123,16 +123,13 @@ AS
                           @CREATE_MODE = N'Авто печать';
 
                      /* For bunt scales increment bunt_no property*/
-                     IF @WorkType IN (N'Standard')
+                     SET @SCALES_TYPE=dbo.get_EquipmentPropertyValue(@EquipmentID,N'SCALES_TYPE');
+                     IF @SCALES_TYPE IN (N'BUNT')
                         BEGIN
-                           SET @SCALES_TYPE=dbo.get_EquipmentPropertyValue(@EquipmentID,N'SCALES_TYPE');
-                           IF @SCALES_TYPE IN (N'BUNT')
-                              BEGIN
-                                 UPDATE [dbo].[ParameterSpecification]
-                                 SET [Value]=CAST(ISNULL([Value],1) AS INT)+1
-                                 WHERE ([WorkDefinitionID]=@WorkDefinitionID)
-                                   AND ([PropertyType]=dbo.[get_PropertyTypeIdByValue](N'BUNT_NO'));
-                              END;
+                           UPDATE [dbo].[ParameterSpecification]
+                           SET [Value]=CAST(ISNULL([Value],1) AS INT)+1
+                           WHERE ([WorkDefinitionID]=@WorkDefinitionID)
+                             AND ([PropertyType]=dbo.[get_PropertyTypeIdByValue](N'BUNT_NO'));
                         END;
 
 /*
@@ -161,4 +158,86 @@ AS
              EXEC dbo.ins_ErrorLog;
          END CATCH;
      END;
+GO
+
+IF OBJECT_ID ('dbo.get_LatestWorkRequests', N'TF') IS NOT NULL
+   DROP FUNCTION dbo.get_LatestWorkRequests;
+GO
+/*
+   Function: get_LatestWorkRequests
+
+   Получает свойства Work Request(Job Order) по ID весов.
+
+   Parameters:
+
+      EquipmentID - ID весов
+     
+   Returns:
+
+      TABLE (WorkRequestID INT,
+             JobOrderID    INT,
+             EquipmentID   INT,
+             ProfileID     INT,
+             WorkType      NVARCHAR(50),
+             PropertyType  NVARCHAR(50),
+             Value         NVARCHAR(250)).
+
+*/
+CREATE FUNCTION dbo.get_LatestWorkRequests(@EquipmentID INT)
+RETURNS @get_LatestWorkRequests TABLE (WorkRequestID INT,
+                                       JobOrderID    INT,
+                                       EquipmentID   INT,
+                                       ProfileID     INT,
+                                       WorkType      NVARCHAR(50),
+                                       PropertyType  NVARCHAR(50),
+                                       Value         NVARCHAR(250))
+AS
+BEGIN
+
+   DECLARE @JobOrderID       INT,
+           @WorkRequestID    INT,
+           @WorkDefinitionID INT,
+           @ProfileID        INT,
+           @WorkType         NVARCHAR(50),
+           @PacksLeft        NVARCHAR(50);
+
+   SET @JobOrderID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'JOB_ORDER_ID');
+   SET @WorkDefinitionID=dbo.get_EquipmentPropertyValue(@EquipmentID,N'WORK_DEFINITION_ID');
+
+   SELECT @WorkRequestID=jo.[WorkRequest],
+          @WorkType=wr.[WorkType],
+          @ProfileID=mr.[MaterialDefinitionID]
+   FROM [dbo].[JobOrder] jo
+        INNER JOIN [dbo].[WorkRequest] wr ON (jo.[WorkRequest]=wr.[ID])
+        LEFT OUTER JOIN [dbo].[OpMaterialRequirement] mr ON (mr.[JobOrderID]=jo.[ID] AND mr.[MaterialClassID]=dbo.get_MaterialClassIDByCode(N'PROFILE'))
+   WHERE jo.[ID]=@JobOrderID;
+
+   INSERT @get_LatestWorkRequests
+   SELECT @WorkRequestID WorkRequestID,
+          par.[JobOrder] JobOrderID,
+          er.[EquipmentID],
+          @ProfileID ProfileID,
+          isnull(@WorkType,N'Standard') WorkType,
+          pt.[Value] PropertyType,
+          par.[Value]
+   FROM [dbo].[Parameter] par
+        INNER JOIN [dbo].[OpEquipmentRequirement] er ON (er.[JobOrderID]=par.[JobOrder])
+        INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=par.[PropertyType] AND pt.[Value] NOT IN (N'COMM_ORDER'))
+   WHERE par.[JobOrder]=@JobOrderID
+   UNION ALL
+   SELECT @WorkRequestID,
+          @JobOrderID,
+          oes.[EquipmentID],
+          @ProfileID ProfileID,
+          isnull(@WorkType,N'Standard') WorkType,
+          pt.[Value] PropertyType,
+          ps.[Value]
+   FROM [dbo].[ParameterSpecification] ps
+        INNER JOIN [dbo].[OpEquipmentSpecification] oes ON (oes.[WorkDefinition]=ps.WorkDefinitionID)
+        INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=ps.[PropertyType] AND pt.[Value] IN (N'COMM_ORDER',N'BRIGADE_NO',N'PROD_DATE',N'BUNT_NO'))
+   WHERE ps.[WorkDefinitionID]=@WorkDefinitionID;
+
+RETURN;
+
+END;
 GO
