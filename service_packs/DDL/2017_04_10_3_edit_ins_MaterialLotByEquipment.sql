@@ -96,16 +96,13 @@ IF @WorkDefinitionID IS NOT NULL
                                                            @CREATE_MODE      = @CREATE_MODE;
 
       /* For bunt scales increment bunt_no property*/
-      IF @Quantity IS NOT NULL AND @WorkType IN (N'Standard')
+      SET @SCALES_TYPE=dbo.get_EquipmentPropertyValue(@EquipmentID,N'SCALES_TYPE');
+      IF @SCALES_TYPE IN (N'BUNT')
          BEGIN
-            SET @SCALES_TYPE=dbo.get_EquipmentPropertyValue(@EquipmentID,N'SCALES_TYPE');
-            IF @SCALES_TYPE IN (N'BUNT')
-               BEGIN
-                  UPDATE [dbo].[ParameterSpecification]
-                  SET [Value]=CAST(ISNULL([Value],1) AS INT)+1
-                  WHERE ([WorkDefinitionID]=@WorkDefinitionID)
-                    AND ([PropertyType]=dbo.[get_PropertyTypeIdByValue](N'BUNT_NO'));
-               END;
+            UPDATE [dbo].[ParameterSpecification]
+            SET [Value]=CAST(ISNULL([Value],1) AS INT)+1
+            WHERE ([WorkDefinitionID]=@WorkDefinitionID)
+              AND ([PropertyType]=dbo.[get_PropertyTypeIdByValue](N'BUNT_NO'));
          END;
 
       SET @PrinterID = [dbo].[get_EquipmentPropertyValue](@EquipmentID,N'USED_PRINTER');
