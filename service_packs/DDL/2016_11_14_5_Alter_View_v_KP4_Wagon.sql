@@ -29,7 +29,7 @@ SELECT     TOP (100) PERCENT
 		when dbo.JobResponse.WorkType = 'Taring'
 		then dbo.OpPackagingActualProperty.Value
 		when dbo.JobResponse.WorkType = 'Weighting'
-		then (SELECT Value FROM   dbo.PackagingUnitsProperty WHERE	PackagingDefinitionPropertyID=2	AND PackagingUnitsID = dbo.PackagingUnits.ID)
+		then (SELECT Value FROM   dbo.PackagingUnitsProperty WHERE	 PackagingUnitsID = dbo.PackagingUnits.ID and [Description]=N'Вес тары' )
 	end)									AS Tare, 
 	map.brutto		AS Brutto, 
 	map.netto       AS Netto, 
@@ -66,5 +66,3 @@ FROM
         GROUP BY OpMaterialActual ) map  
 	 ON map.OpMaterialActual=om.ID  LEFT OUTER JOIN
 	 [dbo].[OpPersonnelActual] opea ON dbo.JobResponse.ID = opea.JobResponseID 
-
-GO
