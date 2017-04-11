@@ -72,7 +72,7 @@ BEGIN
           ps.[Value]
    FROM [dbo].[ParameterSpecification] ps
         INNER JOIN [dbo].[OpEquipmentSpecification] oes ON (oes.[WorkDefinition]=ps.WorkDefinitionID)
-        INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=ps.[PropertyType] AND pt.[Value] IN (N'COMM_ORDER',N'BRIGADE_NO',N'PROD_DATE'))
+        INNER JOIN [dbo].[PropertyTypes] pt ON (pt.ID=ps.[PropertyType] AND pt.[Value] IN (N'COMM_ORDER',N'BRIGADE_NO',N'PROD_DATE',N'BUNT_NO'))
    WHERE ps.[WorkDefinitionID]=@WorkDefinitionID;
 
 RETURN;
