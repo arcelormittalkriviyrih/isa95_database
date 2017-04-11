@@ -8,7 +8,7 @@ GO
    View: v_WGT_Consigners
     Отправители и получатели грузов
 */
-alter view dbo.v_WGT_Consigners
+create view dbo.v_WGT_Consigners
 as
 select
 	 E.ID
