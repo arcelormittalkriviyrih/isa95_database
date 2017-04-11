@@ -6,17 +6,6 @@ GO
 SET ANSI_NULLS ON
 GO
 
-
--------TRANSACTION insKP4_TakeWeight
-CREATE PROCEDURE [dbo].[ins_KP4_WeightBrutto]
-IF OBJECT_ID ('dbo.ins_KP4_WeightBrutto',N'P') IS NOT NULL
-  DROP PROCEDURE dbo.ins_KP4_WeightBrutto;
-GO
- 
-SET ANSI_NULLS ON
-GO
-
-
 -------TRANSACTION insKP4_TakeWeight
 CREATE PROCEDURE [dbo].[ins_KP4_WeightBrutto]
    @WorkPerformanceID int,					-- ID WeightSheet 

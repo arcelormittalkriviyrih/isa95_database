@@ -122,7 +122,7 @@ BEGIN
 					PackagingUnitsID=pu.ID
 		     FROM   dbo.PackagingUnitsProperty pr2 
 		            left join dbo.PackagingUnits pu on pr2.PackagingUnitsID=pu.ID
-					left join [KRR-FAS71].LOMSRV.[dbo].WEIGHT_TARA_ALL tara71  on tara71.N_CAR=pu.Description
+					left join [KRR-FAS71].LOMSRV.[dbo].WEIGHT_TARA_ALL tara71  on tara71.N_CAR=pu.Description COLLATE Ukrainian_CI_AS
 		     WHERE  pr2.ValueTime>@DTtara
 
              SET @ID_JobOrder=NEXT  VALUE FOR [dbo].[gen_JobOrder];
