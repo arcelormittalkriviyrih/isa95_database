@@ -1,4 +1,29 @@
-﻿--------------------------------------------------------------
+﻿ALTER TABLE dbo.JobOrder ALTER COLUMN [Command] nvarchar(250);
+GO
+
+SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+
+IF OBJECT_ID('dbo.v_JobOrders', N'V') IS NOT NULL
+    DROP VIEW [dbo].[v_JobOrders];
+GO
+/*
+   View: v_JobOrders
+   Возвращает список JobOrder.
+*/
+CREATE VIEW [dbo].[v_JobOrders]
+AS
+     SELECT ID,
+            DispatchStatus,
+		  WorkType,
+		  Command,
+		  CommandRule
+     FROM dbo.JobOrder;
+GO
+
+--------------------------------------------------------------
 -- Процедура ins_JobOrderOPCCommand
 IF OBJECT_ID ('dbo.ins_JobOrderOPCCommand',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_JobOrderOPCCommand;
