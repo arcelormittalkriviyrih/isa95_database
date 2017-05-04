@@ -20,7 +20,7 @@ IF (isnull(@WagonNumber, '') = '')
 	THROW 60001, N'WagonNumber param required', 1;
 IF @PackagingClass IS NULL
 	THROW 60001, N'PackagingClass param required', 1;
-IF not exists (select ID from [PackagingUnitsClass] where ID = @PackagingClass)
+IF not exists (select ID from [PackagingClass] where ID = @PackagingClass)
 	THROW 60001, N'PackagingClassID doesnt exist', 1;
 
 
