@@ -11,7 +11,8 @@ GO
 
 CREATE PROCEDURE [dbo].[ins_PackagingUnits] 
    @WagonNumber		nvarchar(20),		-- Wagon Number
-   @PackagingClass	int					-- Wagon Type
+   @PackagingClass	int,				-- Wagon Type
+   @PackagingUnitsID int OUTPUT			-- returned value
 
 AS
 BEGIN
@@ -23,8 +24,9 @@ IF @PackagingClass IS NULL
 IF not exists (select ID from [PackagingClass] where ID = @PackagingClass)
 	THROW 60001, N'PackagingClassID doesnt exist', 1;
 
+set @PackagingUnitsID = null
 
-declare @PackagingUnitsID int
+--declare @PackagingUnitsID int
 
 SELECT @PackagingUnitsID = [ID]
 FROM [PackagingUnits] 
@@ -46,9 +48,8 @@ BEGIN
 
 END
 
-select @PackagingUnitsID 
+--select @PackagingUnitsID as [PackagingUnitsID]
 
 END
-
 
 GO
