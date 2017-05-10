@@ -86,13 +86,13 @@ BEGIN
 			,[DocumentationsID]
 			,[ValueTime])		
 		select
-			 DCP.Description
-			,T1.Value	as [Value]
-			,null		as [ValueUnitofMeasure]
-			,null		as [DocumentationsProperty]
-			,DCP.ID		as [DocumentationsClassPropertyID]
-			,1111		as [DocumentationsID]
-			,getdate()	as [ValueTime]
+			 DCP.Description	as [Description]
+			,T1.Value			as [Value]
+			,null				as [ValueUnitofMeasure]
+			,null				as [DocumentationsProperty]
+			,DCP.ID				as [DocumentationsClassPropertyID]
+			,@DocumentationsID	as [DocumentationsID]
+			,getdate()			as [ValueTime]
 		from (
 		values
 			 (N'Номер путевой',										cast(@WaybillNumber as nvarchar))
@@ -135,7 +135,7 @@ BEGIN
 		
 	BEGIN CATCH
 		ROLLBACK TRANSACTION ins_SaveWaybill;
-		THROW 16,'Error transaction ins_SaveWaybill',1;	
+		THROW 60020,'Error transaction ins_SaveWaybill',1;	
 	END CATCH
 
 
