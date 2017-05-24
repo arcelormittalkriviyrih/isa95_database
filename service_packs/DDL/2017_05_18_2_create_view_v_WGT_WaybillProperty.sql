@@ -62,7 +62,7 @@ from (
 		,[DocumentationsID]
 		,cast([ValueTime] as smalldatetime) as [ValueTime]
 		,[DocumentationsClassPropertyID]
-		,row_number() over (partition by [DocumentationsClassPropertyID], [ValueTime] order by ID) as RN
+		,row_number() over (partition by [DocumentationsID], [DocumentationsClassPropertyID] order by ID desc) as RN
 	from [dbo].[DocumentationsProperty]) as T1
 where RN = 1
 GO
