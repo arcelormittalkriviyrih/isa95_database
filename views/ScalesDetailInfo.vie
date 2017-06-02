@@ -44,7 +44,6 @@ AS
 						 kl.[WEIGHT_OK],
 						 kl.[PEREBOR]
                   FROM dbo.KEP_logger kl
-                  WHERE kl.[TIMESTAMP] >= DATEADD(hour, -1, GETDATE())
               ) ww
               WHERE ww.RowNumber = 1)
           SELECT eq.ID AS ID,
