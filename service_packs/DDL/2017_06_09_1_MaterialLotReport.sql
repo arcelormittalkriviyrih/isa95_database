@@ -1,7 +1,21 @@
-﻿SET ANSI_NULLS ON;
+SET ANSI_NULLS ON;
 GO
 
 SET QUOTED_IDENTIFIER ON;
+GO
+
+IF NOT EXISTS(SELECT NULL
+              FROM information_schema.columns
+              WHERE table_name = 'MaterialLot'
+                AND column_name = 'FactoryNumberScales')
+   ALTER TABLE dbo.MaterialLot ADD [FactoryNumberScales] AS SUBSTRING([FactoryNumber],7,2)
+GO
+
+IF NOT EXISTS(SELECT NULL
+              FROM information_schema.columns
+              WHERE table_name = 'MaterialLotProperty'
+                AND column_name = 'ValueDate')
+   ALTER TABLE dbo.MaterialLotProperty ADD [ValueDate] AS TRY_CONVERT(DATETIMEOFFSET(3),[Value],104)
 GO
 
 IF OBJECT_ID ('dbo.v_MaterialLotReport', N'V') IS NOT NULL
