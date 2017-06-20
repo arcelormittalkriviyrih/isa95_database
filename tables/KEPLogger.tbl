@@ -4,7 +4,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[KEP_logger](
+CREATE TABLE [dbo].[KEP_logger_table](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[AUTO_MANU] [bit] NULL,
 	[COUNT_BAR] [int] NULL,
@@ -29,12 +29,15 @@ PRIMARY KEY CLUSTERED
 
 GO
 
-CREATE NONCLUSTERED INDEX [i1_kep_logger_timestamp] ON [dbo].[KEP_logger]
+CREATE NONCLUSTERED INDEX [i1_kep_logger_timestamp] ON [dbo].[KEP_logger_table]
 (
 	[TIMESTAMP] ASC,
 	[NUMBER_POCKET] ASC
 )
 INCLUDE ([WEIGHT_CURRENT]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 70) ON [PRIMARY]
+GO
+
+CREATE UNIQUE INDEX [u2_number_pocket_unqiue] ON [dbo].[KEP_logger_table] ([NUMBER_POCKET])
 GO
 
 
@@ -48,7 +51,7 @@ IF OBJECT_ID ('dbo.InsKeplogger_archive',N'TR') IS NOT NULL
    DROP TRIGGER [dbo].[InsKeplogger_archive];
 GO
 
-CREATE TRIGGER [dbo].[InsKeplogger_archive] ON [dbo].[KEP_logger]
+CREATE TRIGGER [dbo].[InsKeplogger_archive] ON [dbo].[KEP_logger_table]
 AFTER INSERT
 AS
 BEGIN
@@ -68,7 +71,7 @@ IF OBJECT_ID ('dbo.InsKeplogger',N'TR') IS NOT NULL
    DROP TRIGGER [dbo].[InsKeplogger];
 GO
 
-CREATE TRIGGER [dbo].[InsKeplogger] ON [dbo].[KEP_logger]
+CREATE TRIGGER [dbo].[InsKeplogger] ON [dbo].[KEP_logger_table]
 AFTER INSERT
 AS
 BEGIN
