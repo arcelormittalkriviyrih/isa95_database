@@ -52,13 +52,50 @@ IF OBJECT_ID ('dbo.InsKeplogger_archive',N'TR') IS NOT NULL
 GO
 
 CREATE TRIGGER [dbo].[InsKeplogger_archive] ON [dbo].[KEP_logger_table]
-AFTER INSERT
+AFTER INSERT, UPDATE
 AS
 BEGIN
 
    SET NOCOUNT ON;
 
-   INSERT INTO [dbo].[KEP_logger_archive] SELECT * FROM INSERTED;
+   INSERT INTO [dbo].[KEP_logger_archive]  ([id]
+           ,[AUTO_MANU]
+           ,[COUNT_BAR]
+           ,[NUMBER_POCKET]
+           ,[POCKET_LOC]
+           ,[REM_BAR]
+           ,[WEIGHT_CURRENT]
+           ,[TIMESTAMP]
+           ,[WEIGHT_SP_MAX]
+           ,[WEIGHT_SP_MIN]
+           ,[WEIGHT_STAB]
+           ,[WEIGHT_ZERO]
+           ,[PACK_SANDWICH]
+           ,[ALARM]
+           ,[KEY_MANU]
+           ,[EN_BUTTON_TARA]
+           ,[WEIGHT_OK]
+           ,[CMD_TAKE_WEIGHT]
+           ,[PEREBOR]) 
+		   SELECT [id]
+           ,[AUTO_MANU]
+           ,[COUNT_BAR]
+           ,[NUMBER_POCKET]
+           ,[POCKET_LOC]
+           ,[REM_BAR]
+           ,[WEIGHT_CURRENT]
+           ,[TIMESTAMP]
+           ,[WEIGHT_SP_MAX]
+           ,[WEIGHT_SP_MIN]
+           ,[WEIGHT_STAB]
+           ,[WEIGHT_ZERO]
+           ,[PACK_SANDWICH]
+           ,[ALARM]
+           ,[KEY_MANU]
+           ,[EN_BUTTON_TARA]
+           ,[WEIGHT_OK]
+           ,[CMD_TAKE_WEIGHT]
+           ,[PEREBOR] FROM INSERTED;
 
 END
 GO
@@ -72,7 +109,7 @@ IF OBJECT_ID ('dbo.InsKeplogger',N'TR') IS NOT NULL
 GO
 
 CREATE TRIGGER [dbo].[InsKeplogger] ON [dbo].[KEP_logger_table]
-AFTER INSERT
+AFTER INSERT, UPDATE
 AS
 BEGIN
 
