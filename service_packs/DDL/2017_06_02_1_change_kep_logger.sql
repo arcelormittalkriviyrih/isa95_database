@@ -13,30 +13,37 @@ IF OBJECT_ID ('dbo.InsKeplogger_archive',N'TR') IS NOT NULL
    DROP TRIGGER [dbo].[InsKeplogger_archive];
 GO
 
-CREATE TRIGGER [dbo].[InsKeplogger_archive] ON [dbo].[KEP_logger]
-AFTER INSERT
-AS
-BEGIN
+IF OBJECT_ID ('dbo.KEP_logger',N'U') IS NOT NULL
+begin
+	exec('
+			CREATE TRIGGER [dbo].[InsKeplogger_archive] ON [dbo].[KEP_logger]
+			AFTER INSERT
+			AS
+			BEGIN
 
-   SET NOCOUNT ON;
+			   SET NOCOUNT ON;
 
-   INSERT INTO [dbo].[KEP_logger_archive] SELECT * FROM INSERTED;
-   
-   DECLARE @insertedID INT, @NUMBER_POCKET INT;
+			   INSERT INTO [dbo].[KEP_logger_archive] SELECT * FROM INSERTED;
+	   
+			   DECLARE @insertedID INT, @NUMBER_POCKET INT;
 
-   SELECT @insertedID = id,
-		@NUMBER_POCKET = [NUMBER_POCKET]
-   FROM INSERTED;
-   
-   DELETE FROM [dbo].[KEP_logger]
-    WHERE NUMBER_POCKET = @NUMBER_POCKET
-	   AND ID != @insertedID;
+			   SELECT @insertedID = id,
+					@NUMBER_POCKET = [NUMBER_POCKET]
+			   FROM INSERTED;
+	   
+			   DELETE FROM [dbo].[KEP_logger]
+				WHERE NUMBER_POCKET = @NUMBER_POCKET
+				   AND ID != @insertedID;
 
-END
-GO
+			END
+			--GO
+			
+			EXEC sp_settriggerorder @triggername=N''[dbo].[InsKeplogger_archive]'', @order=N''First'', @stmttype=N''INSERT''
+			--GO
+	')
 
-EXEC sp_settriggerorder @triggername=N'[dbo].[InsKeplogger_archive]', @order=N'First', @stmttype=N'INSERT'
-GO
+end
+go
 
 
 IF OBJECT_ID ('dbo.v_DiagInfo',N'V') IS NOT NULL
