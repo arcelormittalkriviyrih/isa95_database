@@ -58,8 +58,8 @@ BEGIN
 
    SET NOCOUNT ON;
 
-   INSERT INTO [dbo].[KEP_logger_archive]  ([id]
-           ,[AUTO_MANU]
+   INSERT INTO [dbo].[KEP_logger_archive]  (
+           [AUTO_MANU]
            ,[COUNT_BAR]
            ,[NUMBER_POCKET]
            ,[POCKET_LOC]
@@ -77,8 +77,8 @@ BEGIN
            ,[WEIGHT_OK]
            ,[CMD_TAKE_WEIGHT]
            ,[PEREBOR]) 
-		   SELECT [id]
-           ,[AUTO_MANU]
+		   SELECT 
+           [AUTO_MANU]
            ,[COUNT_BAR]
            ,[NUMBER_POCKET]
            ,[POCKET_LOC]
