@@ -16,12 +16,14 @@ INCREMENT BY 1
 NO CACHE;'
 
 EXEC (@s);
-END;
-GO
 
 ALTER TABLE dbo.KEP_logger_archive
 ADD DEFAULT(NEXT VALUE FOR dbo.gen_KepLoggerArchive) FOR ID;
+
+
+END;
 GO
+
 
 ALTER TRIGGER [dbo].[InsKeplogger_archive] ON [dbo].[KEP_logger_table]
 AFTER INSERT, UPDATE
