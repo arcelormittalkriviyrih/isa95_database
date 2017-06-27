@@ -12,19 +12,7 @@ IF OBJECT_ID ('dbo.ServicePacksFiles',N'U') IS NULL
 GO
 
 PRINT N'BEGIN SCRIPT FileName=$(FileName)'
-GO
-
-IF NOT EXISTS (SELECT NULL FROM dbo.ServicePacksFiles WHERE FileName = N'$(FileName)')
-BEGIN
-   SET NOEXEC OFF
-   PRINT N'New script. Applying...'
-   
-END
-ELSE
-BEGIN
-   PRINT N'Already applied script, skipping...'
-   SET NOEXEC ON
-END
+PRINT N'New script. Applying...'
 GO
 
 :r $(FileName)
@@ -32,8 +20,6 @@ GO
 GO
 
 INSERT INTO dbo.ServicePacksFiles(FileName) VALUES(N'$(FileName)')
-
-SET NOEXEC OFF
 
 PRINT N'Script processed'
 GO
