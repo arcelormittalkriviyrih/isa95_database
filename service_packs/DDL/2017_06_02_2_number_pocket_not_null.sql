@@ -8,8 +8,12 @@ IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='i1_kep_logger_timestamp' AND
    DROP INDEX [i1_kep_logger_timestamp] ON [dbo].[KEP_logger]
 GO
 
+IF EXISTS (SELECT NULL  FROM information_schema.TABLES
+              WHERE table_name = 'KEP_logger'
+                AND table_type = 'BASE TABLE')
 ALTER TABLE [dbo].[KEP_logger] ALTER COLUMN [NUMBER_POCKET] INT NOT NULL;
 GO
+
   
 
 CREATE NONCLUSTERED INDEX [i1_kep_logger_timestamp] ON [dbo].[KEP_logger]

@@ -92,6 +92,9 @@ IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='u2_number_pocket_unqiue' AND
   DROP INDEX [u2_number_pocket_unqiue] ON [dbo].[KEP_logger_table]
 GO
 
+truncate table  [dbo].[KEP_logger_table] 
+GO
+
 CREATE UNIQUE INDEX [u2_number_pocket_unqiue] ON [dbo].[KEP_logger_table] ([NUMBER_POCKET])
 GO
 
