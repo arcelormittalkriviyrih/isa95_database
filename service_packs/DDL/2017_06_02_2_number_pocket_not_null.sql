@@ -15,7 +15,9 @@ ALTER TABLE [dbo].[KEP_logger] ALTER COLUMN [NUMBER_POCKET] INT NOT NULL;
 GO
 
   
-
+IF EXISTS (SELECT NULL  FROM information_schema.TABLES
+              WHERE table_name = 'KEP_logger'
+                AND table_type = 'BASE TABLE')
 CREATE NONCLUSTERED INDEX [i1_kep_logger_timestamp] ON [dbo].[KEP_logger]
 (
 	[TIMESTAMP] ASC,
