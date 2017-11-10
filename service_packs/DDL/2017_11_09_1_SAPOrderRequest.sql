@@ -19,7 +19,7 @@ SELECT p.ID,
           'hidden_password'
          ELSE
           p.[Value]
-       END as [ Value ]
+       END as [Value]
   FROM JobOrder o, [Parameter] p, dbo.PropertyTypes pt
  WHERE WorkType = 'SAPOrderRequest'
    AND p.JobOrder = o.ID
