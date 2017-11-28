@@ -9,8 +9,8 @@ insert into [dbo].[EquipmentProperty]
 	,[EquipmentID]
 	,[ClassPropertyID])
 select
-	 N'Статические'
-	,N'STATIC'
+	 null
+	,N'[{ WagonClassID : 2, Weight : [ ''Weight_platform_1'' ] },{ WagonClassID : 3, Weight : [ ''Weight_platform_1'', ''Weight_platform_2'' ] },{ WagonClassID : 4, Weight : [ ''Weight_platform_1'', ''Weight_platform_2'' ] },{ WagonClassID : 5, Weight : [ ''Weight_platform_1'', ''Weight_platform_2'' ] }]'
 	,null
 	,E.ID
 	,ECP.ID
@@ -21,7 +21,7 @@ join [dbo].[EquipmentClassProperty] ECP
 on ECP.EquipmentClassID = EC.ID
 where	EC.Code = N'SCALES'
 	and E.Description in (N'Весы Копр.№4')
-	and ECP.Value = N'SCALES_TYPE'
+	and ECP.Value = N'WEIGHBRIDGES_PLATFORMS_WAGON_CLASS'
 
 GO
 

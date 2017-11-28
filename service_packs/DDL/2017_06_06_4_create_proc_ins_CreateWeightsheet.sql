@@ -26,12 +26,17 @@ if(@WeightSheetNumber is null)
 	THROW 60001, N'WeightSheetNumber param required', 1;
 if(@ScalesID is null)
 	THROW 60001, N'ScalesID param required', 1;
-if(@SenderID is null)
-	THROW 60001, N'SenderID param required', 1;
-if(@ReceiverID is null)
-	THROW 60001, N'ReceiverID param required', 1;
 if(@DocumentationsClassID is null)
 	THROW 60001, N'DocumentationsClassID param required', 1;
+
+-- if Taring - skip Sender and Receiver checking
+if (@DocumentationsClassID != (select top 1 [ID] from [dbo].[DocumentationsClass] where [Description] = N'Тарирование'))
+begin
+	if(@SenderID is null)
+		THROW 60001, N'SenderID param required', 1;
+	if(@ReceiverID is null)
+		THROW 60001, N'ReceiverID param required', 1;
+end
 
 declare @PersonID int
 select @PersonID = [PersonID] from [dbo].[PersonProperty] where UPPER([Value]) = UPPER(@PersonName)
@@ -53,7 +58,7 @@ if(@PersonID is null)
 		,[EndTime])
 	select 
 		 @DocumentationID
-		,N'WeightSheet #'+@WeightSheetNumber
+		,N'Отвесная №'+@WeightSheetNumber
 		,N'active'
 		,@DocumentationsClassID
 		,getdate()
