@@ -11,12 +11,14 @@ create view [dbo].[v_WGT_Weightsheet] as
 
 select
 	 WO.[ID]
-	,WO.[DocumentationsID]
+	,WO.[DocumentationsID]		as [WeightsheetID]
+	,PUD.[PackagingUnitsID]		as [WagonID]
 	,WO.[Description]			as [WagonNumber]
+	,DP.[DocumentationsID]		as [WaybillID]
 	,DP.[Value]					as [WaybillNumber]
 	,PUP.[Description]			as [Carrying]
-	--,WO.[MaterialDefinitionID]
-	,MD.[Description]			as [CSH]
+	,WO.[MaterialDefinitionID]	as [CargoTypeID]
+	,MD.[Description]			as [CargoType]
 	--,[OperationTime]
 	--,WO.[EquipmentID]			as [WeighbridgeID]
 	--,[PackagingUnitsDocsID]
@@ -29,6 +31,7 @@ select
 	--,PUDP.*
 	--,D.*
 	--,PUD.*
+	--,DP.*
 FROM [dbo].[WeightingOperations] WO
 left join 
 	(select
@@ -43,11 +46,11 @@ left join
 		from [dbo].[PackagingUnitsDocsProperty] PUDP) as T
 	pivot( max([Value]) for [Description] in ([Путевая], [Род груза])) as pvt) as PUDP
 on PUDP.[PackagingUnitsDocsID] = WO.[PackagingUnitsDocsID]
-join [dbo].[MaterialDefinition] MD
+left join [dbo].[MaterialDefinition] MD
 on PUDP.[CargoTypeID] = MD.[ID]
-join [dbo].[DocumentationsProperty] DP
+left join [dbo].[DocumentationsProperty] DP
 on DP.[DocumentationsID] = PUDP.[WaybillID] and DP.[Description] = N'Номер путевой'
-join [dbo].[PackagingUnitsDocs] PUD
+left join [dbo].[PackagingUnitsDocs] PUD
 on PUD.ID = WO.[PackagingUnitsDocsID]
 left join [dbo].[PackagingUnitsProperty] PUP
 on PUP.[PackagingUnitsID] = PUD.[PackagingUnitsID] and PUP.[Description] = N'Грузоподъемность'

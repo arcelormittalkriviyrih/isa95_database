@@ -29,8 +29,8 @@ if(@ScalesID is null)
 if(@DocumentationsClassID is null)
 	THROW 60001, N'DocumentationsClassID param required', 1;
 
--- if Taring - skip Sender and Receiver checking
-if (@DocumentationsClassID != (select top 1 [ID] from [dbo].[DocumentationsClass] where [Description] = N'Тарирование'))
+-- if Taring or Brutting - skip Sender and Receiver checking
+if (@DocumentationsClassID not in (select [ID] from [dbo].[DocumentationsClass] where [Description] in (N'Тарирование', N'Контроль брутто')))
 begin
 	if(@SenderID is null)
 		THROW 60001, N'SenderID param required', 1;

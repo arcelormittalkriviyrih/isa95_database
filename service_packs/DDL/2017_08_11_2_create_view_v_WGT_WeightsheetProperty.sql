@@ -64,8 +64,8 @@ from (
 	VALUES 
 		 (cast([DocumentationsClassID] as nvarchar(100)), 'DocumentationsClassID')
 		,(cast([Status] as nvarchar(100)), 'Status')
-		,(cast(cast([StartTime] as datetime) as nvarchar), 'StartTime')
-		,(cast(cast([EndTime] as datetime) as nvarchar), 'EndTime')) as upvt([Value], [Description])
+		,(convert(nvarchar(19), [StartTime], 126), 'StartTime')
+		,(convert(nvarchar(19), [EndTime], 126), 'EndTime')) as upvt([Value], [Description])
 	--select
 	--	 isnull(ROW_NUMBER() over (order by [DocumentationsID]) + (select max(ID) from [DocumentationsProperty]), 0) [ID]
 	--	,N'Вид документа'			as [Description]

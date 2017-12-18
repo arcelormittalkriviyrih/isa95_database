@@ -93,18 +93,18 @@ BEGIN
 			,(N'Цех отправления',									N'SenderShop'			, cast(@SenderShop as nvarchar))
 			,(N'Место погрузки',									N'SenderDistrict'		, cast(@SenderDistrict as nvarchar))
 			,(N'Станция отправления',								N'SenderRWStation'		, cast(@SenderRWStation as nvarchar))
-			,(N'Время прибытия (станция отправления)',				N'SenderArriveDT'		, cast(@SenderArriveDT as nvarchar))
-			,(N'Время подачи под погрузку (станция отправления)',	N'SenderStartLoadDT'	, cast(@SenderStartLoadDT as nvarchar))
-			,(N'Время окончания выгрузки (станция отправления)',	N'SenderEndLoadDT'		, cast(@SenderEndLoadDT as nvarchar))
+			,(N'Время прибытия (станция отправления)',				N'SenderArriveDT'		, convert(nvarchar, convert(datetime, @SenderArriveDT), 126))--cast(@SenderArriveDT as nvarchar))
+			,(N'Время подачи под погрузку (станция отправления)',	N'SenderStartLoadDT'	, convert(nvarchar, convert(datetime, @SenderStartLoadDT), 126))--cast(@SenderStartLoadDT as nvarchar))
+			,(N'Время окончания выгрузки (станция отправления)',	N'SenderEndLoadDT'		, convert(nvarchar, convert(datetime, @SenderEndLoadDT), 126))--cast(@SenderEndLoadDT as nvarchar))
 			,(N'Цех получения',										N'ReceiverShop'			, cast(@ReceiverShop as nvarchar))
 			,(N'Место выгрузки',									N'ReceiverDistrict'		, cast(@ReceiverDistrict as nvarchar))
 			,(N'Станция назначения',								N'ReceiverRWStation'	, cast(@ReceiverRWStation as nvarchar))
-			,(N'Время прибытия (станция назначения)',				N'ReceiverArriveDT'		, cast(@ReceiverArriveDT as nvarchar))
-			,(N'Время подачи под погрузку (станция назначения)',	N'ReceiverStartLoadDT'	, cast(@ReceiverStartLoadDT as nvarchar))
-			,(N'Время окончания выгрузки (станция назначения)',		N'ReceiverEndLoadDT'	, cast(@ReceiverEndLoadDT as nvarchar))
+			,(N'Время прибытия (станция назначения)',				N'ReceiverArriveDT'		, convert(nvarchar, convert(datetime, @ReceiverArriveDT), 126))--cast(@ReceiverArriveDT as nvarchar))
+			,(N'Время подачи под погрузку (станция назначения)',	N'ReceiverStartLoadDT'	, convert(nvarchar, convert(datetime, @ReceiverStartLoadDT), 126))--cast(@ReceiverStartLoadDT as nvarchar))
+			,(N'Время окончания выгрузки (станция назначения)',		N'ReceiverEndLoadDT'	, convert(nvarchar, convert(datetime, @ReceiverEndLoadDT), 126))--cast(@ReceiverEndLoadDT as nvarchar))
 	
 	) as new ([Description], [Description2], [Value])
-	full join [KRR-PA-ISA95_PRODUCTION].[dbo].[v_WGT_WaybillProperty] vWP
+	full join [dbo].[v_WGT_WaybillProperty] vWP
 	on vWP.[Description2] = new.[Description2]		
 	inner join [dbo].[DocumentationsClassProperty] DCP
 	on new.[Description] = DCP.[Description]

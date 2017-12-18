@@ -11,7 +11,7 @@ GO
 
 /* take weight Tare */
 create PROCEDURE [dbo].[ins_TakeWeightTare]
-	 @WeightSheetID int
+	 @WeightsheetID int
 	,@PackagingUnitsID int
 	,@ScalesID int
 	,@WeightTare real
@@ -22,8 +22,8 @@ begin
 
 if(@PackagingUnitsID is null)
 	THROW 60001, N'PackagingUnitsID does not exists', 1;
-if(@WeightSheetID is null)
-	THROW 60001, N'WeightSheetID param required', 1;
+if(@WeightsheetID is null)
+	THROW 60001, N'WeightsheetID param required', 1;
 if(@ScalesID is null)
 	THROW 60001, N'ScalesID param required', 1;
 if(@WeightTare is null)
@@ -45,13 +45,13 @@ insert into [dbo].[PackagingUnitsDocs]
 select top 1
 	 @PackagingUnitsDocsID		as [ID]
 	,PU.[Description]			as [Description]
-	,@WeightSheetID				as [DocumentationsID]
+	,@WeightsheetID				as [DocumentationsID]
 	,PU.ID						as [PackagingUnitsID]
 	,null						as [Status]
 	,getdate()					as [StartTime]
 from [dbo].[PackagingUnits] PU
 join [dbo].[Documentations] D
-on D.ID = @WeightSheetID and D.[Status] = 'active'
+on D.ID = @WeightsheetID and D.[Status] = 'active'
 where PU.ID = @PackagingUnitsID
 */
 
@@ -66,13 +66,13 @@ MERGE INTO [PackagingUnitsDocs]	as trg
 USING  
 	(select top 1
 		 PU.[Description]			as [Description]
-		,@WeightSheetID				as [DocumentationsID]
+		,@WeightsheetID				as [DocumentationsID]
 		,PU.ID						as [PackagingUnitsID]
 		,null						as [Status]
 		,getdate()					as [StartTime]
 	from [dbo].[PackagingUnits] PU
 	join [dbo].[Documentations] D
-	on D.ID = @WeightSheetID and D.[Status] = 'active'
+	on D.ID = @WeightsheetID and D.[Status] = 'active'
 	where PU.ID = @PackagingUnitsID
 ) as src
 ON		trg.[DocumentationsID] = src.[DocumentationsID]
@@ -123,7 +123,7 @@ join [dbo].[PackagingUnits] PU
 on PU.ID = @PackagingUnitsID
 join [WeightingOperations] WO
 on WO.DocumentationsID = D.ID and WO.PackagingUnitsDocsID = @PackagingUnitsDocsID
-where	D.ID = @WeightSheetID and D.[Status] = 'active' and WO.OperationTime < getdate()
+where	D.ID = @WeightsheetID and D.[Status] = 'active' and WO.OperationTime < getdate()
 
 
 -- insert new weighting operation in [WeightingOperations]
@@ -156,9 +156,9 @@ join [dbo].[DocumentationsClass] DC
 on D.DocumentationsClassID = DC.ID
 join [dbo].[PackagingUnits] PU
 on PU.ID = @PackagingUnitsID
-where D.ID = @WeightSheetID and D.[Status] = 'active'
+where D.ID = @WeightsheetID and D.[Status] = 'active'
 
---select * from [dbo].[WeightingOperations] where [DocumentationsID] = @WeightSheetID
+--select * from [dbo].[WeightingOperations] where [DocumentationsID] = @WeightsheetID
 
 
 /*OK*/
