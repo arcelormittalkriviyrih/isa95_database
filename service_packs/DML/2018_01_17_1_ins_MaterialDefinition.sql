@@ -22,7 +22,7 @@ inner join
 (830, N'Смесь шихтовая №4, Керамет')
 ) as T1 ([ID],[Description])
 on 1=1
-where MD.[Description] = N'смешанный лом  '
+where MD.[Description] = N'оборотный лом  '
 
 GO
 
