@@ -18,7 +18,7 @@ GO
 
 CREATE TABLE [dbo].[sap_commerical_order](
 	[id] [int] IDENTITY(1,1) NOT NULL,
-	[timestamp] [datetime] NULL CONSTRAINT [DF_KEP_Analytics_Weight_archive_DT]  DEFAULT (getdate()),
+	[timestamp] [datetime] NULL CONSTRAINT [DF_sap_commerical_order_timestamp]  DEFAULT (getdate()),
 	[SelesOrder] [nvarchar](250) NULL,
 	[Contract] [nvarchar](250) NULL,
 	[CountryName] [nvarchar](250) NULL,
