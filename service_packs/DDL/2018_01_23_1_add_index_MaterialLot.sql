@@ -1,0 +1,13 @@
+﻿SET NUMERIC_ROUNDABORT OFF;
+GO
+
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON;
+GO
+
+IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='i2_MaterialLot' AND object_id = OBJECT_ID('[dbo].[MaterialLot]'))
+   DROP INDEX [i2_MaterialLot] ON [dbo].[MaterialLot]
+GO
+
+CREATE NONCLUSTERED INDEX i2_MaterialLot
+ON [dbo].[MaterialLot] ([CreateTime])
+GO
