@@ -36,5 +36,6 @@ SELECT mlp.[ID],
 FROM MaterialLotFilt ml
      INNER JOIN [dbo].[MaterialLotProperty] mlp ON (mlp.[MaterialLotID]=ml.[ID])
      INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=mlp.[PropertyType])
-WHERE ml.[Quantity]	> 0;
+WHERE ml.[Quantity]	> 0
+  AND AND ml.[Status]!=1;
 GO
