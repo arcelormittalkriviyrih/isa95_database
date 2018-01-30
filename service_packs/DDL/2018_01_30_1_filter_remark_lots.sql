@@ -65,7 +65,8 @@ WITH MaterialLotFilt AS (SELECT ml.[ID],
                                   ml.[Status],
                                   ml.[Quantity],
                                   ROW_NUMBER() OVER (PARTITION BY ml.[FactoryNumber] ORDER BY ml.[CreateTime] DESC, ml.[ID] DESC) RowNumber
-                           FROM [dbo].[MaterialLot] ml) ml
+                           FROM [dbo].[MaterialLot] ml
+						   WHERE ml.[Status]!=1) ml
                      WHERE ml.RowNumber=1)
 SELECT mlp.[ID],
        ml.[ID] MaterialLotID,
@@ -78,8 +79,7 @@ SELECT mlp.[ID],
 FROM MaterialLotFilt ml
      INNER JOIN [dbo].[MaterialLotProperty] mlp ON (mlp.[MaterialLotID]=ml.[ID])
      INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=mlp.[PropertyType])
-WHERE ml.[Quantity]	> 0
-  AND AND ml.[Status]!=1;
+WHERE ml.[Quantity]	> 0;
 GO
 
 IF OBJECT_ID ('dbo.v_MaterialLotReport', N'V') IS NOT NULL
