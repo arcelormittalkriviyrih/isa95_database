@@ -34,7 +34,8 @@ FROM (SELECT ml.[ID],
                    ml.[Quantity],
                    ml.CreateTime,
                    ROW_NUMBER() OVER (PARTITION BY ml.[FactoryNumber] ORDER BY ml.[CreateTime] DESC, ml.[ID] DESC) RowNumber
-            FROM [dbo].[MaterialLot] ml) ml
+            FROM [dbo].[MaterialLot] ml
+			WHERE ml.[Status]!=1) ml
             WHERE ml.RowNumber=1) ml
      INNER JOIN [dbo].[EquipmentProperty] eqp ON (eqp.[ClassPropertyID]=[dbo].[get_EquipmentClassPropertyByValue]('SCALES_NO') AND eqp.[Value]=ml.FactoryNumberScales)
      INNER JOIN [dbo].[Equipment] eq ON (eq.ID=eqp.EquipmentID)

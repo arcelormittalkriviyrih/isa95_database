@@ -1,0 +1,123 @@
+﻿SET ANSI_NULLS ON;
+GO
+
+SET QUOTED_IDENTIFIER ON;
+GO
+
+IF OBJECT_ID('dbo.v_MaterialLotChange', N'V') IS NOT NULL
+    DROP VIEW dbo.[v_MaterialLotChange];
+GO
+/*
+   View: v_MaterialLotChange
+    Возвращает список бирок для режима изменения заказа.
+*/
+CREATE VIEW [dbo].[v_MaterialLotChange]
+AS
+SELECT ml.ID,
+       ml.FactoryNumber,
+       ml.CreateTime,
+       ml.Quantity,
+       eq.Equipment SideID,
+       prod_order.[Value] PROD_ORDER,
+       part_no.[Value] PART_NO,
+       bunt_no.[Value] BUNT_NO,
+       CAST(0 AS BIT) selected
+FROM (SELECT ml.[ID],
+             ml.[FactoryNumber],
+             SUBSTRING(ml.FactoryNumber,7,2) FactoryNumberScales,
+             ml.[Status],
+             ml.[Quantity],
+             ml.CreateTime
+      FROM (SELECT ml.[ID],
+                   ml.[FactoryNumber],
+                   ml.[Status],
+                   ml.[Quantity],
+                   ml.CreateTime,
+                   ROW_NUMBER() OVER (PARTITION BY ml.[FactoryNumber] ORDER BY ml.[CreateTime] DESC, ml.[ID] DESC) RowNumber
+            FROM [dbo].[MaterialLot] ml
+			WHERE ml.[Status]!=1) ml
+            WHERE ml.RowNumber=1) ml
+     INNER JOIN [dbo].[EquipmentProperty] eqp ON (eqp.[ClassPropertyID]=[dbo].[get_EquipmentClassPropertyByValue]('SCALES_NO') AND eqp.[Value]=ml.FactoryNumberScales)
+     INNER JOIN [dbo].[Equipment] eq ON (eq.ID=eqp.EquipmentID)
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] prod_order ON (prod_order.[MaterialLotID]=ml.[ID] AND prod_order.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PROD_ORDER'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] part_no ON (part_no.[MaterialLotID]=ml.[ID] AND part_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PART_NO'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] bunt_no ON (bunt_no.[MaterialLotID]=ml.[ID] AND bunt_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('BUNT_NO'))
+WHERE ml.Quantity>0;
+
+GO
+
+IF OBJECT_ID ('dbo.v_MaterialLotProperty', N'V') IS NOT NULL
+   DROP VIEW dbo.v_MaterialLotProperty;
+GO
+/*
+   View: v_MaterialLotProperty
+    Возвращает список свойств бирки.
+	Используется в спец режимах.
+*/
+CREATE VIEW [dbo].[v_MaterialLotProperty]
+AS
+WITH MaterialLotFilt AS (SELECT ml.[ID],
+                            ml.[FactoryNumber],
+                            ml.[Status],
+                            ml.[Quantity]
+                     FROM (SELECT ml.[ID],
+                                  ml.[FactoryNumber],
+                                  ml.[Status],
+                                  ml.[Quantity],
+                                  ROW_NUMBER() OVER (PARTITION BY ml.[FactoryNumber] ORDER BY ml.[CreateTime] DESC, ml.[ID] DESC) RowNumber
+                           FROM [dbo].[MaterialLot] ml) ml
+                     WHERE ml.RowNumber=1)
+SELECT mlp.[ID],
+       ml.[ID] MaterialLotID,
+       ml.[FactoryNumber],
+       ml.[Status],
+       ml.[Quantity],
+       mlp.[PropertyType] PropertyID,
+       pt.[Value] Property,
+       mlp.[Value]
+FROM MaterialLotFilt ml
+     INNER JOIN [dbo].[MaterialLotProperty] mlp ON (mlp.[MaterialLotID]=ml.[ID])
+     INNER JOIN [dbo].[PropertyTypes] pt ON (pt.[ID]=mlp.[PropertyType])
+WHERE ml.[Quantity]	> 0
+  AND AND ml.[Status]!=1;
+GO
+
+IF OBJECT_ID ('dbo.v_MaterialLotReport', N'V') IS NOT NULL
+   DROP VIEW dbo.v_MaterialLotReport;
+GO
+/*
+   View: v_MaterialLotReport
+    Возвращает список бирок с информацией для отчетов.
+*/
+CREATE VIEW [dbo].[v_MaterialLotReport]
+AS
+SELECT ml.ID,
+       ml.FactoryNumber,
+       ml.Quantity,
+       eq.Equipment SideID,
+       prod_date.[ValueDate] PROD_DATE,
+       change_no.[Value] CHANGE_NO,
+       brigade_no.[Value] BRIGADE_NO,
+       melt_no.[Value] MELT_NO,
+       prod_order.[Value] PROD_ORDER,
+       part_no.[Value] PART_NO,
+       auto_manu_value.[Value] AUTO_MANU_VALUE,
+       create_mode.[Value] CREATE_MODE,
+       measure_time.[ValueDate] MEASURE_TIME,
+       material_no.[Value] MATERIAL_NO,
+	   (SELECT mt.Description FROM [dbo].[MaterialLinkTypes] mt WHERE mt.[ID]=ml.[Status]) StatusName
+FROM [dbo].[MaterialLot] ml
+     INNER JOIN [dbo].[EquipmentProperty] eqp ON (eqp.[ClassPropertyID]=[dbo].[get_EquipmentClassPropertyByValue]('SCALES_NO') AND eqp.[Value]=ml.FactoryNumberScales)
+     INNER JOIN [dbo].[Equipment] eq ON (eq.ID=eqp.EquipmentID)
+     INNER JOIN [dbo].[MaterialLotProperty] prod_date ON (prod_date.[MaterialLotID]=ml.[ID] AND prod_date.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PROD_DATE'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] change_no ON (change_no.[MaterialLotID]=ml.[ID] AND change_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('CHANGE_NO'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] brigade_no ON (brigade_no.[MaterialLotID]=ml.[ID] AND brigade_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('BRIGADE_NO'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] melt_no ON (melt_no.[MaterialLotID]=ml.[ID] AND melt_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('MELT_NO'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] prod_order ON (prod_order.[MaterialLotID]=ml.[ID] AND prod_order.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PROD_ORDER'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] part_no ON (part_no.[MaterialLotID]=ml.[ID] AND part_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PART_NO'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] auto_manu_value ON (auto_manu_value.[MaterialLotID]=ml.[ID] AND auto_manu_value.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('AUTO_MANU_VALUE'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] create_mode ON (create_mode.[MaterialLotID]=ml.[ID] AND create_mode.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('CREATE_MODE'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] measure_time ON (measure_time.[MaterialLotID]=ml.[ID] AND measure_time.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('MEASURE_TIME'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] material_no ON (material_no.[MaterialLotID]=ml.[ID] AND material_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('MATERIAL_NO'))
+WHERE ml.[Status]!=1
+GO
