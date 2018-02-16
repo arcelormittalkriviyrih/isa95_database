@@ -1,7 +1,4 @@
-USE [KRR-PA-ISA95_PRODUCTION]
-GO
-/****** Object:  StoredProcedure [dbo].[ins_ExportMaterialLotToSAP]    Script Date: 05.04.2017 16:37:50 ******/
-SET ANSI_NULLS ON
+﻿SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
