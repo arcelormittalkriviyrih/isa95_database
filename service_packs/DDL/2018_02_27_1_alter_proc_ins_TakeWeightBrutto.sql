@@ -1,6 +1,6 @@
 ﻿
-IF OBJECT_ID ('dbo.ins_TakeWeightLoading',N'P') IS NOT NULL
-  DROP PROCEDURE dbo.ins_TakeWeightLoading;
+IF OBJECT_ID ('dbo.ins_TakeWeightBrutto',N'P') IS NOT NULL
+  DROP PROCEDURE dbo.ins_TakeWeightBrutto;
 GO
 
 SET ANSI_NULLS ON
@@ -9,71 +9,68 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 /*
-	Procedure: ins_TakeWeightLoading
-	Процедура регистрации веса в отвесную при погрузке
+	Procedure: ins_TakeWeightBrutto
+	Процедура регистрации веса брутто в отвесную при контроле брутто
 */
 
 
-/* take loading */
-create PROCEDURE [dbo].[ins_TakeWeightLoading] 
+/* take brutto */
+create PROCEDURE [dbo].[ins_TakeWeightBrutto] 
 	 @WeightsheetID int			-- weightsheet
-	,@WaybillID int				-- waybill
+	--,@WaybillID int				-- waybill
 	,@ScalesID int				-- scales
 	,@WeightBrutto real			-- brutto
-	--,@PackagingUnitsID int		-- wagon
-	--,@MaterialDefinitionID int	-- cargo type
+	,@PackagingUnitsID int		-- wagon
+	,@MaterialDefinitionID int	-- cargo type
 as
 begin
 
 declare 
-	 @PackagingUnitsID int		-- wagon
-	,@MaterialDefinitionID int	-- cargo type
-	,@SenderID int				-- sender shop
-	,@ReceiverID int			-- receiver shop
-	,@PackagingUnitsDocsID int
+	-- @PackagingUnitsID int		-- wagon
+	--,@MaterialDefinitionID int	-- cargo type
+	--,@SenderID int				-- sender shop
+	--,@ReceiverID int			-- receiver shop
+	 @PackagingUnitsDocsID int
 	,@WeightTare real
-	,@TareDT datetime
 
-;with CTE_WaybillProperty as (
-select 
-	 vDP.[ID]
-    ,vDP.[DocumentationsID]
-    ,vDP.[Description]
-	,vDP.[Description2]
-    ,vDP.[Value]
-	,row_number() over (partition by vDP.[DocumentationsID], vDP.[Description] order by vDP.[ValueTime] desc) RN
-from [dbo].[v_WGT_DocumentsProperty] vDP
-join [Documentations] D
-on vDP.[DocumentationsID] = D.ID
-where	isnull(D.[Status], '') != 'reject'
-	and D.ID = @WaybillID )
+--;with CTE_WaybillProperty as (
+--select 
+--	 vWP.[ID]
+--    ,vWP.[DocumentationsID]
+--    ,vWP.[Description]
+--	,vWP.[Description2]
+--    ,vWP.[Value]
+--	,row_number() over (partition by vWP.[DocumentationsID], vWP.[Description] order by vWP.[ValueTime] desc) RN
+--from [dbo].[v_WGT_WaybillProperty] vWP
+--join [Documentations] D
+--on vWP.[DocumentationsID] = D.ID
+--where	isnull(D.[Status], '') != 'reject'
+--	and D.ID = @WaybillID )
 
--- get CargoType, Sender and Receiver from Waybill properties
-select 
-	-- [DocumentationsID]
-	--,[WaybillNumber]
-	--,[WagonType]
-	 @MaterialDefinitionID = [CargoType]
-	,@SenderID = [SenderShop]
-	,@ReceiverID = [ReceiverShop]
-from 
-(select [DocumentationsID], [Description2],[Value] from CTE_WaybillProperty where RN = 1) as src
-pivot (max([Value]) for [Description2] in ([WaybillNumber], [WagonType], [CargoType], [SenderShop], [ReceiverShop])
-) as pvt
+---- get CargoType, Sender and Receiver from Waybill properties
+--select 
+--	-- [DocumentationsID]
+--	--,[WaybillNumber]
+--	--,[WagonType]
+--	 @MaterialDefinitionID = [CargoType]
+--	,@SenderID = [SenderShop]
+--	,@ReceiverID = [ReceiverShop]
+--from 
+--(select [DocumentationsID], [Description2],[Value] from CTE_WaybillProperty where RN = 1) as src
+--pivot (max([Value]) for [Description2] in ([WaybillNumber], [WagonType], [CargoType], [SenderShop], [ReceiverShop])
+--) as pvt
 
--- get WagonID from Waybill properties
-select top 1
-	@PackagingUnitsID = PUD.PackagingUnitsID	 
-from [PackagingUnitsDocs] PUD
-join [Documentations] D
-on PUD.[DocumentationsID] = D.ID
-where	isnull(D.[Status], '') != 'reject'
-	and D.ID = @WaybillID
+---- get WagonID from Waybill properties
+--select top 1
+--	@PackagingUnitsID = PUD.PackagingUnitsID	 
+--from [PackagingUnitsDocs] PUD
+--join [Documentations] D
+--on PUD.[DocumentationsID] = D.ID
+--where	isnull(D.[Status], '') != 'reject'
+--	and D.ID = @WaybillID
 
--- get Tare and its dt
-select top 1 
-	 @WeightTare = [Value]
-	,@TareDT = [ValueTime]
+-- get Tare (is not necessary in Brutting!)
+select top 1 @WeightTare = Value
 from [PackagingUnitsProperty] PUP
 where	PUP.[PackagingUnitsID] = @PackagingUnitsID
 	and PUP.[Description] = N'Вес тары'
@@ -84,49 +81,47 @@ order by ID desc
 -- check validations
 if(@WeightSheetID is null)
 	THROW 60001, N'WeightSheetID param required', 1;
-if(@WaybillID is null)
-	THROW 60001, N'WaybillID param required', 1;
+--if(@WaybillID is null)
+--	THROW 60001, N'WaybillID param required', 1;
 if(@ScalesID is null)
 	THROW 60001, N'ScalesID param required', 1;
 if(@MaterialDefinitionID is null)
 	THROW 60001, N'MaterialDefinitionID param required', 1;
 if(@PackagingUnitsID is null)
 	THROW 60001, N'PackagingUnitsID param required', 1;
-if(@SenderID is null)
-	THROW 60001, N'@SenderID param required', 1;
-if(@ReceiverID is null)
-	THROW 60001, N'@ReceiverID param required', 1;
-if(@WeightBrutto is null)
+--if(@SenderID is null)
+--	THROW 60001, N'PackagingUnitsID param required', 1;
+--if(@ReceiverID is null)
+--	THROW 60001, N'PackagingUnitsID param required', 1;
+if(@WeightBrutto is null or @WeightBrutto <= 0)
 	THROW 60001, N'WeightBrutto param required', 1;
-if(@WeightBrutto-@WeightTare < 0)
-	THROW 60001, N'Netto weight < 0!', 1;
 
-/* checking Weightsheet type */
+/* add checking Weightsheet type and Brutto */
 if not exists
 (	select D.ID
 	from [dbo].[Documentations] D
 	join [dbo].[DocumentationsClass] DC
 	on DC.ID = [DocumentationsClassID]
-	where DC.[Description] = N'Погрузка' and D.ID = @WeightSheetID)
+	where DC.[Description] = N'Контроль брутто' and D.ID = @WeightSheetID)
 	THROW 60001, N'Documentation type error', 1;
 
-/* checking of equal sender and receiver properties of waybill and weightsheet*/
-if (
-	select count(Prop.[Description])
-	from (values
-	(N'Цех отправления'),
-	(N'Цех получения')
-	) as Prop ([Description])
-	left join [dbo].[v_WGT_DocumentsProperty] vDP_WB
-	on vDP_WB.[Description] = Prop.[Description] and vDP_WB.[DocumentationsID] = @WaybillID
-	left join [dbo].[v_WGT_DocumentsProperty] vDP_WS
-	on vDP_WS.[Description] = Prop.[Description] and vDP_WS.[DocumentationsID] = @WeightSheetID
-	where isnull(vDP_WB.[Value],'') != isnull(vDP_WS.[Value],'')
-) > 0
-	THROW 60001, N'Sender or Receiver in Weightsheet and Waybill are not equal!', 1;
+--/* add checking of equal sender and receiver properties of waybill and weightsheet*/
+--if (
+--	select count(Prop.[Description])
+--	from (values
+--	(N'Цех отправления'),
+--	(N'Цех получения')
+--	) as Prop ([Description])
+--	left join [dbo].[v_WGT_WaybillProperty] wWP_WB
+--	on wWP_WB.[Description] = Prop.[Description] and wWP_WB.[DocumentationsID] = @WaybillID
+--	left join [dbo].[v_WGT_WaybillProperty] wWP_WS
+--	on wWP_WS.[Description] = Prop.[Description] and wWP_WS.[DocumentationsID] = @WeightSheetID
+--	where isnull(wWP_WB.[Value],'') != isnull(wWP_WS.[Value],'')
+--) > 0
+--	THROW 60001, N'Sender or Receiver in Weightsheet and Waybill are not equal!', 1;
 
 
-BEGIN TRANSACTION ins_TakeWeightLoading;
+BEGIN TRANSACTION ins_TakeWeightBrutto;
 BEGIN TRY
 
 --select 
@@ -196,7 +191,7 @@ USING
 		,T1.[Value]
 		,getdate()				as [ValueTime]
 	from (values
-	(N'Путевая',	cast(@WaybillID as nvarchar)),
+	--(N'Путевая',	cast(@WaybillID as nvarchar)),
 	(N'Род груза',  cast(@MaterialDefinitionID as nvarchar))
 	) as T1 ([Description], [Value])
 ) as src
@@ -263,18 +258,19 @@ insert into [dbo].[WeightingOperations]
 	,[MaterialDefinitionID]
 	,[TaringTime])
 select top 1
-	 PU.[Description]			as [Description]
-	,getdate()					as [OperationTime]
-	,null						as [Status]
-	,@ScalesID					as [EquipmentID]
-	,@PackagingUnitsDocsID		as [PackagingUnitsDocsID]
-	,D.ID						as [DocumentationsID]
-	,@WeightBrutto				as [Brutto]
-	,@WeightTare				as [Tara]
-	,@WeightBrutto-@WeightTare	as [Netto]
-	,DC.[Description]			as [OperationType]
-	,@MaterialDefinitionID		as [MaterialDefinitionID]
-	,@TareDT					as [TaringTime]
+	 PU.[Description]		as [Description]
+	,getdate()				as [OperationTime]
+	,null					as [Status]
+	,@ScalesID				as [EquipmentID]
+	,@PackagingUnitsDocsID	as [PackagingUnitsDocsID]
+	,D.ID					as [DocumentationsID]
+	,@WeightBrutto			as [Brutto]
+	--,@WeightTare			as [Tara]
+	,null					as [Tara]
+	,null					as [Netto]
+	,DC.[Description]		as [OperationType]
+	,@MaterialDefinitionID	as [MaterialDefinitionID]
+	,null					as [TaringTime]
 from [dbo].[Documentations] D
 join [dbo].[DocumentationsClass] DC
 on D.DocumentationsClassID = DC.ID
@@ -282,17 +278,15 @@ join [dbo].[PackagingUnits] PU
 on PU.ID = @PackagingUnitsID
 where D.ID = @WeightSheetID and D.[Status] = 'active'
 
---select * from [dbo].[WeightingOperations] where [DocumentationsID] = @WeightSheetID
 
-COMMIT TRANSACTION  ins_TakeWeightLoading; 
+COMMIT TRANSACTION  ins_TakeWeightBrutto; 
 END TRY
 	
 BEGIN CATCH
-	ROLLBACK TRANSACTION ins_TakeWeightLoading;
-	THROW 60020,'Error transaction ins_TakeWeightLoading',1;	
+	ROLLBACK TRANSACTION ins_TakeWeightBrutto;
+	THROW 60020,'Error transaction ins_TakeWeightBrutto',1;	
 END CATCH
 end
-
 
 
 

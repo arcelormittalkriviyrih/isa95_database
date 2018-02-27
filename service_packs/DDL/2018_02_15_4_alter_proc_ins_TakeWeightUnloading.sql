@@ -14,7 +14,6 @@ GO
 */
 
 
-
 /* take unloading */
 create PROCEDURE [dbo].[ins_TakeWeightUnloading] 
 	 @WeightsheetID int			-- weightsheet
@@ -84,19 +83,19 @@ if(@MaterialDefinitionID is null)
 if(@PackagingUnitsID is null)
 	THROW 60001, N'PackagingUnitsID param required', 1;
 if(@SenderID is null)
-	THROW 60001, N'PackagingUnitsID param required', 1;
+	THROW 60001, N'@SenderID param required', 1;
 if(@ReceiverID is null)
-	THROW 60001, N'PackagingUnitsID param required', 1;
+	THROW 60001, N'@ReceiverID param required', 1;
 if(@WeightBrutto is null or @WeightBrutto <= 0)
 	THROW 60001, N'WeightBrutto param required', 1;
 
-/* add checking Weightsheet type and Brutto */
+/* add checking Weightsheet type */
 if not exists
 (	select D.ID
 	from [dbo].[Documentations] D
 	join [dbo].[DocumentationsClass] DC
 	on DC.ID = [DocumentationsClassID]
-	where DC.[Description] = N'Отгрузка' and D.ID = @WeightSheetID)
+	where DC.[Description] = N'Разгрузка' and D.ID = @WeightSheetID)
 	THROW 60001, N'Documentation type error', 1;
 
 /* add checking of equal sender and receiver properties of waybill and weightsheet*/
@@ -249,7 +248,8 @@ insert into [dbo].[WeightingOperations]
 	,[Tara]
 	,[Netto]
 	,[OperationType]
-	,[MaterialDefinitionID])
+	,[MaterialDefinitionID]
+	,[TaringTime])
 select top 1
 	 PU.[Description]		as [Description]
 	,getdate()				as [OperationTime]
@@ -263,6 +263,7 @@ select top 1
 	,null					as [Netto]
 	,DC.[Description]		as [OperationType]
 	,@MaterialDefinitionID	as [MaterialDefinitionID]
+	,null					as [TaringTime]
 from [dbo].[Documentations] D
 join [dbo].[DocumentationsClass] DC
 on D.DocumentationsClassID = DC.ID

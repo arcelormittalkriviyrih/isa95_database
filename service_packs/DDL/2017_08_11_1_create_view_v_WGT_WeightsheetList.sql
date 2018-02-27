@@ -53,7 +53,9 @@ inner join [dbo].[Person] P
 on pvt.[Весовщик] = P.ID
 inner join [dbo].[DocumentationsClass] DC
 on DC.ID = D.DocumentationsClassID
-where DC.Description in (N'Тарирование', N'Загрузка', N'Отгрузка', N'Контроль брутто')
+inner join [dbo].[DocumentationsClass] DC1
+on DC1.ID = DC.ParentID
+where DC1.Description in (N'Отвесная')
 --order by [DocumentationsID]
 ),
 
