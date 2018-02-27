@@ -1,7 +1,4 @@
-USE [KRR-PA-ISA95_PRODUCTION]
-GO
-/****** Object:  StoredProcedure [dbo].[ins_ExportMaterialLotToSAP]    Script Date: 05.04.2017 16:37:50 ******/
-SET ANSI_NULLS ON
+﻿SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
@@ -83,7 +80,7 @@ BEGIN
              (SELECT RTRIM(LTRIM(t.[Value])) FROM @tblProperty t WHERE [Description]=N'PART_NO'), --PARTY
              isnull((SELECT CAST(t.[Value] AS NUMERIC(10,0)) FROM @tblProperty t WHERE t.[Description]=N'BUNT_NO' AND ISNUMERIC(t.[Value])=1),0), --BUNT
               @Quantity, --MAS
-             (SELECT RTRIM(LTRIM(t.[Value])) FROM @tblProperty t WHERE t.[Description]=N'MELT_NO'), --PLAVK
+             (SELECT t.[Value] FROM @tblProperty t WHERE t.[Description]=N'MELT_NO'), --PLAVK
               @Status, --OLD_BIR
              (SELECT t.[Value] FROM @tblProperty t WHERE t.[Description]=N'MILL_ID'), --AUART
               @FactoryNumber, --EO
