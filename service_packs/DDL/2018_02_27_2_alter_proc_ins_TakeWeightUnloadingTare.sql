@@ -1,4 +1,9 @@
-﻿SET ANSI_NULLS ON
+﻿
+IF OBJECT_ID ('dbo.ins_TakeWeightUnloadingTare',N'P') IS NOT NULL
+  DROP PROCEDURE dbo.ins_TakeWeightUnloadingTare;
+GO
+
+SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
