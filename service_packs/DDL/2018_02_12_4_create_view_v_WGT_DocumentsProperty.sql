@@ -42,6 +42,8 @@ select
 		when N'Вид документа'										then N'DocumentType'
 		when N'Время создания'										then N'StartTime'
 		when N'Время изменения'										then N'EndTime'
+		when N'Использован в отвесной'								then N'UsedInWeightsheet'
+		when N'Вес в отвесной'										then N'WeightInWeightsheet'
 		else T1.[Description]
 	 end				as [Description2]
 	
@@ -69,6 +71,8 @@ select
 		when N'Время окончания выгрузки (станция назначения)'		then convert(nvarchar(10) ,cast([Value] as datetime), 104) + ' ' + convert(nvarchar(5) ,cast([Value] as datetime), 108)
 		when N'Время создания'										then convert(nvarchar(10) ,cast([Value] as datetime), 104) + ' ' + convert(nvarchar(5) ,cast([Value] as datetime), 108)
 		when N'Время изменения'										then convert(nvarchar(10) ,cast([Value] as datetime), 104) + ' ' + convert(nvarchar(5) ,cast([Value] as datetime), 108)
+		when N'Использован в отвесной'								then (select top 1 [Value] from [dbo].[DocumentationsProperty] where [DocumentationsID] = Value and [Description] = N'Номер отвесной')
+		when N'Вес в отвесной'										then [Value]
 end				as [Value2]
 from (
 	select
