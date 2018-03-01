@@ -39,8 +39,7 @@ from (
 pivot (max([Value]) for [Description2] in ([WaybillNumber], [SenderShop], [ReceiverShop])) as pvt
 ) as P
 on P.[DocumentationsID] = D.[ID]
-where	(D.[Status] != N'reject' or D.[Status] is null)
-	and DC.[Description] = N'Путевая'
+where DC.[Description] = N'Путевая' and isnull(D.[Status], '') not in (N'reject', N'used')
 --order by D.[EndTime] desc
 
 GO

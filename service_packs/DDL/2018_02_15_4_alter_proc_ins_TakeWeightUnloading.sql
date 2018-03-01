@@ -273,6 +273,41 @@ where D.ID = @WeightSheetID and D.[Status] = 'active'
 
 --select * from [dbo].[WeightingOperations] where [DocumentationsID] = @WeightSheetID
 
+
+-- insert Waybill properties
+insert into [dbo].[DocumentationsProperty]
+	([Description]
+	,[Value]
+	,[ValueUnitofMeasure]
+	,[DocumentationsProperty]
+	,[DocumentationsClassPropertyID]
+	,[DocumentationsID]
+	,[ValueTime])		
+select
+	 DCP.Description	as [Description]
+	,T1.Value			as [Value]
+	,null				as [ValueUnitofMeasure]
+	,null				as [DocumentationsProperty]
+	,DCP.ID				as [DocumentationsClassPropertyID]
+	,@WaybillID			as [DocumentationsID]
+	,getdate()			as [ValueTime]
+from (
+values
+	 (N'Использован в отвесной',	cast(@WeightsheetID as nvarchar))
+	,(N'Вес в отвесной',			cast(@WeightBrutto as nvarchar)+'/ - / - ')
+) as T1([Property], [Value])		
+inner join [dbo].[DocumentationsClassProperty] DCP
+on T1.[Property] = DCP.[Description]
+inner join [dbo].[DocumentationsClass] DC
+on DC.[ID] = DCP.[DocumentationsClassID]
+where DC.[Description] = N'Путевая'
+
+-- update Status of Waybill
+update [dbo].[Documentations]
+set [Status] = N'used'
+where [ID] = @WaybillID
+
+
 COMMIT TRANSACTION  ins_TakeWeightUnloading; 
 END TRY
 	

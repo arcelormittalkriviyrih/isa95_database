@@ -32,6 +32,8 @@ if not exists
 
 BEGIN TRANSACTION ins_TakeWeightUnloadingTare;
 BEGIN TRY
+-- temp table for updated WO IDs
+declare @upd_WO_IDs table ([ID] int)
 
 -- CTE with all wagons Tare
 ;with CTE_Tare as (
@@ -62,13 +64,13 @@ BEGIN TRY
 	where WO.[OperationType] = N'Тарирование' and isnull(WO.[Status], '') != N'reject' and WO.[Tara] > 0
 )
 
-
+-- update Tare and Netto info for each row in WO for this Weightsheet (if Tare exists)
 update WO
 set 
 	 WO.[Tara] = TARE.[Value]
 	,WO.[Netto] = WO.[Brutto] - TARE.[Value]
 	,WO.[TaringTime] = TARE.[ValueTime]
-
+output inserted.[ID] into @upd_WO_IDs
 from [dbo].[WeightingOperations] WO
 outer apply
 (	-- first Tare after Brutting for each wagon
@@ -86,6 +88,41 @@ where	WO.[OperationType] = N'Разгрузка'
 	and isnull(WO.[Status], '') != N'reject' 
 	and WO.[DocumentationsID] = @WeightSheetID
 
+
+-- insert Waybill properties
+insert into [dbo].[DocumentationsProperty]
+	([Description]
+	,[Value]
+	,[ValueUnitofMeasure]
+	,[DocumentationsProperty]
+	,[DocumentationsClassPropertyID]
+	,[DocumentationsID]
+	,[ValueTime])	
+select 
+	 DCP.Description	as [Description]
+	,cast(WO.[Brutto] as nvarchar) + '/' + cast(WO.[Tara] as nvarchar) + '/' + cast(WO.[Netto] as nvarchar)			as [Value]
+	,null				as [ValueUnitofMeasure]
+	,null				as [DocumentationsProperty]
+	,DCP.ID				as [DocumentationsClassPropertyID]
+	,PUDP.[WaybillID]	as [DocumentationsID]
+	,getdate()			as [ValueTime]
+from [dbo].[WeightingOperations] WO
+join @upd_WO_IDs U
+on WO.[ID] = U.[ID]
+outer apply(
+	select top 1 
+		 N'Вес в отвесной'	as [Description]
+		,[Value]			as [WaybillID] 
+	from [dbo].[PackagingUnitsDocsProperty] PUDP
+	where PUDP.[Description]= N'Путевая' and PUDP.[PackagingUnitsDocsID] = WO.[PackagingUnitsDocsID]
+) as PUDP
+inner join [dbo].[DocumentationsClassProperty] DCP
+on PUDP.[Description] = DCP.[Description]
+inner join [dbo].[DocumentationsClass] DC
+on DC.[ID] = DCP.[DocumentationsClassID]
+where DC.[Description] = N'Путевая'
+
+
 COMMIT TRANSACTION  ins_TakeWeightUnloadingTare; 
 END TRY
 	
@@ -94,7 +131,5 @@ BEGIN CATCH
 	THROW 60020,'Error transaction ins_TakeWeightUnloadingTare',1;	
 END CATCH
 end
-
-
 
 
