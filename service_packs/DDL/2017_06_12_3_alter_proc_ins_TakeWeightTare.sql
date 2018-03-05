@@ -135,7 +135,8 @@ join [dbo].[PackagingUnits] PU
 on PU.ID = @PackagingUnitsID
 where D.ID = @WeightsheetID and D.[Status] = 'active'
 
-
+/* !!!! НЕ OK - обновляем Тару только после закрытия отвесной (т.к. взвешивание можно забраковать) */
+/*
 -- если св-во Вес тары для вагона существует - обновляем значение и дату
 -- если св-во не существует - вставляем его
 -- updating Tare value in [PackagingUnitsProperty]
@@ -174,7 +175,7 @@ OUTPUT
 	,ISNULL(INSERTED.[PackagingUnitsID], DELETED.[PackagingUnitsID])	AS [PackagingUnitsID]
 	,ISNULL(INSERTED.[ValueTime], DELETED.[ValueTime])					AS [ValueTime] 
 ;
-
+*/
 COMMIT TRANSACTION  ins_TakeWeightTare; 
 END TRY
 	

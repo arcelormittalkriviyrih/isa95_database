@@ -18,7 +18,8 @@ select --distinct
 	,P.[WaybillNumber]
 	,P.[SenderShop]
 	,P.[ReceiverShop]
-	,D.[EndTime]
+	,D.[StartTime]
+	,D.[Status]
 from [dbo].[PackagingUnitsDocs] PUD
 join [dbo].[Documentations] D
 on PUD.[DocumentationsID] = D.[ID]
@@ -39,7 +40,7 @@ from (
 pivot (max([Value]) for [Description2] in ([WaybillNumber], [SenderShop], [ReceiverShop])) as pvt
 ) as P
 on P.[DocumentationsID] = D.[ID]
-where DC.[Description] = N'Путевая' and isnull(D.[Status], '') not in (N'reject', N'used')
+where DC.[Description] = N'Путевая' and isnull(D.[Status], '') not in (N'reject'/*, N'used'*/)
 --order by D.[EndTime] desc
 
 GO
