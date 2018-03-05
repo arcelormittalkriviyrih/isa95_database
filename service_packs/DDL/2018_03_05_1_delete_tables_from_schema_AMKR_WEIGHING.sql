@@ -1,0 +1,23 @@
+﻿SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+IF OBJECT_ID ('AMKR_WEIGHING.KP4_WagonNumberRecognition',N'U') IS NOT NULL
+  DROP TABLE [AMKR_WEIGHING].[KP4_WagonNumberRecognition];
+GO
+
+IF OBJECT_ID ('AMKR_WEIGHING.KEP_Analytics_Weight',N'U') IS NOT NULL
+  DROP TABLE [AMKR_WEIGHING].[KEP_Analytics_Weight];
+GO
+
+IF OBJECT_ID ('AMKR_WEIGHING.KEP_Analytics_Weight_archive',N'U') IS NOT NULL
+  DROP TABLE [AMKR_WEIGHING].[KEP_Analytics_Weight_archive];
+GO
+
+
+GO
