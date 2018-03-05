@@ -14,7 +14,7 @@ IF OBJECT_ID ('AMKR_WEIGHING.Ins_KEP_Analytics_Weight',N'TR') IS NOT NULL
 	DROP TRIGGER [AMKR_WEIGHING].[Ins_KEP_Analytics_Weight] 
 GO
 
-
+/*
 CREATE TRIGGER [AMKR_WEIGHING].[Ins_KEP_Analytics_Weight] ON [AMKR_WEIGHING].[KEP_Analytics_Weight]
 FOR INSERT
 AS
@@ -94,7 +94,7 @@ BEGIN
 	set IDENTITY_INSERT [AMKR_WEIGHING].[KEP_Analytics_Weight] OFF
 
 END
-
+*/
 
 GO
 

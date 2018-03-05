@@ -11,7 +11,7 @@ GO
 
 
 
-
+/*
 CREATE view [dbo].[v_AvailableWeighbridgesInfo]
 as
 
@@ -76,7 +76,7 @@ inner join [dbo].[v_AvailableWeighbridges] AW on KEP.ID_Scales = AW.ID
 where	N = 1
 	and	DT > getdate()-1.0/24
 order by dt desc
-
+*/
 
 
 
