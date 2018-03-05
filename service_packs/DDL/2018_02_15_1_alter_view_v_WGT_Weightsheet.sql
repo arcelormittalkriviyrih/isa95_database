@@ -19,15 +19,16 @@ select
 	,PUP.[Description]			as [Carrying]
 	,WO.[MaterialDefinitionID]	as [CargoTypeID]
 	,MD.[Description]			as [CargoType]
-	--,[OperationTime]
 	--,WO.[EquipmentID]			as [WeighbridgeID]
 	--,[PackagingUnitsDocsID]
 	,WO.[Brutto]
 	,WO.[Tara]
 	,WO.[Netto]
 	--,[OperationType]
-	--,[TaringTime]
 	,WO.[Status]
+	,WO.[OperationTime]
+	--,WO.[TaringTime]
+	,convert(nvarchar(10) ,cast(WO.[TaringTime] as datetime), 104) + ' ' + convert(nvarchar(5) ,cast(WO.[TaringTime] as datetime), 108) as [TaringTime]
 	--,PUDP.*
 	--,D.*
 	--,PUD.*
