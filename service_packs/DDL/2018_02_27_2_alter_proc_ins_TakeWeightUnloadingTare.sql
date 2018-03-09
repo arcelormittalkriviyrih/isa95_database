@@ -61,7 +61,12 @@ declare @upd_WO_IDs table ([ID] int)
 	from [dbo].[WeightingOperations] WO
 	join [dbo].[PackagingUnitsDocs] PUD
 	on WO.[PackagingUnitsDocsID] = PUD.[ID]
-	where WO.[OperationType] = N'Тарирование' and isnull(WO.[Status], '') != N'reject' and WO.[Tara] > 0
+	join [dbo].[Documentations] D
+	on WO.[DocumentationsID] = D.[ID]
+	where WO.[OperationType] = N'Тарирование' 
+		and isnull(WO.[Status], '') != N'reject' 
+		and WO.[Tara] > 0 
+		and D.[Status] = N'closed'
 )
 
 -- update Tare and Netto info for each row in WO for this Weightsheet (if Tare exists)
@@ -121,7 +126,6 @@ on PUDP.[Description] = DCP.[Description]
 inner join [dbo].[DocumentationsClass] DC
 on DC.[ID] = DCP.[DocumentationsClassID]
 where DC.[Description] = N'Путевая'
-
 
 COMMIT TRANSACTION  ins_TakeWeightUnloadingTare; 
 END TRY
