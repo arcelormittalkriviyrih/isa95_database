@@ -14,7 +14,7 @@ select distinct
 	 MD.[ID]
 	,MD.[Description]
 	,MDP.[Value]		as [ScrapClassID]
-	,MC.[Description]	as [ScrapClass]
+	,MD1.[Description]	as [ScrapClass]
 from [dbo].[MaterialDefinition] MD
 cross apply(
 	select top 1 *

@@ -53,7 +53,7 @@ on DC.[ID] = D.[DocumentationsClassID]
 where WO.[DocumentationsID] = @DocumentationsID 
 and isnull(WO.[Status], N'') != N'reject' 
 and isnull(PUD.[Status], N'') != N'reject' 
-and DC.[Description] in (N'Загрузка', N'Разгрузка')
+and DC.[Description] in (N'Погрузка', N'Разгрузка')
 and @Status = N'closed'
 
 -- insert Waybill properties
@@ -153,7 +153,9 @@ END TRY
 	
 BEGIN CATCH
 	ROLLBACK TRANSACTION upd_Documentations;
-	THROW 60020,'Error transaction upd_Documentations',1;	
+	declare @err nvarchar(500) = ERROR_MESSAGE();
+	set @err = N'Error transaction upd_Documentations. \n\r' + @err;
+	THROW 60020,@err,1;	
 END CATCH
         
 END

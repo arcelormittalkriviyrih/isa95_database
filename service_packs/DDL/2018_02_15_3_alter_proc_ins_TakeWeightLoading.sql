@@ -284,7 +284,7 @@ where D.ID = @WeightSheetID and D.[Status] = 'active'
 
 --select * from [dbo].[WeightingOperations] where [DocumentationsID] = @WeightSheetID
 
-
+/*
 -- insert Waybill properties
 insert into [dbo].[DocumentationsProperty]
 	([Description]
@@ -317,14 +317,16 @@ where DC.[Description] = N'Путевая'
 update [dbo].[Documentations]
 set [Status] = N'used'
 where [ID] = @WaybillID
-
+*/
 
 COMMIT TRANSACTION  ins_TakeWeightLoading; 
 END TRY
 	
 BEGIN CATCH
 	ROLLBACK TRANSACTION ins_TakeWeightLoading;
-	THROW 60020,'Error transaction ins_TakeWeightLoading',1;	
+	declare @err nvarchar(500) = ERROR_MESSAGE();
+	set @err = N'Error transaction ins_TakeWeightLoading. \n\r' + @err;
+	THROW 60020,@err,1;	
 END CATCH
 end
 
