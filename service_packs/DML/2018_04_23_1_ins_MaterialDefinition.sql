@@ -79,7 +79,7 @@ inner join
 	,(404, N'Лом чугунный габаритный с переработки', N'Чугунный лом')
 	,(396, N'Карточки с переработки', N'Оборотный лом')
 	
-	,(280, N'Лом габаритный легир. ЦСХиПП', N'Оборотный лом')
+	,(294, N'Лом габаритный легир. ЦСХиПП', N'Оборотный лом')
 ) as T([ID],[Description], [ParentDescription])
 on MD.[Description] = T.[ParentDescription]
 left join [dbo].[MaterialDefinition] MD1
