@@ -3,15 +3,15 @@ GO
 SET ANSI_NULLS ON
 GO
 
-
+/*
 IF OBJECT_ID ('dbo.v_AvailableWeighbridgesInfo',N'V') IS NOT NULL
-  DROP VIEW dbo.v_AvailableWeighbridgesInfo;
+  DROP VIEW dbo.v_AvailableWeighbridgesInfo;*/
 GO
  
 
 
 
-
+/*
 CREATE view [dbo].[v_AvailableWeighbridgesInfo]
 as
 
@@ -54,7 +54,7 @@ inner join [dbo].[v_AvailableWeighbridges] AW on KEP.ID_Scales = AW.ScaleID
 where	N = 1
 	and	DT > getdate()-1.0/24
 order by dt desc
-
+*/
 
 GO
 
