@@ -27,7 +27,8 @@ select
 	,WO.[Netto]
 	--,[OperationType]
 	,WO.[Status]
-	,WO.[OperationTime]
+	--,WO.[OperationTime]
+	,convert(nvarchar(10) ,cast(WO.[OperationTime] as datetime), 104) + ' ' + convert(nvarchar(5) ,cast(WO.[OperationTime] as datetime), 108) as [OperationTime]
 	--,WO.[TaringTime]
 	,convert(nvarchar(10) ,cast(WO.[TaringTime] as datetime), 104) + ' ' + convert(nvarchar(5) ,cast(WO.[TaringTime] as datetime), 108) as [TaringTime]
 	--,PUDP.*
