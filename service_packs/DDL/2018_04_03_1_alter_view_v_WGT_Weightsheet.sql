@@ -50,7 +50,7 @@ left join
 on PUDP.[PackagingUnitsDocsID] = WO.[PackagingUnitsDocsID]
 left join [dbo].[MaterialDefinition] MD
 on PUDP.[CargoTypeID] = MD.[ID]
-left join [dbo].[DocumentationsProperty] DP
+left join [dbo].[v_WGT_DocumentsProperty] DP
 on DP.[DocumentationsID] = PUDP.[WaybillID] and DP.[Description] = N'Номер путевой'
 left join [dbo].[v_WGT_DocumentsProperty] DP1
 on DP1.[DocumentationsID] = PUDP.[WaybillID] and DP1.[Description] = N'Примечание к роду груза'
