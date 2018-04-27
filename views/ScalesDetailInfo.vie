@@ -47,6 +47,7 @@ AS
               ) ww
               WHERE ww.RowNumber = 1)
           SELECT eq.ID AS ID,
+		  kd.[NUMBER_POCKET],
                  eq.[Description] AS ScalesName,
                  dbo.get_RoundedWeightByEquipment(kd.WEIGHT_CURRENT, eq.ID) WEIGHT_CURRENT,
                  kd.WEIGHT_STAB,
@@ -72,21 +73,34 @@ AS
                  ISNULL(dbo.get_EquipmentPropertyValue(eq.ID, N'TAKE_WEIGHT_LOCKED'), '0') TAKE_WEIGHT_LOCKED,
 				 kd.[WEIGHT_OK],
 				 kd.[PEREBOR],
-				 (SELECT 1 WHERE EXISTS (SELECT NULL FROM dbo.JobOrder jo WHERE jo.WorkType = N'KEPCommands'
+				 (SELECT 1 WHERE EXISTS (SELECT NULL FROM dbo.JobOrder jo,
+				 dbo.EquipmentProperty epv,
+				 dbo.EquipmentClassProperty epr
+				  WHERE epv.EquipmentID=eq.ID 
+				  AND ecp.ID = eqp.ClassPropertyID
+				  AND ecp.value = N'SCALES_NO'
+				  AND jo.WorkType = N'KEPCommands'
 																		   AND jo.DispatchStatus=N'ToSend'   
 																		   AND CAST(epv.Value as nvarchar)=  left(Command, len(Command)- charindex('.', reverse(Command)))
 																		   and DATEDIFF(second, jo.StartTime, CURRENT_TIMESTAMP) > 15 )
-						  OR EXISTS (SELECT * from dbo.kep_controller_diag diag where DATEDIFF(second, diag.Controller_Last_Connect,CURRENT_TIMESTAMP)>15 
+						  OR EXISTS (SELECT * from dbo.kep_controller_diag diag,
+						  dbo.Equipment side,
+						  dbo.EquipmentProperty epv2,
+						  dbo.EquipmentClassProperty epr2
+						   where side.ID = eq.Equipment 
+						   AND epv2.EquipmentID=side.ID
+						   AND epv2.ClassPropertyID=epr2.ID and CAST(epr2.Value as nvarchar) = N'CONTROLLER_ID'
+						   AND DATEDIFF(second, diag.Controller_Last_Connect,CURRENT_TIMESTAMP)>15 
 																			AND (cast(diag.Controller_ID as nvarchar) = CAST(epv2.[Value] as nvarchar)))) Send_OPC_Error
           FROM dbo.Equipment eq
                INNER JOIN dbo.EquipmentProperty eqp ON(eqp.EquipmentID = eq.ID)
                INNER JOIN dbo.EquipmentClassProperty ecp ON(ecp.ID = eqp.ClassPropertyID
                                                             AND ecp.value = N'SCALES_NO')
-			   INNER JOIN dbo.EquipmentProperty epv ON (epv.EquipmentID=eq.ID)
-			   INNER JOIN dbo.EquipmentClassProperty epr ON (epv.ClassPropertyID=epr.ID and CAST(epr.Value as nvarchar) = N'OPC_DEVICE_NAME')
-			   INNER JOIN dbo.Equipment side ON (side.ID = eq.Equipment)
-			   INNER JOIN dbo.EquipmentProperty epv2 ON (epv2.EquipmentID=side.ID)
-			   INNER JOIN dbo.EquipmentClassProperty epr2 ON (epv2.ClassPropertyID=epr2.ID and CAST(epr2.Value as nvarchar) = N'CONTROLLER_ID')
+			  -- INNER JOIN dbo.EquipmentProperty epv ON (epv.EquipmentID=eq.ID)
+			   --INNER JOIN dbo.EquipmentClassProperty epr ON (epv.ClassPropertyID=epr.ID and CAST(epr.Value as nvarchar) = N'OPC_DEVICE_NAME')
+			   --INNER JOIN dbo.Equipment side ON (side.ID = eq.Equipment)
+			   --INNER JOIN dbo.EquipmentProperty epv2 ON (epv2.EquipmentID=side.ID)
+			   --INNER JOIN dbo.EquipmentClassProperty epr2 ON (epv2.ClassPropertyID=epr2.ID and CAST(epr2.Value as nvarchar) = N'CONTROLLER_ID')
                LEFT OUTER JOIN Kep_Data kd ON(ISNUMERIC(eqp.value) = 1 AND kd.[NUMBER_POCKET] = CAST(eqp.value AS INT))
                LEFT OUTER JOIN BarWeight bw ON bw.EquipmentId = eq.ID AND bw.PropertyType = N'BAR_WEIGHT'
                LEFT OUTER JOIN BarWeight bminW ON bminW.EquipmentId = eq.ID AND bminW.PropertyType = N'MIN_WEIGHT'
