@@ -1,6 +1,6 @@
-﻿--------------------------------------------------------------
-IF OBJECT_ID('dbo.get_RoundedWeight', N'FN') IS NOT NULL
-    DROP FUNCTION dbo.get_RoundedWeight;
+﻿SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER OFF
 GO
 /*
    Function: dbo.get_RoundedWeight
@@ -18,7 +18,7 @@ GO
       Округлённый вес.
 	
 */
-CREATE FUNCTION dbo.get_RoundedWeight
+ALTER FUNCTION [dbo].[get_RoundedWeight]
 (@WeightValue INT,
  @RoundRule   NVARCHAR(50),
  @RoundPrecision  INT
