@@ -11,6 +11,12 @@ END
 GO
 
 IF OBJECT_ID ('dbo.PackagingUnitsDocs',N'U') IS NOT NULL
+  if exists(SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_PackagingUnitsDocs_Documentations]') AND parent_object_id = OBJECT_ID(N'[dbo].[PackagingUnitsDocs]'))
+	ALTER TABLE [dbo].[PackagingUnitsDocs] DROP CONSTRAINT [FK_PackagingUnitsDocs_Documentations]
+  
+  if exists(SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_PackagingUnitsDocs_PackagingUnits]') AND parent_object_id = OBJECT_ID(N'[dbo].[PackagingUnitsDocs]'))
+	ALTER TABLE [dbo].[PackagingUnitsDocs] DROP CONSTRAINT [FK_PackagingUnitsDocs_PackagingUnits]
+   
   DROP TABLE [dbo].[PackagingUnitsDocs];
 GO
 

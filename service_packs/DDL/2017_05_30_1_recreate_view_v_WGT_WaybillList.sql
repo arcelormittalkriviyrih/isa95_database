@@ -49,6 +49,9 @@ left join [dbo].[Equipment] E
 on pvt.[Цех отправления] = E.ID
 inner join [dbo].[Documentations] D
 on D.ID = pvt.DocumentationsID
+inner join [dbo].[DocumentationsClass] DC
+on DC.ID = D.DocumentationsClassID
+where DC.Description = N'Путевая'
 --order by [DocumentationsID]
 ),
 

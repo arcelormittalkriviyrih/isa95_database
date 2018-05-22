@@ -34,8 +34,9 @@ ALTER TABLE [dbo].Documentations
 ADD  [EndTime] [datetimeoffset](7) NULL
 
 
-IF COLUMNPROPERTY(OBJECT_ID('Documentations','U'),'DocumentationsClassID','ColumnId') IS NOT NULL
+IF COLUMNPROPERTY(OBJECT_ID('Documentations','U'),'DocumentationsDefinitionID','ColumnId') IS NOT NULL
 BEGIN
+   IF EXISTS(SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Documentations_DocumentationsDefinition]') AND parent_object_id = OBJECT_ID(N'[dbo].[Documentations]'))
    ALTER TABLE [dbo].Documentations
    DROP CONSTRAINT [FK_Documentations_DocumentationsDefinition]
 

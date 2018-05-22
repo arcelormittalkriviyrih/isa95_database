@@ -9,7 +9,7 @@ insert into [dbo].[EquipmentProperty]
 	,[EquipmentID]
 	,[ClassPropertyID])
 select
-	 null
+	 N'Статические'
 	,N'STATIC'
 	,null
 	,E.ID

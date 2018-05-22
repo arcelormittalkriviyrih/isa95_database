@@ -102,18 +102,21 @@ BEGIN
 			,(N'Цех отправления',									cast(@SenderShop as nvarchar))
 			,(N'Место погрузки',									cast(@SenderDistrict as nvarchar))
 			,(N'Станция отправления',								cast(@SenderRWStation as nvarchar))
-			,(N'Время прибытия (станция отправления)',				cast(@SenderArriveDT as nvarchar))
-			,(N'Время подачи под погрузку (станция отправления)',	cast(@SenderStartLoadDT as nvarchar))
-			,(N'Время окончания выгрузки (станция отправления)',	cast(@SenderEndLoadDT as nvarchar))
+			,(N'Время прибытия (станция отправления)',				convert(nvarchar, convert(datetime, @SenderArriveDT), 126))--cast(@SenderArriveDT as nvarchar))
+			,(N'Время подачи под погрузку (станция отправления)',	convert(nvarchar, convert(datetime, @SenderStartLoadDT), 126))--cast(@SenderStartLoadDT as nvarchar))
+			,(N'Время окончания выгрузки (станция отправления)',	convert(nvarchar, convert(datetime, @SenderEndLoadDT), 126))--cast(@SenderEndLoadDT as nvarchar))
 			,(N'Цех получения',										cast(@ReceiverShop as nvarchar))
 			,(N'Место выгрузки',									cast(@ReceiverDistrict as nvarchar))
 			,(N'Станция назначения',								cast(@ReceiverRWStation as nvarchar))
-			,(N'Время прибытия (станция назначения)',				cast(@ReceiverArriveDT as nvarchar))
-			,(N'Время подачи под погрузку (станция назначения)',	cast(@ReceiverStartLoadDT as nvarchar))
-			,(N'Время окончания выгрузки (станция назначения)',		cast(@ReceiverEndLoadDT as nvarchar))
+			,(N'Время прибытия (станция назначения)',				convert(nvarchar, convert(datetime, @ReceiverArriveDT), 126))--cast(@ReceiverArriveDT as nvarchar))
+			,(N'Время подачи под погрузку (станция назначения)',	convert(nvarchar, convert(datetime, @ReceiverStartLoadDT), 126))--cast(@ReceiverStartLoadDT as nvarchar))
+			,(N'Время окончания выгрузки (станция назначения)',		convert(nvarchar, convert(datetime, @ReceiverEndLoadDT), 126))--cast(@ReceiverEndLoadDT as nvarchar))
 		) as T1([Property], [Value])		
 		inner join [dbo].[DocumentationsClassProperty] DCP
 		on T1.[Property] = DCP.[Description]
+		inner join [dbo].[DocumentationsClass] DC
+		on DC.[ID] = DCP.[DocumentationsClassID]
+		where DC.[Description] = N'Путевая'
 
 		--- insert Waybill wagon info 
 		insert into [dbo].[PackagingUnitsDocs]

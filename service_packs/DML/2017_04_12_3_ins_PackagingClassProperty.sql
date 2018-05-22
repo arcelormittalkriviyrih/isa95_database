@@ -22,7 +22,7 @@ SELECT [ID]
       ,[Description]
       ,[ParentID]
 	  ,50 as [Value]
-FROM [KRR-PA-ISA95_PRODUCTION].[dbo].[PackagingClass]
+FROM [dbo].[PackagingClass]
 ) as T2
 on 1=1
 where T2.Description in (N'Лафет-короб', N'Полувагон', N'Спецвагон', N'Цистерна')

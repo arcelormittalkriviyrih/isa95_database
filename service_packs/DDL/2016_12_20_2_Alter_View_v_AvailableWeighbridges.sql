@@ -5,8 +5,6 @@ IF OBJECT_ID ('dbo.v_AvailableWeighbridgesInfo',N'V') IS NOT NULL
   DROP VIEW dbo.v_AvailableWeighbridgesInfo;*/
 GO
 
-SET ANSI_PADDING OFF
-GO
 
 /*
 CREATE view [dbo].[v_AvailableWeighbridgesInfo]
