@@ -1,4 +1,8 @@
-﻿--------------------------------------------------------------
+﻿SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER OFF
+GO
+--------------------------------------------------------------
 -- Процедура ins_CreateOrder
 IF OBJECT_ID ('dbo.ins_Order',N'P') IS NOT NULL
    DROP PROCEDURE dbo.ins_Order;
@@ -164,4 +168,3 @@ BEGIN
 
 END;
 GO
-
