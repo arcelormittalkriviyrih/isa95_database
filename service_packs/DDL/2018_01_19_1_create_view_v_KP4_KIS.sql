@@ -27,7 +27,8 @@ SELECT     TOP (100) PERCENT
 		when JR.WorkType = 'Taring'
 		then OPAP.Value
 		when JR.WorkType = 'Weighting'
-		then (SELECT Value FROM dbo.PackagingUnitsProperty WHERE PackagingUnitsID = PU.ID and [Description]=N'Вес тары' )
+		--then (SELECT Value FROM dbo.PackagingUnitsProperty WHERE PackagingUnitsID = PU.ID and [Description]=N'Вес тары' )
+		then cast(MAP.[Brutto] - MAP.[Netto] as nvarchar)
 	end)											AS [Tare], 
 	MAP.[Brutto], 
 	MAP.[Netto], 
@@ -53,8 +54,8 @@ LEFT JOIN
 	(select 
 		 OpMaterialActual
 		,[Вид лома]			as [CSH]
-		,[Вес брутто]		as [Brutto]
-		,[Вес нетто Дебет]	as [Netto]
+		,cast([Вес брутто] as real)		as [Brutto]
+		,cast([Вес нетто Дебет]as real)	as [Netto]
 		,[Получатель]		as [ReceiverID]
 		,[Отправитель]		as [SenderID]
 	from(

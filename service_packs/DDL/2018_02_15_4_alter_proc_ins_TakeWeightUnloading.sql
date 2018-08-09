@@ -67,7 +67,9 @@ from [PackagingUnitsDocs] PUD
 join [Documentations] D
 on PUD.[DocumentationsID] = D.ID
 where	isnull(D.[Status], '') != 'reject'
+	and isnull(PUD.[Status], '') != 'reject'
 	and D.ID = @WaybillID
+order by PUD.ID desc
 
 
 
