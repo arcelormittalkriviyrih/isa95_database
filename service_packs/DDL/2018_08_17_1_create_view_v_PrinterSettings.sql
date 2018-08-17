@@ -10,7 +10,7 @@ GO
 create view [dbo].[v_PrinterSettings]
 as
 
-;with CTE1 as (
+with CTE1 as (
 	-- get printers settings for equipment --
 	select  
 		 Tbl.Col.value('../@EquipmentID', 'int')						as [EquipmentID]
