@@ -10,7 +10,7 @@ GO
 create view [dbo].[v_PrinterSettings]
 as
 
-;with CTE1 as (
+with CTE1 as (
 	-- get printers settings for equipment --
 	select  
 		 Tbl.Col.value('../@EquipmentID', 'int')						as [EquipmentID]
@@ -28,7 +28,8 @@ as
 
 
 select
-	 CTE1.[EquipmentID]
+	 DPS.[ID]
+	,CTE1.[EquipmentID]
 	,CTE1.[PRINTER_NO]
 	,DPS.[PRINTER_NAME]
 	,DPS.[PRINTER_IP]
@@ -41,7 +42,8 @@ on CTE1.[PRINTER_NO] = vEP.[Value] and vEP.[Property] = N'USED_PRINTER'-- and vE
 join (
 	-- Default printer settings --
 	select
-		 [PRINTER_NO]
+		 [ID]
+		,[PRINTER_NO]
 		,[PRINTER_NAME]
 		,[PRINTER_IP]
 		,[PAPER_SIZE]
@@ -49,7 +51,8 @@ join (
 		,[COPIES]
 	from (
 		select
-			 vEP1.[Value]		as [PRINTER_NO]
+			 vEP1.[EquipmentID]	as [ID]
+			,vEP1.[Value]		as [PRINTER_NO]
 			,vEP2.[Property]
 			,vEP2.[Value]
 		from [dbo].[v_EquipmentProperty] vEP1
@@ -59,8 +62,5 @@ join (
 ) as DPS
 on CTE1.[PRINTER_NO] = DPS.[PRINTER_NO]
 --where  vEP.[EquipmentID] = @quip_id
-
-
-
   
 GO
