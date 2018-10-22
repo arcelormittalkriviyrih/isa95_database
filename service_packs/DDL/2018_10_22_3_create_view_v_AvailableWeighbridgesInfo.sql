@@ -1,19 +1,14 @@
-﻿/*
-SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_NULLS ON
-GO
-
-
+﻿
 IF OBJECT_ID ('dbo.v_AvailableWeighbridgesInfo',N'V') IS NOT NULL
-  DROP VIEW dbo.v_AvailableWeighbridgesInfo;
+  DROP VIEW [dbo].[v_AvailableWeighbridgesInfo];
 GO
- 
 
+/*
+   View: v_AvailableWeighbridgesInfo
+   Возвращает онлайн показания для каждых ЖД весов
+*/
 
-
-
-CREATE view [dbo].[v_AvailableWeighbridgesInfo]
+create view [dbo].[v_AvailableWeighbridgesInfo]
 as
 
 with KEP as(
@@ -30,8 +25,9 @@ SELECT
       ,[L_bias_weight]
       ,[H_bias_weight]
       ,[Weight_OK]
-      ,[Tara_OK]
-      ,cast([stabilizing_weight] as int) as [stabilizing_weight]
+      --,[Tara_OK]
+      --,cast([stabilizing_weight] as int) as [stabilizing_weight]
+	  ,isnull([WeightStabilized_1], 1) & isnull([WeightStabilized_2], 1)	as [WeightStabilized]
 FROM dbo.[KEP_Analytics_Weight]
 )
 
@@ -48,15 +44,13 @@ SELECT top 100
       ,cast(0.001*[L_bias_weight] as real)		as [L_bias_weight]
       ,cast(0.001*[H_bias_weight] as real)		as [H_bias_weight]
       ,[Weight_OK]
-      ,[Tara_OK]
-      ,[stabilizing_weight]
+      --,[Tara_OK]
+      ,cast([WeightStabilized] as int)			as [stabilizing_weight]
 FROM KEP
 inner join [dbo].[v_AvailableWeighbridges] AW on KEP.ID_Scales = AW.ScaleID
 where	N = 1
-	and	DT > getdate()-0.02/24
+	and	DT > getdate()-0.0014/24	-- 2 min
 order by dt desc
 
 
 GO
-*/
-
