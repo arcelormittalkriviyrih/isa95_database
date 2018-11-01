@@ -12,18 +12,20 @@ as
 
 with CTE1 as (
 	-- get printers settings for equipment --
-	select  
-		 Tbl.Col.value('../@EquipmentID', 'int')						as [EquipmentID]
-		,Tbl.Col.value('@PRINTER_NO', 'nvarchar(100)')					as [PRINTER_NO]
-		,Tbl.Col.value('@PAPER_SIZE', 'nvarchar(100)')					as [PAPER_SIZE]
-		,Tbl.Col.value('@PAPER_ORIENTATION_LANDSCAPE', 'nvarchar(100)') as [PAPER_ORIENTATION_LANDSCAPE]
-		,Tbl.Col.value('@COPIES', 'int')								as [COPIES]
+	select
+		 [EquipmentID]
+		,Col.query('PRINTER_NO').value('.', 'nvarchar(100)') AS [PRINTER_NO]
+		,Col.query('PAPER_SIZE').value('.', 'nvarchar(100)') AS [PAPER_SIZE]
+		,Col.query('PAPER_ORIENTATION_LANDSCAPE').value('.', 'nvarchar(100)') AS [PAPER_ORIENTATION_LANDSCAPE]
+		,Col.query('COPIES').value('.', 'nvarchar(100)') AS [COPIES]
 	from (
-		select
-			convert(xml, N'<A EquipmentID="'+cast([EquipmentID] as nvarchar)+N'">'+replace(replace(replace(replace(replace(replace([Value],'[',''),']',''),':','='),',',' '),'{','<row '),'}','></row>')+N'</A>') as [xml]
-		from [dbo].[v_EquipmentProperty] vEP
-		where [Property] = N'PRINTER_SETTINGS' --and [EquipmentID] = @quip_id 
-	) as CTE cross apply [xml].nodes('//row') Tbl(Col)
+	select
+		[EquipmentID],
+		dbo.get_JSON2XML('{"ROW": ' + [Value] + '}') as [XML]
+	from [dbo].[v_EquipmentProperty] vEP
+
+	where [Property] = N'PRINTER_SETTINGS'
+	) as CTE cross apply [xml].nodes('ROW') Tbl(Col)
 ) 
 
 
