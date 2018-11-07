@@ -1,8 +1,13 @@
-USE [KRR-PA-ISA95_PRODUCTION]
+﻿SET ANSI_NULLS ON
 GO
-/****** Object:  StoredProcedure [dbo].[ins_ExportMaterialLotToSAP]    Script Date: 05.04.2017 16:37:50 ******/
-SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER OFF
 GO
+--------------------------------------------------------------
+-- Процедура ins_CreateOrder
+IF OBJECT_ID ('dbo.ins_ExportMaterialLotToSAP',N'P') IS NOT NULL
+   DROP PROCEDURE dbo.ins_ExportMaterialLotToSAP;
+GO
+
 SET QUOTED_IDENTIFIER ON
 GO
 /*
@@ -13,7 +18,7 @@ GO
 
       MaterialLotID - MaterialLot ID.
 */
-ALTER PROCEDURE [dbo].[ins_ExportMaterialLotToSAP]
+CREATE PROCEDURE [dbo].[ins_ExportMaterialLotToSAP]
 @MaterialLotID INT,
 @LinkedServer NVARCHAR(50)
 AS
