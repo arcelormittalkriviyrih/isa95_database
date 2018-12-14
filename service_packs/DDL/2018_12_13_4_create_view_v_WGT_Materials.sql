@@ -24,7 +24,7 @@ join [dbo].[MaterialClass] MC
 on MD.[MaterialClassID] = MC.[ID]
 left join [dbo].[MaterialDefinition] MD1
 on MD.[MaterialDefinitionID] = MD1.[ID]
-outer apply(
+cross apply(
 	select top 1
 		 [MaterialDefinitionID]
 		,[Description]
