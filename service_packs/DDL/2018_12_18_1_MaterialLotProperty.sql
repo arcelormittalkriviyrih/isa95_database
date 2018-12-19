@@ -1,7 +1,87 @@
-п»їSET ANSI_NULLS ON;
+SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
 GO
 
-SET QUOTED_IDENTIFIER ON;
+
+IF NOT EXISTS(SELECT NULL
+              FROM information_schema.columns
+              WHERE table_name = 'MaterialLot'
+                AND column_name = 'SideID')
+   ALTER TABLE [dbo].[MaterialLot] ADD SideID INT NULL
+GO
+
+IF NOT EXISTS(SELECT NULL
+              FROM information_schema.columns
+              WHERE table_name = 'MaterialLot'
+                AND column_name = 'ProdDate')
+	ALTER TABLE [dbo].[MaterialLot] ADD ProdDate DATETIMEOFFSET NULL
+GO
+
+IF OBJECT_ID ('dbo.InsUpdMaterialLot',N'TR') IS NOT NULL
+   DROP TRIGGER [dbo].[InsUpdMaterialLot];
+GO
+
+CREATE TRIGGER [dbo].[InsUpdMaterialLot] ON [dbo].[MaterialLot]
+AFTER INSERT, UPDATE
+AS
+BEGIN
+
+   SET NOCOUNT ON;
+
+   DECLARE @ID                  INT,
+           @SideID           INT,
+           @FactoryNumberScales NVARCHAR(250);
+
+   SELECT @ID=[ID],
+          @FactoryNumberScales=[FactoryNumberScales]
+   FROM INSERTED;
+
+   SELECT @SideID=eq.[Equipment]
+   FROM [dbo].[EquipmentProperty] eqp
+        INNER JOIN [dbo].[Equipment] eq ON (eq.ID=eqp.[EquipmentID])
+   WHERE eqp.[ClassPropertyID]=[dbo].[get_EquipmentClassPropertyByValue](N'SCALES_NO')
+     AND eqp.[Value]=@FactoryNumberScales;
+
+   UPDATE [dbo].[MaterialLot]
+   SET SideID=@SideID
+   WHERE [ID]=@ID;
+
+END
+GO
+
+IF OBJECT_ID ('dbo.[InsUpdMaterialLotProperty]',N'TR') IS NOT NULL
+   DROP TRIGGER [dbo].[InsUpdMaterialLotProperty];
+GO
+
+CREATE TRIGGER [dbo].[InsUpdMaterialLotProperty] ON [dbo].[MaterialLotProperty]
+AFTER INSERT, UPDATE
+AS
+BEGIN
+
+   SET NOCOUNT ON;
+
+   UPDATE [dbo].[MaterialLot]
+   SET [MaterialLot].[ProdDate] = INSERTED.[ValueDate]
+   FROM INSERTED
+   WHERE [MaterialLot].[ID] = INSERTED.[MaterialLotID]
+    AND INSERTED.[PropertyType] = [dbo].[get_PropertyTypeIdByValue](N'PROD_DATE')
+
+END
+GO
+
+IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='i4_MaterialLot_SideID_ProdDate' AND object_id = OBJECT_ID('[dbo].[MaterialLot]'))
+   DROP INDEX [i4_MaterialLot_SideID_ProdDate] ON [dbo].[MaterialLot]
+GO
+
+CREATE INDEX [i4_MaterialLot_SideID_ProdDate] ON [dbo].[MaterialLot] ([SideID],[ProdDate])
+GO
+
+IF EXISTS (SELECT NULL FROM sys.indexes WHERE name='i1_MaterialLotProperty' AND object_id = OBJECT_ID('[dbo].[MaterialLotProperty]'))
+   DROP INDEX [i1_MaterialLotProperty] ON [dbo].[MaterialLotProperty]
+GO
+
+CREATE INDEX [i1_MaterialLotProperty] ON [dbo].[MaterialLotProperty] ([Value])
 GO
 
 IF OBJECT_ID ('dbo.v_MaterialLotReport', N'V') IS NOT NULL
@@ -9,7 +89,7 @@ IF OBJECT_ID ('dbo.v_MaterialLotReport', N'V') IS NOT NULL
 GO
 /*
    View: v_MaterialLotReport
-    Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃРїРёСЃРѕРє Р±РёСЂРѕРє СЃ РёРЅС„РѕСЂРјР°С†РёРµР№ РґР»СЏ РѕС‚С‡РµС‚РѕРІ.
+    Возвращает список бирок с информацией для отчетов.
 */
 CREATE VIEW [dbo].[v_MaterialLotReport]
 AS
