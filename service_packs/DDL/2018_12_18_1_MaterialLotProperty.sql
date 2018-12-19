@@ -120,3 +120,54 @@ FROM [dbo].[MaterialLot] ml
      LEFT OUTER JOIN [dbo].[MaterialLotProperty] material_no ON (material_no.[MaterialLotID]=ml.[ID] AND material_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('MATERIAL_NO'))
 WHERE ml.[Status]!=1
 GO
+
+IF OBJECT_ID ('dbo.v_MaterialLot', N'V') IS NOT NULL
+   DROP VIEW dbo.v_MaterialLot;
+GO
+/*
+   View: v_MaterialLot
+    Возвращает список бирок.
+*/
+CREATE VIEW [dbo].[v_MaterialLot]
+AS
+SELECT [ID]
+      ,[FactoryNumber]
+      ,[MaterialDefinitionID]
+      ,[Description]
+      ,[Status]
+      ,[StorageLocation]
+      ,[Quantity]
+      ,[Location]
+      ,[AssemblyLotID]
+      ,[AssemblyType]
+      ,[AssemblyRelationship]
+      ,[UnitID]
+      ,[CreateTime]
+      ,[FactoryNumberScales]
+      ,[ProdDate]
+      ,[SideID]
+      ,[MaterialLotID]
+      ,[DispatchStatus]      
+       ,(SELECT mt.Description FROM [dbo].[MaterialLinkTypes] mt WHERE mt.[ID]=mlp.[Status]) StatusName,
+       (CASE ps.DispatchStatus
+            WHEN N'Done'
+            THEN CAST(1 AS BIT)
+            WHEN N'ToPrint'
+            THEN CAST(0 AS BIT)
+            ELSE NULL
+        END) isPrinted
+FROM [dbo].[MaterialLot] mlp
+     LEFT OUTER JOIN (SELECT ww.MaterialLotID,
+                             ww.DispatchStatus
+                      FROM (SELECT ROW_NUMBER() OVER (PARTITION BY p.[Value] ORDER BY jo.ID DESC) rnum,
+                                   jo.ID,
+                                   jo.DispatchStatus,
+                                   CAST(p.[Value] AS INT) MaterialLotID
+                            FROM Parameter p,PropertyTypes pt,JobOrder jo
+                            WHERE pt.ID = p.PropertyType
+                              AND pt.[Value] = N'MaterialLotID'
+                              AND jo.ID = p.JobOrder
+                              AND jo.WorkType=N'Print') ww
+                       WHERE ww.rnum=1) ps ON ps.MaterialLotID=mlp.ID;
+GO
+
