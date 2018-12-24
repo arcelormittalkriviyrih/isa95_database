@@ -115,7 +115,7 @@ select
 	 P.[Description]			as [Description]
 	,P.[Value]					as [Value]
 	,PUD.[PackagingUnitsID]		as [PackagingUnitsID]
-	,getdate()					as [ValueTime]
+	,WO.[OperationTime]			as [ValueTime]
 from [dbo].[Documentations] D
 join [dbo].[DocumentationsClass] DC
 on D.[DocumentationsClassID] = DC.[ID]
