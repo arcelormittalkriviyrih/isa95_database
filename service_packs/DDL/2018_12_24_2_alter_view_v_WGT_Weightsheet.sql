@@ -17,6 +17,7 @@ select
 	,DP.[DocumentationsID]		as [WaybillID]
 	,DP.[Value]					as [WaybillNumber]
 	,cast(WOP.[Value] as real)	as [Carrying]
+	,cast(WOP1.[Value] as real)	as [MarkedTare]
 	,WO.[MaterialDefinitionID]	as [CargoTypeID]
 	,MD.[Description]			as [CargoType]
 	,DP1.[Value]				as [CargoTypeNotes]
@@ -63,6 +64,8 @@ left join [dbo].[PackagingUnitsDocs] PUD
 on PUD.ID = WO.[PackagingUnitsDocsID]
 left join [dbo].[WeightingOperationsProperty] WOP
 on WOP.[WeightingOperationsID] = WO.[ID] and WOP.[Description] = N'Грузоподъемность'
+left join [dbo].[WeightingOperationsProperty] WOP1
+on WOP1.[WeightingOperationsID] = WO.[ID] and WOP1.[Description] = N'Тара с бруса'
 
 
 GO
