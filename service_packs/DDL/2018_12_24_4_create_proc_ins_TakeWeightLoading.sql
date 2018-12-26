@@ -261,6 +261,7 @@ on WO.DocumentationsID = D.ID and WO.PackagingUnitsDocsID = @PackagingUnitsDocsI
 where	D.ID = @WeightSheetID and D.[Status] = 'active' and WO.OperationTime < getdate()
 
 
+declare @out_id_WO table ([ID] int)
 -- insert new weighting operation in [WeightingOperations]
 insert into [dbo].[WeightingOperations]
 	([Description]
@@ -277,6 +278,7 @@ insert into [dbo].[WeightingOperations]
 	,[TaringTime]
 	,[PersonID]
 	,[TaringPersonID])
+output INSERTED.[ID] INTO @out_id_WO
 select top 1
 	 PU.[Description]			as [Description]
 	,getdate()					as [OperationTime]
@@ -298,6 +300,21 @@ on D.DocumentationsClassID = DC.ID
 join [dbo].[PackagingUnits] PU
 on PU.ID = @PackagingUnitsID
 where D.ID = @WeightSheetID and D.[Status] = 'active'
+
+-- insert properties in [WeightingOperationsProperty] (MarkedTare and Carrying)
+insert into [dbo].[WeightingOperationsProperty]
+	([Description]
+	,[Value]
+	,[WeightingOperationsID]
+	,[ValueTime])
+select
+	 PUP.[Description]
+	,PUP.[Value]
+	,T.[ID] as [WeightingOperationsID]
+	,PUP.[ValueTime]
+from [dbo].[PackagingUnitsProperty] PUP
+cross apply @out_id_WO T
+where PUP.[PackagingUnitsID] = @PackagingUnitsID and PUP.[Description] in (N'Грузоподъемность', N'Тара с бруса')
 
 
 
@@ -357,8 +374,6 @@ BEGIN CATCH
 	THROW 60020,@err,1;	
 END CATCH
 end
-
-
 
 
 
