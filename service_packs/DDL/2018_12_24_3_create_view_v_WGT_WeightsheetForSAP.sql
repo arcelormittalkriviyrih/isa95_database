@@ -38,8 +38,10 @@ select
 	,cast(WOP.[Value] as real)					as [Carrying]
 	,cast(WOP1.[Value] as real)					as [MarkedTare]
 	--,vDP4.[Value2]								as [Weigher]
-	,(select top 1 [PersonName] from [dbo].[Person] where [ID] = WO.[PersonID])			as [Weigher]
-	,(select top 1 [PersonName] from [dbo].[Person] where [ID] = WO.[TaringPersonID])	as [TareWeigher]
+	--,(select top 1 [PersonName] from [dbo].[Person] where [ID] = WO.[PersonID])			as [Weigher]
+	--,(select top 1 [PersonName] from [dbo].[Person] where [ID] = WO.[TaringPersonID])	as [TareWeigher]
+	,WGB.[Value]								as [Weigher]
+	,WGT.[Value]								as [TareWeigher]
 
 from [dbo].[WeightingOperations] WO
 join [dbo].[Documentations] D
@@ -60,6 +62,20 @@ left join [dbo].[WeightingOperationsProperty] WOP
 on WOP.[WeightingOperationsID] = WO.[ID] and WOP.[Description] = N'Грузоподъемность'
 left join [dbo].[WeightingOperationsProperty] WOP1
 on WOP1.[WeightingOperationsID] = WO.[ID] and WOP1.[Description] = N'Тара с бруса'
+outer apply (
+	select top 1 
+		PP.[Value]
+	from [dbo].[PersonProperty] PP
+	join [dbo].[PersonnelClassProperty] PCP
+	on PCP.[ID] = PP.[ClassPropertyID] and PCP.[Description] = N'Active directory login' and PP.[PersonID] = WO.[PersonID]
+) WGB
+outer apply (
+	select top 1 
+		PP.[Value]
+	from [dbo].[PersonProperty] PP
+	join [dbo].[PersonnelClassProperty] PCP
+	on PCP.[ID] = PP.[ClassPropertyID] and PCP.[Description] = N'Active directory login' and PP.[PersonID] = WO.[TaringPersonID]
+) WGT
 
 where	isnull(WO.Status, '') != N'reject'
 	and isnull(D.Status, '')   = N'closed'
