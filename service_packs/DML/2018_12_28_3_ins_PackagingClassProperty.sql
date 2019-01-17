@@ -23,7 +23,7 @@ cross join (values
 ) as R([Description], [Value], [ValueUnitofMeasure])
 left join (values	
 	 (N'Вагон УЗ', N'^[2-9]{1}[0-9]{7}$')
-	,(N'Вагон местный', N'^[0-9]{8}$')
+	,(N'Вагон местный', N'^[0-9]{3,8}$')
 	,(N'Автомобиль', N'^[A-zА-я]{0,3}[0-9]{1,6}(\-[0-9]{1,3})?[A-zА-я]{0,3}\-?[0-9]{0,3}$')
 ) as K([Description], [Value])
 on T.[Description] = K.[Description] and R.[Description] = N'Wagon number template'
