@@ -13,8 +13,25 @@ GO
 */
 CREATE VIEW [dbo].[v_MaterialLot]
 AS
-SELECT *,
-       (SELECT mt.Description FROM [dbo].[MaterialLinkTypes] mt WHERE mt.[ID]=mlp.[Status]) StatusName,
+SELECT [ID]
+      ,[FactoryNumber]
+      ,[MaterialDefinitionID]
+      ,[Description]
+      ,[Status]
+      ,[StorageLocation]
+      ,[Quantity]
+      ,[Location]
+      ,[AssemblyLotID]
+      ,[AssemblyType]
+      ,[AssemblyRelationship]
+      ,[UnitID]
+      ,[CreateTime]
+      ,[FactoryNumberScales]
+      ,[ProdDate]
+      ,[SideID]
+      ,[MaterialLotID]
+      ,[DispatchStatus]      
+       ,(SELECT mt.Description FROM [dbo].[MaterialLinkTypes] mt WHERE mt.[ID]=mlp.[Status]) StatusName,
        (CASE ps.DispatchStatus
             WHEN N'Done'
             THEN CAST(1 AS BIT)

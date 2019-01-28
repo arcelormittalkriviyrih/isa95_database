@@ -16,8 +16,8 @@ AS
 SELECT ml.ID,
        ml.FactoryNumber,
        ml.Quantity,
-       eq.Equipment SideID,
-       prod_date.[ValueDate] PROD_DATE,
+       ml.SideID SideID,
+       ml.[ProdDate] PROD_DATE,
        change_no.[Value] CHANGE_NO,
        brigade_no.[Value] BRIGADE_NO,
        melt_no.[Value] MELT_NO,
@@ -29,9 +29,6 @@ SELECT ml.ID,
        material_no.[Value] MATERIAL_NO,
 	   (SELECT mt.Description FROM [dbo].[MaterialLinkTypes] mt WHERE mt.[ID]=ml.[Status]) StatusName
 FROM [dbo].[MaterialLot] ml
-     INNER JOIN [dbo].[EquipmentProperty] eqp ON (eqp.[ClassPropertyID]=[dbo].[get_EquipmentClassPropertyByValue]('SCALES_NO') AND eqp.[Value]=ml.FactoryNumberScales)
-     INNER JOIN [dbo].[Equipment] eq ON (eq.ID=eqp.EquipmentID)
-     INNER JOIN [dbo].[MaterialLotProperty] prod_date ON (prod_date.[MaterialLotID]=ml.[ID] AND prod_date.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PROD_DATE'))
      LEFT OUTER JOIN [dbo].[MaterialLotProperty] change_no ON (change_no.[MaterialLotID]=ml.[ID] AND change_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('CHANGE_NO'))
      LEFT OUTER JOIN [dbo].[MaterialLotProperty] brigade_no ON (brigade_no.[MaterialLotID]=ml.[ID] AND brigade_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('BRIGADE_NO'))
      LEFT OUTER JOIN [dbo].[MaterialLotProperty] melt_no ON (melt_no.[MaterialLotID]=ml.[ID] AND melt_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('MELT_NO'))

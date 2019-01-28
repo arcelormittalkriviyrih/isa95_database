@@ -20,7 +20,7 @@ from (
 		 [DocumentationsID]
 		,[Description2]
 		,[Value]
-	from [dbo].[v_WGT_WaybillProperty] 
+	from [dbo].[v_WGT_DocumentsProperty]
 ) as WP
 pivot(max(Value) for [Description2] in ([WaybillNumber], [SenderShop])) as pvt
 inner join
