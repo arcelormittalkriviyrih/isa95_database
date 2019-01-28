@@ -1,4 +1,4 @@
 [submodule "service_packs_internal"]
 	path = service_packs_internal
 	url = http://krr-app-gitlab01/saarhipov/isa95_database.git
-	branch = testing
+	branch = master
