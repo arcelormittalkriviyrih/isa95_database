@@ -21,8 +21,8 @@ SELECT ml.ID,
        change_no.[Value] CHANGE_NO,
        brigade_no.[Value] BRIGADE_NO,
        melt_no.[Value] MELT_NO,
-       prod_order.[Value] PROD_ORDER,
-       part_no.[Value] PART_NO,
+       ml.PROD_ORDER,
+       ml.PART_NO,
        auto_manu_value.[Value] AUTO_MANU_VALUE,
        create_mode.[Value] CREATE_MODE,
        measure_time.[ValueDate] MEASURE_TIME,
@@ -31,9 +31,7 @@ SELECT ml.ID,
 FROM [dbo].[MaterialLot] ml
      LEFT OUTER JOIN [dbo].[MaterialLotProperty] change_no ON (change_no.[MaterialLotID]=ml.[ID] AND change_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('CHANGE_NO'))
      LEFT OUTER JOIN [dbo].[MaterialLotProperty] brigade_no ON (brigade_no.[MaterialLotID]=ml.[ID] AND brigade_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('BRIGADE_NO'))
-     LEFT OUTER JOIN [dbo].[MaterialLotProperty] melt_no ON (melt_no.[MaterialLotID]=ml.[ID] AND melt_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('MELT_NO'))
-     LEFT OUTER JOIN [dbo].[MaterialLotProperty] prod_order ON (prod_order.[MaterialLotID]=ml.[ID] AND prod_order.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PROD_ORDER'))
-     LEFT OUTER JOIN [dbo].[MaterialLotProperty] part_no ON (part_no.[MaterialLotID]=ml.[ID] AND part_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PART_NO'))
+     LEFT OUTER JOIN [dbo].[MaterialLotProperty] melt_no ON (melt_no.[MaterialLotID]=ml.[ID] AND melt_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('MELT_NO'))          
      LEFT OUTER JOIN [dbo].[MaterialLotProperty] auto_manu_value ON (auto_manu_value.[MaterialLotID]=ml.[ID] AND auto_manu_value.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('AUTO_MANU_VALUE'))
      LEFT OUTER JOIN [dbo].[MaterialLotProperty] create_mode ON (create_mode.[MaterialLotID]=ml.[ID] AND create_mode.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('CREATE_MODE'))
      LEFT OUTER JOIN [dbo].[MaterialLotProperty] measure_time ON (measure_time.[MaterialLotID]=ml.[ID] AND measure_time.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('MEASURE_TIME'))

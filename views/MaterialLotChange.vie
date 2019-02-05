@@ -18,16 +18,12 @@ SELECT ml.ID,
        ml.CreateTime,
        ml.Quantity,
        ml.SideID,
-       prod_order.[Value] PROD_ORDER,
-       part_no.[Value] PART_NO,
-       bunt_no.[Value] BUNT_NO,
+       ml.PROD_ORDER,
+       ml.PART_NO,
+       ml.BUNT_NO,
        CAST(0 AS BIT) selected
 FROM [dbo].[MaterialLot] ml
-     INNER JOIN [dbo].[MaterialLotLast] mll ON (mll.[MaterialLotID]=ml.[ID])
-     LEFT OUTER JOIN [dbo].[MaterialLotProperty] prod_order ON (prod_order.[MaterialLotID]=ml.[ID] AND prod_order.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PROD_ORDER'))
-     LEFT OUTER JOIN [dbo].[MaterialLotProperty] part_no ON (part_no.[MaterialLotID]=ml.[ID] AND part_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('PART_NO'))
-     LEFT OUTER JOIN [dbo].[MaterialLotProperty] bunt_no ON (bunt_no.[MaterialLotID]=ml.[ID] AND bunt_no.[PropertyType]=[dbo].[get_PropertyTypeIdByValue]('BUNT_NO'))
+     INNER JOIN [dbo].[MaterialLotLast] mll ON (mll.[MaterialLotID]=ml.[ID])     
 WHERE ml.Quantity>0;
-
 GO
 
