@@ -50,7 +50,7 @@ cross apply(
 	order by [ID] desc
 ) as MDP2
 -- 01.03.19 end
-where MC.[Code] in (N'Scrap', N'Finished Products', N'Raw Material') and MDP2.[Value] != 0 -- mod and MDP2.[Value] != 0
+where MC.[Code] in (N'Scrap', N'Finished Products', N'Raw Material') -- mod and MDP2.[Value] != 0
 
 
 GO
